@@ -171,16 +171,8 @@ h3 { font-size: 1.24rem; line-height: 1.28; }
   cursor: not-allowed;
 }
 
-/* Announcement bar */
-.announcement-bar {
-  background: var(--paper);
-  color: var(--ink);
-  text-align: center;
-  padding: 10px 26px;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  border-bottom: 1px solid var(--hair);
-}
+/* Announcement bar styles are defined below in the site sections area. */
+
 
 /* Header */
 .site-header {
