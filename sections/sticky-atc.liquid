@@ -1,0 +1,32 @@
+{% comment %} Sticky add-to-cart bar (PDP) — appears on scroll past the buy box {% endcomment %}
+{% if template contains 'product' and product %}
+  {%- assign v = product.selected_or_first_available_variant -%}
+  <div class="sticky-atc" data-sticky-atc hidden aria-hidden="true">
+    <div class="sticky-atc-inner">
+      <div class="sticky-atc-product">
+        {% if product.featured_image != blank %}
+          <img src="{{ product.featured_image | image_url: width: 120 }}" alt="" width="48" height="48" loading="lazy">
+        {% endif %}
+        <div>
+          <div class="sticky-atc-title">{{ product.title }}</div>
+          <div class="sticky-atc-variant" data-sticky-atc-variant>{% unless product.has_only_default_variant %}{{ v.title }}{% endunless %}</div>
+        </div>
+      </div>
+      <div class="sticky-atc-buy">
+        <span class="sticky-atc-price" data-sticky-atc-price>{{ v.price | money }}</span>
+        <button type="button" class="btn btn-gold sticky-atc-btn" data-sticky-atc-submit {% unless v.available %}disabled{% endunless %}>
+          {% if v.available %}Add to cart{% else %}Sold out{% endif %}
+        </button>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Sticky add-to-cart",
+  "settings": [],
+  "presets": [{ "name": "Sticky add-to-cart" }],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}
