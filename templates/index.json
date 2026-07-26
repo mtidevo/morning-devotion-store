@@ -1,21 +1,176 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "hero": { "type": "hero", "settings": {} },
-    "collection-grid": { "type": "collection-grid", "settings": {} },
-    "devotion-feature": { "type": "devotion-feature", "settings": {} },
-    "highlighted-text": { "type": "highlighted-text", "settings": {} },
-    "trust-bar": { "type": "trust-bar", "settings": {} },
-    "pricing-grid": { "type": "pricing-grid", "settings": {} },
-    "rise-pour-renew": { "type": "rise-pour-renew", "settings": {} },
-    "guarantee": { "type": "guarantee", "settings": {} },
-    "fundraisers": { "type": "fundraisers", "settings": {} },
-    "about": { "type": "about", "settings": {} },
-    "faq": { "type": "faq", "settings": {} },
-    "email-capture": { "type": "email-capture", "settings": {} },
-    "cookie-banner": { "type": "cookie-banner", "settings": {} },
-    "sticky-mobile-cta": { "type": "sticky-mobile-cta", "settings": {} }
+    "announcement_bar_YrBAH6": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message_ypEFnq": {
+          "type": "message",
+          "settings": {
+            "text": "Free US shipping over $40",
+            "link": ""
+          }
+        },
+        "message_D9dVxa": {
+          "type": "message",
+          "settings": {
+            "text": "A new devotion on the back of every bag",
+            "link": ""
+          }
+        },
+        "message_aWCUUp": {
+          "type": "message",
+          "settings": {
+            "text": "Cancel or skip any month",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "message_ypEFnq",
+        "message_D9dVxa",
+        "message_aWCUUp"
+      ],
+      "name": "Announcement bar",
+      "settings": {
+        "fallback": "Free US shipping over $40. Cancel any month.",
+        "instagram_url": "https://www.instagram.com/foreverymorning",
+        "facebook_url": "https://www.facebook.com/Foreverymorning",
+        "x_url": "",
+        "show_locale": true,
+        "show_country": true
+      }
+    },
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "No. 01 · August · Morning Mercies",
+        "heading": "Coffee with something underneath it.",
+        "description": "Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted.",
+        "primary_cta_text": "Shop this month",
+        "primary_cta_url": "",
+        "secondary_cta_text": "Read the devotion",
+        "secondary_cta_url": ""
+      }
+    },
+    "collection-grid": {
+      "type": "collection-grid",
+      "settings": {
+        "eyebrow": "Explore",
+        "heading": "Shop the morning."
+      }
+    },
+    "devotion-feature": {
+      "type": "devotion-feature",
+      "settings": {
+        "heading": "A new devotion, printed once, gone with the month.",
+        "description": "Every month we write and print one devotion and prayer on the back of the bag. When the month ends, that bag ends. The next one comes with something new to sit with.",
+        "cta_text": "Start a morning",
+        "cta_url": "",
+        "devotion_number": "No. 01",
+        "devotion_month": "August",
+        "devotion_title": "Morning Mercies",
+        "devotion_author": "Written by Alex Lambert",
+        "devotion_verse": "Because of the Lord's great love we are not consumed, for his compassions never fail. They are new every morning.",
+        "devotion_citation": "Lamentations 3 : 22–23",
+        "devotion_body": "",
+        "devotion_prayer": "",
+        "devotion_bagline": "12 oz · Whole bean"
+      }
+    },
+    "highlighted-text": {
+      "type": "highlighted-text",
+      "settings": {
+        "eyebrow": "Our promise",
+        "heading": "Written once. Never reprinted.",
+        "highlight": "Never reprinted",
+        "body": "<p>Every devotion on the back of every bag is written for one month, printed on that month's bag, then retired. What arrives at your door won't arrive again. The morning stays fresh because it never repeats.</p>"
+      }
+    },
+    "trust-bar": {
+      "type": "trust-bar",
+      "settings": {}
+    },
+    "pricing-grid": {
+      "type": "pricing-grid",
+      "settings": {
+        "heading": "Specialty grade. Roasted the week it ships.",
+        "description": "Certified specialty beans, small-batch roasted in Bend, Oregon, independently lab tested. On average just over four days between roaster and post.",
+        "collection": "",
+        "product_handles": "one-bag,two-bags,the-morning,the-table",
+        "products_to_show": 4
+      }
+    },
+    "rise-pour-renew": {
+      "type": "rise-pour-renew",
+      "settings": {
+        "heading": "A simple morning rhythm.",
+        "description": "No complicated portal. No guilt if you skip. Just good coffee and a few honest words waiting for you."
+      }
+    },
+    "guarantee": {
+      "type": "guarantee",
+      "settings": {
+        "label": "Our promise",
+        "heading": "Love your first bag, or we make it right.",
+        "description": "If the coffee or the devotion does not land the way you hoped, email us. We will refund the bag or send a replacement — no script, no waiting. We are not here to keep your money; we are here to keep you in the morning."
+      }
+    },
+    "fundraisers": {
+      "type": "fundraisers",
+      "settings": {
+        "heading": "Coffee that funds what you care about.",
+        "description": "Run a month-long campaign with a custom bag and devotion. Your people get fresh coffee; your cause gets a meaningful share of every order."
+      }
+    },
+    "about": {
+      "type": "about",
+      "settings": {
+        "heading": "Coffee with a devotion on the back of every bag.",
+        "description": "<p>For Every Morning started with a simple idea: the things we do every day should point somewhere good. A bag of coffee is ordinary. A few honest words on the back of it can make it a small altar.</p><p>We roast specialty-grade beans in Bend, Oregon, and write a new devotion and prayer each month. The words are written once, printed once, and never reprinted. When the month is gone, the devotion is gone with it — so the morning stays fresh.</p>"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "heading": "Questions before your first bag.",
+        "description": "The things people ask us over email, in one place. If your question is not here, we read every reply at"
+      }
+    },
+    "email-capture": {
+      "type": "email-capture",
+      "settings": {
+        "heading": "Be first for the next roast.",
+        "description": "One email when No. 01 opens. No daily noise, no sales spam — just a heads up when the next devotion and roast are ready.",
+        "placeholder": "Your email address",
+        "button_text": "Join the list"
+      }
+    },
+    "cookie-banner": {
+      "type": "cookie-banner",
+      "settings": {
+        "heading": "We use cookies",
+        "body": "A few cookies help us keep the mornings smooth. Nothing spooky."
+      }
+    },
+    "sticky-mobile-cta": {
+      "type": "sticky-mobile-cta",
+      "settings": {
+        "text": "Shop now",
+        "url": ""
+      }
+    }
   },
   "order": [
+    "announcement_bar_YrBAH6",
     "hero",
     "collection-grid",
     "devotion-feature",
