@@ -1,0 +1,54 @@
+{% comment %} Popup newsletter — timed or exit-intent modal {% endcomment %}
+<div class="popup-newsletter"
+     data-popup-newsletter
+     data-delay="{{ section.settings.delay | default: 6 }}"
+     data-exit-intent="{% if section.settings.exit_intent %}1{% else %}0{% endif %}"
+     data-cooldown="{{ section.settings.cooldown_days | default: 30 }}"
+     hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="popup-nl-title">
+  <div class="popup-newsletter-backdrop" data-popup-close></div>
+  <div class="popup-newsletter-panel">
+    <button type="button" class="popup-newsletter-close" aria-label="Close" data-popup-close>{% render 'icon-x' %}</button>
+
+    {% if section.settings.image != blank %}
+      <div class="popup-newsletter-media">
+        <img src="{{ section.settings.image | image_url: width: 900 }}" alt="" loading="lazy">
+      </div>
+    {% endif %}
+
+    <div class="popup-newsletter-body">
+      <span class="rule">{{ section.settings.eyebrow | default: 'First timer?' }}</span>
+      <h2 id="popup-nl-title" class="popup-newsletter-title">
+        {{ section.settings.heading | default: 'Sign up and get 20% off your first order' }}
+      </h2>
+      <p class="popup-newsletter-sub">
+        {{ section.settings.subtext | default: 'Devotions, new roasts, and members-only drops.' }}
+      </p>
+      {% form 'customer', class: 'popup-newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter,popup">
+        <label class="visually-hidden" for="popup-nl-email">Email</label>
+        <input id="popup-nl-email" type="email" name="contact[email]" placeholder="Enter your email" required>
+        <button type="submit" class="btn btn-gold">Get my code</button>
+        {% if form.posted_successfully? %}
+          <p class="popup-newsletter-note">Check your inbox — your code is on the way.</p>
+        {% endif %}
+      {% endform %}
+      <button type="button" class="popup-newsletter-dismiss" data-popup-close>No thanks</button>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Popup newsletter",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "First timer?" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Sign up and get 20% off your first order" },
+    { "type": "textarea", "id": "subtext", "label": "Subtext", "default": "Devotions, new roasts, and members-only drops." },
+    { "type": "image_picker", "id": "image", "label": "Side image" },
+    { "type": "range", "id": "delay", "label": "Show after (seconds)", "min": 0, "max": 30, "step": 1, "default": 6 },
+    { "type": "checkbox", "id": "exit_intent", "label": "Also trigger on exit intent", "default": true },
+    { "type": "range", "id": "cooldown_days", "label": "Dismiss cooldown (days)", "min": 1, "max": 90, "step": 1, "default": 30 }
+  ],
+  "presets": [{ "name": "Popup newsletter" }]
+}
+{% endschema %}

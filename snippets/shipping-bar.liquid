@@ -1,0 +1,22 @@
+{% comment %}
+  Free-shipping progress bar.
+  Usage: {% render 'shipping-bar', threshold_cents: 4000 %}
+{% endcomment %}
+{%- assign threshold = threshold_cents | default: 4000 -%}
+{%- assign remaining = threshold | minus: cart.total_price -%}
+{%- if remaining < 0 -%}{%- assign remaining = 0 -%}{%- endif -%}
+{%- assign pct = cart.total_price | times: 100 | divided_by: threshold -%}
+{%- if pct > 100 -%}{%- assign pct = 100 -%}{%- endif -%}
+
+<div class="ship-bar" data-ship-bar data-ship-threshold="{{ threshold }}">
+  <p class="ship-bar-msg" data-ship-msg>
+    {% if remaining > 0 %}
+      Spend <strong>{{ remaining | money }}</strong> more to reach <strong>free shipping</strong>.
+    {% else %}
+      You've unlocked <strong>free shipping</strong>.
+    {% endif %}
+  </p>
+  <div class="ship-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}">
+    <div class="ship-bar-fill" data-ship-fill style="width: {{ pct }}%;"></div>
+  </div>
+</div>

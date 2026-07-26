@@ -1,0 +1,16 @@
+{% comment %}
+  Popular upgrade row.
+  Usage: {% render 'upgrade-row', product: upgrade_product %}
+{% endcomment %}
+{%- if product and product != blank -%}
+  {%- assign uv = product.selected_or_first_available_variant -%}
+  <label class="upgrade-row">
+    <input type="checkbox" class="upgrade-check" data-upgrade-variant="{{ uv.id }}" data-upgrade-price="{{ uv.price }}">
+    <span class="upgrade-check-box" aria-hidden="true"></span>
+    {% if product.featured_image != blank %}
+      <img class="upgrade-thumb" src="{{ product.featured_image | image_url: width: 120 }}" alt="" width="44" height="44" loading="lazy">
+    {% endif %}
+    <span class="upgrade-title">{{ product.title }}</span>
+    <span class="upgrade-price">{{ uv.price | money }}</span>
+  </label>
+{%- endif -%}

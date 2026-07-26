@@ -1,0 +1,46 @@
+{% comment %}
+  Mega menu section. Add this section to any template and set the "Trigger menu item"
+  to match the exact title of a header link (e.g. "Shop"). Hovering that link will
+  reveal the mega panel below the header.
+{% endcomment %}
+<div class="mega-menu"
+     data-mega-menu
+     data-mega-trigger="{{ section.settings.trigger_title | escape | downcase }}"
+     hidden aria-hidden="true">
+  <div class="wrap mega-menu-grid">
+    {% for block in section.blocks %}
+      <a href="{{ block.settings.link }}" class="mega-card" {{ block.shopify_attributes }}>
+        {% if block.settings.image != blank %}
+          <div class="mega-card-media"><img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.title | escape }}" loading="lazy"></div>
+        {% endif %}
+        <div class="mega-card-body">
+          <div class="mega-card-title">{{ block.settings.title }}</div>
+          {% if block.settings.subtitle != blank %}<div class="mega-card-sub">{{ block.settings.subtitle }}</div>{% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Mega menu",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "trigger_title", "label": "Trigger menu item (exact title, case-insensitive)", "default": "Shop" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "New devotion" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "image_picker", "id": "image", "label": "Image" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Mega menu" }]
+}
+{% endschema %}

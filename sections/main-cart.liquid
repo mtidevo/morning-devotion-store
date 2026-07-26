@@ -11,6 +11,9 @@
         <a href="{{ routes.all_products_collection_url }}" class="btn btn-gold mt-4">Continue shopping</a>
       </div>
     {% else %}
+      {%- assign ship_threshold = section.settings.free_shipping_threshold_cents | default: 4000 -%}
+      {% render 'shipping-bar', threshold_cents: ship_threshold %}
+
       <form action="{{ routes.cart_url }}" method="post" class="cart-form">
         <div class="cart-items">
           {% for item in cart.items %}
@@ -36,6 +39,11 @@
           {% endfor %}
         </div>
 
+        <details class="cart-notes" {% if cart.note != blank %}open{% endif %}>
+          <summary>Order special instructions</summary>
+          <textarea name="note" rows="3" placeholder="Add a note for our roasters…" aria-label="Order note">{{ cart.note }}</textarea>
+        </details>
+
         <div class="cart-footer">
           <div>
             <button type="submit" name="update" class="btn btn-edge btn-sm">Update cart</button>
@@ -54,6 +62,8 @@
 {% schema %}
 {
   "name": "Main cart",
-  "settings": []
+  "settings": [
+    { "type": "number", "id": "free_shipping_threshold_cents", "label": "Free shipping threshold (cents)", "default": 4000 }
+  ]
 }
 {% endschema %}
