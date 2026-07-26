@@ -140,6 +140,18 @@
     },
     "faq": {
       "type": "faq",
+      "blocks": {
+        "faq_item_KQmGDL": {
+          "type": "faq_item",
+          "settings": {
+            "question": "When does my bag ship?",
+            "answer": "<p>Every subscription roasts and ships together at the start of the month. One-off orders roast within two business days and land in about a week.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_KQmGDL"
+      ],
       "settings": {
         "heading": "Questions before your first bag.",
         "description": "The things people ask us over email, in one place. If your question is not here, we read every reply at"
