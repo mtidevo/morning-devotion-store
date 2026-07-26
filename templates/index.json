@@ -104,7 +104,7 @@
       "settings": {
         "heading": "Specialty grade. Roasted the week it ships.",
         "description": "Certified specialty beans, small-batch roasted in Bend, Oregon, independently lab tested. On average just over four days between roaster and post.",
-        "collection": "",
+        "collection": "frontpage",
         "product_handles": "one-bag,two-bags,the-morning,the-table",
         "products_to_show": 4
       }
