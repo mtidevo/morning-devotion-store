@@ -1,0 +1,63 @@
+{% comment %} Countdown promo hero {% endcomment %}
+<section class="countdown-hero" data-countdown-target="{{ section.settings.target_datetime }}">
+  <div class="countdown-hero-media">
+    {% if section.settings.image != blank %}
+      <img src="{{ section.settings.image | image_url: width: 2400 }}" alt="{{ section.settings.image.alt | escape }}" loading="lazy">
+    {% else %}
+      <div class="countdown-hero-fallback"></div>
+    {% endif %}
+    <div class="countdown-hero-scrim"></div>
+  </div>
+
+  {% if section.settings.promo_text != blank %}
+    <div class="countdown-hero-promo" aria-hidden="true">
+      <span>{{ section.settings.promo_text }}</span>
+    </div>
+  {% endif %}
+
+  <div class="countdown-hero-content">
+    <div class="wrap countdown-hero-inner">
+      {% if section.settings.eyebrow != blank %}
+        <span class="countdown-hero-eyebrow">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+      <h2 class="countdown-hero-heading">
+        <span>{{ section.settings.heading_line1 | default: 'Get up to 50% off' }}</span>
+        <span>{{ section.settings.heading_line2 | default: 'on waterproof speakers' }}</span>
+      </h2>
+
+      <div class="countdown-clock" role="timer" aria-live="polite">
+        <div class="countdown-unit"><span data-countdown-days>—</span><label>Days</label></div>
+        <div class="countdown-sep" aria-hidden="true">:</div>
+        <div class="countdown-unit"><span data-countdown-hours>—</span><label>Hours</label></div>
+        <div class="countdown-sep" aria-hidden="true">:</div>
+        <div class="countdown-unit"><span data-countdown-mins>—</span><label>Mins</label></div>
+        <div class="countdown-sep" aria-hidden="true">:</div>
+        <div class="countdown-unit"><span data-countdown-secs>—</span><label>Secs</label></div>
+      </div>
+
+      {% if section.settings.cta_text != blank %}
+        <a href="{{ section.settings.cta_url | default: '#' }}" class="countdown-hero-cta">
+          <span>{{ section.settings.cta_text }}</span>
+          {% render 'icon-arrow-right' %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Countdown hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "text", "id": "promo_text", "label": "Vertical promo pill", "default": "GET 20% OFF" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading_line1", "label": "Heading line 1", "default": "Get up to 50% off" },
+    { "type": "text", "id": "heading_line2", "label": "Heading line 2", "default": "on waterproof speakers" },
+    { "type": "text", "id": "target_datetime", "label": "Countdown target (YYYY-MM-DDTHH:MM:SSZ)", "default": "2026-12-31T23:59:59Z", "info": "Use ISO 8601. Example: 2026-08-31T23:59:59Z" },
+    { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Discover sales" },
+    { "type": "url", "id": "cta_url", "label": "CTA URL" }
+  ],
+  "presets": [ { "name": "Countdown hero" } ]
+}
+{% endschema %}

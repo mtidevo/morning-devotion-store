@@ -1783,3 +1783,183 @@ h3 { font-size: 1.24rem; line-height: 1.28; }
 .pdp-tabs-nav button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--gold); }
 .pdp-tabs-panels p { font-size: 14px; color: var(--ink); line-height: 1.7; margin: 0; }
 
+/* ======================================================================
+   COUNTDOWN HERO
+   ====================================================================== */
+.countdown-hero {
+  position: relative; min-height: 78vh;
+  display: flex; align-items: center; color: var(--paper); overflow: hidden;
+}
+.countdown-hero-media { position: absolute; inset: 0; }
+.countdown-hero-media img { width: 100%; height: 100%; object-fit: cover; }
+.countdown-hero-fallback { width: 100%; height: 100%; background: linear-gradient(135deg, #2a1810, #6b3a2a); }
+.countdown-hero-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.65) 100%);
+}
+.countdown-hero-promo {
+  position: absolute; left: 24px; top: 50%;
+  transform: translateY(-50%) rotate(-90deg); transform-origin: left center;
+  z-index: 3;
+}
+.countdown-hero-promo span {
+  display: inline-block; padding: 12px 22px;
+  border: 1px solid rgba(255,255,255,0.5); border-radius: 999px;
+  color: var(--paper); font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase;
+  background: rgba(0,0,0,0.15); backdrop-filter: blur(6px);
+}
+.countdown-hero-content { position: relative; z-index: 2; width: 100%; padding: 60px 0; }
+.countdown-hero-inner { text-align: center; }
+.countdown-hero-eyebrow {
+  display: inline-block; font-size: 11px; letter-spacing: 0.24em;
+  text-transform: uppercase; margin-bottom: 16px; opacity: 0.9;
+}
+.countdown-hero-heading {
+  font-family: var(--font-display, 'Bodoni Moda', serif);
+  font-weight: 400; margin: 0 auto 36px; line-height: 1.05; letter-spacing: -0.01em;
+  font-size: clamp(38px, 6vw, 84px); max-width: 18ch;
+}
+.countdown-hero-heading span { display: block; }
+.countdown-clock {
+  display: inline-flex; align-items: flex-start; gap: 14px;
+  margin-bottom: 32px;
+}
+.countdown-unit { display: flex; flex-direction: column; align-items: center; min-width: 72px; }
+.countdown-unit span {
+  font-family: var(--font-display, 'Bodoni Moda', serif);
+  font-size: clamp(36px, 4.4vw, 64px); font-weight: 400; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.countdown-unit label {
+  margin-top: 8px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.8;
+}
+.countdown-sep {
+  font-family: var(--font-display, 'Bodoni Moda', serif);
+  font-size: clamp(28px, 3.4vw, 50px); color: var(--gold); line-height: 1;
+  padding-top: 6px;
+}
+.countdown-hero-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 26px; border-radius: 999px;
+  background: var(--paper); color: var(--ink); text-decoration: none;
+  font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+  transition: background 0.2s, transform 0.2s;
+}
+.countdown-hero-cta:hover { background: var(--gold); color: #fff; transform: translateY(-1px); }
+@media (max-width: 720px) {
+  .countdown-hero-promo { display: none; }
+  .countdown-clock { gap: 8px; }
+  .countdown-unit { min-width: 56px; }
+}
+
+/* ======================================================================
+   LOOKBOOK
+   ====================================================================== */
+.lookbook { padding: 80px 0; }
+.lookbook-header { text-align: center; margin-bottom: 40px; }
+.lookbook-heading {
+  position: relative; display: inline-block;
+  font-family: var(--font-display, 'Bodoni Moda', serif);
+  font-size: clamp(32px, 4.4vw, 56px); font-weight: 400;
+  line-height: 1.1; letter-spacing: -0.015em; margin: 10px 0 0;
+  padding-bottom: 18px;
+}
+.underline-scribble {
+  position: absolute; left: 20%; right: 20%; bottom: 0;
+  width: 60%; height: 16px; color: var(--gold);
+}
+.lookbook-grid {
+  display: grid; grid-template-columns: 1.55fr 1fr; gap: 32px; align-items: stretch;
+}
+@media (max-width: 900px) { .lookbook-grid { grid-template-columns: 1fr; } }
+.lookbook-image {
+  position: relative; border-radius: 20px; overflow: hidden;
+  aspect-ratio: 4/3; background: var(--paper2);
+}
+.lookbook-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lookbook-fallback { width: 100%; height: 100%; background: linear-gradient(135deg, var(--sage), var(--sage-d)); }
+.lookbook-hotspot {
+  position: absolute; transform: translate(-50%, -50%);
+  width: 34px; height: 34px; padding: 0; border: 0; cursor: pointer;
+  background: transparent; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.lookbook-hotspot::before {
+  content: ''; position: absolute; inset: 0; border-radius: 999px;
+  background: rgba(255,255,255,0.55);
+  animation: hotspot-pulse 2.4s ease-out infinite;
+}
+.lookbook-hotspot-dot {
+  position: relative; z-index: 2;
+  width: 16px; height: 16px; border-radius: 999px;
+  background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  transition: transform 0.2s;
+}
+.lookbook-hotspot:hover .lookbook-hotspot-dot,
+.lookbook-hotspot.is-active .lookbook-hotspot-dot {
+  transform: scale(1.25); background: var(--gold);
+}
+@keyframes hotspot-pulse {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+.lookbook-cards { position: relative; min-height: 360px; }
+.lookbook-card {
+  position: absolute; inset: 0; opacity: 0; pointer-events: none;
+  transform: translateY(8px); transition: opacity 0.35s, transform 0.35s;
+  display: flex; flex-direction: column;
+  border-radius: 20px; overflow: hidden; background: var(--paper2);
+}
+.lookbook-card.is-active { opacity: 1; pointer-events: auto; transform: none; position: relative; inset: auto; }
+@media (max-width: 900px) { .lookbook-card { position: relative; inset: auto; opacity: 1; pointer-events: auto; transform: none; margin-bottom: 16px; } .lookbook-card:not(.is-active) { display: none; } }
+.lookbook-card-media { display: block; aspect-ratio: 4/5; overflow: hidden; background: var(--paper); }
+.lookbook-card-media img { width: 100%; height: 100%; object-fit: cover; }
+.lookbook-card-body { padding: 20px 22px 24px; }
+.lookbook-card-eyebrow { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mute); margin-bottom: 6px; }
+.lookbook-card-title { font-family: var(--font-display, serif); font-size: 22px; font-weight: 400; margin: 0 0 6px; }
+.lookbook-card-title a { color: var(--ink); text-decoration: none; }
+.lookbook-card-price { font-size: 16px; color: var(--ink); margin-bottom: 14px; }
+.lookbook-card-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 999px;
+  background: var(--ink); color: var(--paper); text-decoration: none;
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  transition: background 0.2s;
+}
+.lookbook-card-cta:hover { background: var(--gold-d); }
+
+/* ======================================================================
+   PRESS TESTIMONIAL
+   ====================================================================== */
+.press-testimonial {
+  position: relative; min-height: 62vh;
+  display: flex; align-items: center; color: var(--paper); overflow: hidden;
+  padding: 80px 0;
+}
+.press-testimonial-media { position: absolute; inset: 0; }
+.press-testimonial-media img { width: 100%; height: 100%; object-fit: cover; }
+.press-testimonial-fallback { width: 100%; height: 100%; background: linear-gradient(135deg, var(--sage-d), #2a1810); }
+.press-testimonial-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(30,20,15,0.55) 0%, rgba(30,20,15,0.7) 100%);
+}
+.press-testimonial-content { position: relative; z-index: 2; width: 100%; text-align: center; }
+.press-testimonial-mark {
+  font-family: var(--font-display, 'Bodoni Moda', serif);
+  font-size: 72px; line-height: 0.8; color: var(--paper);
+  margin-bottom: 18px; opacity: 0.9;
+}
+.press-testimonial-quote {
+  font-family: var(--font-display, 'Bodoni Moda', serif);
+  font-size: clamp(22px, 2.8vw, 40px); font-weight: 400;
+  line-height: 1.25; max-width: 30ch; margin: 0 auto 30px;
+  letter-spacing: -0.005em;
+}
+.press-testimonial-publication { max-width: 180px; height: auto; margin: 0 auto 12px; opacity: 0.95; filter: brightness(0) invert(1); }
+.press-testimonial-publication-text {
+  font-family: var(--font-display, serif); font-style: italic;
+  font-size: 20px; margin-bottom: 12px; opacity: 0.95;
+}
+.press-testimonial-attr { font-size: 13px; letter-spacing: 0.06em; opacity: 0.85; }
+
+

@@ -206,5 +206,53 @@
     initSearch();
     initCookieBanner();
     initPDP();
+    initCountdown();
+    initLookbook();
   });
+
+  // ---------- Countdown ----------
+  function initCountdown() {
+    document.querySelectorAll('[data-countdown-target]').forEach(function (el) {
+      const targetStr = el.getAttribute('data-countdown-target');
+      const target = targetStr ? new Date(targetStr).getTime() : NaN;
+      if (!target || isNaN(target)) return;
+      const d = el.querySelector('[data-countdown-days]');
+      const h = el.querySelector('[data-countdown-hours]');
+      const m = el.querySelector('[data-countdown-mins]');
+      const s = el.querySelector('[data-countdown-secs]');
+      const pad = function (n) { return n < 10 ? '0' + n : String(n); };
+      const tick = function () {
+        const diff = Math.max(0, target - Date.now());
+        const days = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff % 86400000) / 3600000);
+        const mins = Math.floor((diff % 3600000) / 60000);
+        const secs = Math.floor((diff % 60000) / 1000);
+        if (d) d.textContent = String(days);
+        if (h) h.textContent = pad(hours);
+        if (m) m.textContent = pad(mins);
+        if (s) s.textContent = pad(secs);
+        if (diff <= 0) clearInterval(id);
+      };
+      tick();
+      const id = setInterval(tick, 1000);
+    });
+  }
+
+  // ---------- Lookbook ----------
+  function initLookbook() {
+    document.querySelectorAll('[data-lookbook]').forEach(function (root) {
+      const hotspots = root.querySelectorAll('[data-lookbook-hotspot]');
+      const cards = root.querySelectorAll('[data-lookbook-card]');
+      hotspots.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const id = btn.getAttribute('data-lookbook-hotspot');
+          hotspots.forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+          cards.forEach(function (c) {
+            c.classList.toggle('is-active', c.getAttribute('data-lookbook-card') === id);
+          });
+        });
+      });
+    });
+  }
 })();
+

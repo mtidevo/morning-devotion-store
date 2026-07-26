@@ -1,0 +1,43 @@
+{% comment %} Press testimonial with lifestyle background {% endcomment %}
+<section class="press-testimonial">
+  <div class="press-testimonial-media">
+    {% if section.settings.image != blank %}
+      <img src="{{ section.settings.image | image_url: width: 2400 }}" alt="" loading="lazy">
+    {% else %}
+      <div class="press-testimonial-fallback"></div>
+    {% endif %}
+    <div class="press-testimonial-scrim"></div>
+  </div>
+
+  <div class="press-testimonial-content">
+    <div class="wrap">
+      <div class="press-testimonial-mark" aria-hidden="true">&ldquo;</div>
+      <blockquote class="press-testimonial-quote">
+        {{ section.settings.quote | default: "A morning ritual disguised as a bag of coffee. The devotion on the back turns the kitchen counter into a quiet chapel." }}
+      </blockquote>
+      {% if section.settings.publication_image != blank %}
+        <img src="{{ section.settings.publication_image | image_url: width: 400 }}" alt="{{ section.settings.publication_alt | escape }}" class="press-testimonial-publication">
+      {% elsif section.settings.publication_text != blank %}
+        <div class="press-testimonial-publication-text">{{ section.settings.publication_text }}</div>
+      {% endif %}
+      {% if section.settings.attribution != blank %}
+        <div class="press-testimonial-attr">— {{ section.settings.attribution }}</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Press testimonial",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "A morning ritual disguised as a bag of coffee. The devotion on the back turns the kitchen counter into a quiet chapel." },
+    { "type": "image_picker", "id": "publication_image", "label": "Publication wordmark (optional)" },
+    { "type": "text", "id": "publication_alt", "label": "Publication alt text", "default": "Publication" },
+    { "type": "text", "id": "publication_text", "label": "Publication text (if no image)" },
+    { "type": "text", "id": "attribution", "label": "Attribution", "default": "Nathan Wright, Rolling Stone" }
+  ],
+  "presets": [ { "name": "Press testimonial" } ]
+}
+{% endschema %}
