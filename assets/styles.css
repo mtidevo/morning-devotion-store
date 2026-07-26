@@ -173,12 +173,13 @@ h3 { font-size: 1.24rem; line-height: 1.28; }
 
 /* Announcement bar */
 .announcement-bar {
-  background: var(--espresso);
-  color: var(--champagne);
+  background: var(--paper);
+  color: var(--ink);
   text-align: center;
   padding: 10px 26px;
   font-size: 11px;
   letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--hair);
 }
 
 /* Header */
