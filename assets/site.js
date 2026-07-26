@@ -256,3 +256,205 @@
   }
 })();
 
+
+// ============================================================
+// Concept-inspired feature scripts
+// ============================================================
+(function () {
+  'use strict';
+
+  function ready(fn) {
+    if (document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
+
+  // ---------- PDP: image color swatches + variant sync ----------
+  function initColorSwatches() {
+    document.querySelectorAll('.pdp-swatches--image').forEach(function (group) {
+      group.addEventListener('change', function (e) {
+        if (!e.target.matches('input[type="radio"]')) return;
+        group.querySelectorAll('.pdp-swatch--image').forEach(function (s) { s.classList.remove('is-active'); });
+        var label = e.target.closest('.pdp-swatch--image');
+        if (label) label.classList.add('is-active');
+        var valLabel = group.closest('.pdp-option').querySelector('[data-pdp-color-value]');
+        if (valLabel) valLabel.textContent = e.target.value;
+        // If the label has a background image, swap the main product image
+        var url = label && label.style.backgroundImage && label.style.backgroundImage.match(/url\(['"]?([^'")]+)['"]?\)/);
+        if (url && url[1]) {
+          var main = document.querySelector('[data-pdp-main-img]');
+          if (main) main.src = url[1].replace(/width=\d+/, 'width=1200');
+        }
+      });
+    });
+  }
+
+  // ---------- PDP: popular upgrades card ----------
+  function initUpgrades() {
+    var closer = document.querySelector('[data-pdp-upgrades-close]');
+    if (closer) closer.addEventListener('click', function () {
+      var card = closer.closest('[data-pdp-upgrades]');
+      if (card) card.hidden = true;
+    });
+    // On PDP submit, POST selected upgrades to /cart/add.js alongside the main form.
+    var form = document.querySelector('[data-pdp-form]');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      var checks = document.querySelectorAll('.upgrade-check:checked');
+      if (!checks.length) return;
+      e.preventDefault();
+      var mainId = form.querySelector('[data-pdp-variant-id]').value;
+      var mainQty = parseInt(form.querySelector('[data-pdp-qty]').value || '1', 10);
+      var items = [{ id: mainId, quantity: mainQty }];
+      checks.forEach(function (c) { items.push({ id: c.getAttribute('data-upgrade-variant'), quantity: 1 }); });
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: items })
+      }).then(function () { window.location.href = '/cart'; })
+        .catch(function () { form.submit(); });
+    });
+  }
+
+  // ---------- Sticky ATC ----------
+  function initStickyATC() {
+    var bar = document.querySelector('[data-sticky-atc]');
+    if (!bar) return;
+    var pdpForm = document.querySelector('[data-pdp-form]');
+    var addBtn = document.querySelector('.pdp-add');
+    if (!pdpForm || !addBtn) return;
+    var onScroll = function () {
+      var rect = addBtn.getBoundingClientRect();
+      var below = rect.bottom < 0 || rect.top > window.innerHeight;
+      bar.hidden = !below;
+      bar.classList.toggle('is-visible', below);
+      bar.setAttribute('aria-hidden', below ? 'false' : 'true');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    var submit = bar.querySelector('[data-sticky-atc-submit]');
+    if (submit) submit.addEventListener('click', function () {
+      if (typeof pdpForm.requestSubmit === 'function') pdpForm.requestSubmit();
+      else pdpForm.submit();
+    });
+    // Reflect variant/price updates
+    pdpForm.addEventListener('change', function () {
+      var price = document.querySelector('[data-pdp-price]');
+      var stickyPrice = bar.querySelector('[data-sticky-atc-price]');
+      if (price && stickyPrice) stickyPrice.textContent = price.textContent;
+    });
+  }
+
+  // ---------- Popup newsletter ----------
+  function initPopup() {
+    var pop = document.querySelector('[data-popup-newsletter]');
+    if (!pop) return;
+    var cooldownDays = parseInt(pop.getAttribute('data-cooldown') || '30', 10);
+    var delay = parseInt(pop.getAttribute('data-delay') || '6', 10) * 1000;
+    var exitOn = pop.getAttribute('data-exit-intent') === '1';
+    var key = 'fem-popup-newsletter';
+    try {
+      var stored = localStorage.getItem(key);
+      if (stored) {
+        var last = parseInt(stored, 10);
+        if (!isNaN(last) && Date.now() - last < cooldownDays * 86400000) return;
+      }
+    } catch (e) {}
+    var shown = false;
+    var show = function () {
+      if (shown) return;
+      shown = true;
+      pop.hidden = false;
+      pop.setAttribute('aria-hidden', 'false');
+    };
+    var dismiss = function () {
+      pop.hidden = true;
+      pop.setAttribute('aria-hidden', 'true');
+      try { localStorage.setItem(key, String(Date.now())); } catch (e) {}
+    };
+    setTimeout(show, delay);
+    if (exitOn) {
+      document.addEventListener('mouseout', function (e) {
+        if (!e.relatedTarget && e.clientY <= 0) show();
+      });
+    }
+    pop.querySelectorAll('[data-popup-close]').forEach(function (b) { b.addEventListener('click', dismiss); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) dismiss(); });
+  }
+
+  // ---------- Mega menu ----------
+  function initMegaMenu() {
+    var menus = document.querySelectorAll('[data-mega-menu]');
+    if (!menus.length) return;
+    var byTrigger = {};
+    menus.forEach(function (m) { byTrigger[m.getAttribute('data-mega-trigger')] = m; });
+    var links = document.querySelectorAll('[data-nav-link]');
+    var openMenu = null;
+    var closeAll = function () {
+      menus.forEach(function (m) { m.hidden = true; m.setAttribute('aria-hidden', 'true'); });
+      openMenu = null;
+    };
+    var open = function (m) {
+      if (openMenu === m) return;
+      closeAll();
+      m.hidden = false;
+      m.setAttribute('aria-hidden', 'false');
+      openMenu = m;
+    };
+    links.forEach(function (link) {
+      var title = link.getAttribute('data-nav-title');
+      var m = byTrigger[title];
+      if (!m) return;
+      link.addEventListener('mouseenter', function () { open(m); });
+      link.addEventListener('focus', function () { open(m); });
+    });
+    document.addEventListener('mousemove', function (e) {
+      if (!openMenu) return;
+      var withinMenu = openMenu.contains(e.target);
+      var withinHeader = e.target.closest && e.target.closest('.site-header');
+      if (!withinMenu && !withinHeader) closeAll();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+  }
+
+  // ---------- Before / after slider ----------
+  function initBeforeAfter() {
+    document.querySelectorAll('[data-ba]').forEach(function (root) {
+      var clip = root.querySelector('[data-ba-clip]');
+      var handle = root.querySelector('[data-ba-handle]');
+      if (!clip || !handle) return;
+      var dragging = false;
+      var setPos = function (pctRaw) {
+        var pct = Math.max(0, Math.min(100, pctRaw));
+        clip.style.width = pct + '%';
+        handle.style.left = pct + '%';
+        var innerImg = clip.querySelector('.ba-img--before');
+        if (innerImg) innerImg.style.width = (100 / (pct / 100)) + '%';
+      };
+      var fromEvent = function (e) {
+        var rect = root.getBoundingClientRect();
+        var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        setPos((x / rect.width) * 100);
+      };
+      var start = function (e) { dragging = true; fromEvent(e); e.preventDefault(); };
+      var move = function (e) { if (dragging) fromEvent(e); };
+      var end = function () { dragging = false; };
+      handle.addEventListener('mousedown', start);
+      handle.addEventListener('touchstart', start, { passive: false });
+      window.addEventListener('mousemove', move);
+      window.addEventListener('touchmove', move, { passive: true });
+      window.addEventListener('mouseup', end);
+      window.addEventListener('touchend', end);
+      root.addEventListener('click', function (e) { if (e.target === root || e.target.classList.contains('ba-img--after')) fromEvent(e); });
+      setPos(50);
+    });
+  }
+
+  ready(function () {
+    initColorSwatches();
+    initUpgrades();
+    initStickyATC();
+    initPopup();
+    initMegaMenu();
+    initBeforeAfter();
+  });
+})();
