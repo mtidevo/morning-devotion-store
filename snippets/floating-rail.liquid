@@ -1,0 +1,17 @@
+{% comment %} Floating vertical rail — social icons + rotated CTA pill {% endcomment %}
+<aside class="floating-rail" aria-label="Follow and promo">
+  <div class="floating-rail-icons">
+    {% if settings.instagram_url != blank or section.settings.instagram_url != blank %}
+      <a href="{{ settings.instagram_url | default: section.settings.instagram_url }}" aria-label="Instagram" target="_blank" rel="noopener">{% render 'icon-instagram' %}</a>
+    {% endif %}
+    {% if settings.facebook_url != blank or section.settings.facebook_url != blank %}
+      <a href="{{ settings.facebook_url | default: section.settings.facebook_url }}" aria-label="Facebook" target="_blank" rel="noopener">{% render 'icon-facebook' %}</a>
+    {% endif %}
+    {% if settings.x_url != blank or section.settings.x_url != blank %}
+      <a href="{{ settings.x_url | default: section.settings.x_url }}" aria-label="X" target="_blank" rel="noopener">{% render 'icon-x' %}</a>
+    {% endif %}
+  </div>
+  <a href="#devotion" class="floating-rail-pill">
+    <span>Read this month's devotion</span>
+  </a>
+</aside>

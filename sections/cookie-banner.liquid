@@ -1,0 +1,27 @@
+{% comment %} Cookie banner — dismissible, stored in localStorage {% endcomment %}
+<div class="cookie-banner" data-cookie-banner hidden>
+  <div class="cookie-banner-inner">
+    <div class="cookie-banner-icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="14" cy="14" r="1" fill="currentColor"/><circle cx="16" cy="9" r="1" fill="currentColor"/></svg>
+    </div>
+    <div class="cookie-banner-text">
+      <strong>{{ section.settings.heading | default: 'We use cookies' }}</strong>
+      <p>{{ section.settings.body | default: 'A few cookies help us keep the mornings smooth. Nothing spooky.' }}</p>
+    </div>
+    <div class="cookie-banner-actions">
+      <button type="button" class="btn btn-edge btn-sm" data-cookie-decline>Decline</button>
+      <button type="button" class="btn btn-gold btn-sm" data-cookie-accept>Accept</button>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cookie banner",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "We use cookies" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "A few cookies help us keep the mornings smooth. Nothing spooky." }
+  ],
+  "presets": [ { "name": "Cookie banner" } ]
+}
+{% endschema %}

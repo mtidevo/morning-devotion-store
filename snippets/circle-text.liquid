@@ -1,0 +1,12 @@
+{% comment %} Rotating circular text badge. Params: text (string), size (px, default 140) {% endcomment %}
+{%- assign _size = size | default: 140 -%}
+<div class="circle-text" style="width: {{ _size }}px; height: {{ _size }}px;" aria-hidden="true">
+  <svg viewBox="0 0 200 200" width="{{ _size }}" height="{{ _size }}">
+    <defs>
+      <path id="circle-text-path-{{ text | handle }}" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/>
+    </defs>
+    <text class="circle-text-text">
+      <textPath href="#circle-text-path-{{ text | handle }}">{{ text }} · {{ text }} · </textPath>
+    </text>
+  </svg>
+</div>
