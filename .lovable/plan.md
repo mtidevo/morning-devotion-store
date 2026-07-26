@@ -1,45 +1,50 @@
-Port three more "Concept" patterns into the theme as new, independent sections you can drop into any template from the Customizer.
+Add the next batch of "Concept" patterns as opt-in theme features. All are drop-in; none replace existing sections.
 
-## 1. Countdown promo hero (new section: `sections/countdown-hero.liquid`)
-- Full-bleed background image (fireside look) with dark scrim
-- Rotated vertical "GET 20% OFF" pill (matches existing floating rail style)
-- Centered white headline: eyebrow + two-line H1 ("Get up to 50% off / on waterproof speakers")
-- Live countdown to a merchant-set target date/time: DAYS / HOURS / MINS / SECS with colon separators
-- CTA pill ("Discover sales →")
-- Schema settings: image, eyebrow, heading line 1, heading line 2, promo pill text, countdown datetime, CTA text, CTA link, text color
+## PDP upgrades (edit `sections/main-product.liquid`)
+- **Color swatches with image previews** — when an option is named "Color" and each variant has an image, render circular image swatches (like the Air Beats reference). Selecting a swatch swaps the main product image and updates the hidden variant ID.
+- **Popular upgrades / cross-sell card** — a bordered card under the buy box listing add-on products from a metafield or theme editor picker. Each row: thumbnail, title, price, checkbox. Checked items are added to the cart alongside the main product via a single form submit. Card is dismissible.
+- Small **star-rating pill** next to the price (from a `product.metafields.reviews.rating` metafield — no fake ratings; renders nothing if absent).
 
-## 2. Lookbook with hotspots (new section: `sections/lookbook.liquid`)
-- Eyebrow + serif heading with hand-drawn underline squiggle (reuse `circle-underline` snippet style, add a new `underline-scribble` snippet)
-- Two-column layout: big lifestyle image left, product card right (title, price, "Choose options" pill)
-- White circular hotspot dots on the lifestyle image, positioned by percentage (block-level x/y settings)
-- Click a hotspot → swaps the right-side product card to that block's product (JS handles the swap)
-- Block schema: product picker, x %, y %
+## Free-shipping progress bar (new snippet `snippets/shipping-bar.liquid`, called from cart drawer / cart page)
+- Threshold set in theme settings (default $40).
+- Live message: "Spend $X more to reach free shipping" → "You've unlocked free shipping."
+- Slim gradient progress bar underneath.
 
-## 3. Press testimonial (new section: `sections/press-testimonial.liquid`)
-- Full-bleed lifestyle background with dark scrim
-- Centered white quote mark glyph
-- Large serif pull-quote centered
-- Publication wordmark image + attribution ("— Nathan Wright, Rolling Stone")
-- Schema settings: background image, quote body, publication image, attribution
+## Sticky add-to-cart bar (new section `sections/sticky-atc.liquid`, opt-in on product template)
+- Appears on scroll past the buy box on PDPs.
+- Left: thumbnail + product title + variant.
+- Right: price + "Add to cart" button that submits the current PDP form.
 
-## Wiring
-- Add new sections to Customizer as presets (available but not auto-added to the homepage)
-- Optionally slot **Press testimonial** on the home page between Guarantee and Fundraisers, and **Lookbook** between Devotion feature and Highlighted text — say the word if you want that default order
-- Extend `assets/styles.css` with `.countdown-hero`, `.lookbook`, `.press-testimonial` styles
-- Extend `assets/site.js` with:
-  - `initCountdown()` — reads target datetime from `data-countdown-target`, updates every second, freezes at 0
-  - `initLookbook()` — click hotspot swaps the visible product card (data-lookbook-item)
+## Popup newsletter (new section `sections/popup-newsletter.liquid`)
+- Timed or exit-intent modal (settings toggle).
+- Image left, form right ("Sign up and get 20% off your first order"), Shopify customer form for email capture.
+- Dismiss state stored in `localStorage` (30-day cooldown).
 
-## Note on the "build:dev" error
-That error is from the React/Vite side of the project, not the Shopify Liquid theme in this repo. Liquid theme files don't need a Vite build — Shopify compiles them at request time. Safe to ignore for the theme work. If you want, I can also stub a `build:dev` in `lovable.toml` so the preview build stops complaining, but it won't affect the theme you upload to Shopify.
+## Countdown-timer strip on PDP (extend `sections/main-product.liquid`)
+- Optional small "Hurry up! 04d : 20h : 48m : 17s" bar under the price when a target datetime is set on the product (via metafield or section setting).
+- Reuses `initCountdown` from `assets/site.js`.
+
+## Cart notes toggle (edit `sections/main-cart.liquid` if present, else new `sections/main-cart.liquid`)
+- Collapsible "Order special instructions" panel with a textarea posting to `cart.attributes[note]` on update.
+
+## Mega menu (extend `sections/header.liquid` + new `sections/header-megamenu.liquid` block)
+- Header link with `mega:` prefix in the linklist handle opens a full-width panel on hover/focus.
+- Grid of collection cards (image + title) driven by section blocks in a new "Mega menu" section paired to a menu handle.
+- Keyboard/ARIA accessible; closes on outside click / Esc.
+
+## Internationalization block (already partly in announcement bar)
+- Move the language + country/currency switchers into the header on desktop (small chip in the actions area) in addition to the announcement bar dropdowns, using the existing `{% form 'localization' %}` pattern. Toggle via header setting.
+
+## Before/after slider (new section `sections/before-after.liquid`)
+- Two images (before / after), draggable divider with a circular handle. Great for "vibrant headphone choices" style comparisons or bag-back reveal. Pure CSS+JS, no library.
 
 ## Files to add/edit
-- `sections/countdown-hero.liquid` (new)
-- `sections/lookbook.liquid` (new)
-- `sections/press-testimonial.liquid` (new)
-- `snippets/underline-scribble.liquid` (new)
-- `assets/styles.css` (append)
-- `assets/site.js` (append `initCountdown`, `initLookbook`)
-- Optional: `templates/index.json` (insert new sections into the home order)
+- Edit: `sections/main-product.liquid`, `sections/header.liquid`, `assets/styles.css`, `assets/site.js`
+- New: `sections/sticky-atc.liquid`, `sections/popup-newsletter.liquid`, `sections/main-cart.liquid`, `sections/header-megamenu.liquid`, `sections/before-after.liquid`, `snippets/shipping-bar.liquid`, `snippets/upgrade-row.liquid`
 
-Reply "go" (and any placement preferences) and I'll build it.
+## Notes
+- Everything is opt-in from the Customizer so upload → toggle. Nothing is auto-added to templates.
+- The "build:dev" error is from the Vite/React side of the project, not the Shopify Liquid theme. Ignore for theme work, or say the word and I'll stub `build:dev` in `lovable.toml` to quiet the preview.
+- No fake reviews — the rating pill only renders if a real reviews metafield is set.
+
+Reply "go" (and flag any you want skipped) and I'll build them in one pass.
