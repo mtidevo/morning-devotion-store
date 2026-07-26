@@ -10,11 +10,30 @@
 
     <nav class="header-nav" role="navigation" aria-label="Main">
       {% for link in linklists[section.settings.menu].links %}
-        <a href="{{ link.url }}" class="nav-link{% if link.active %} is-active{% endif %}">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="nav-link{% if link.active %} is-active{% endif %}" data-nav-link data-nav-title="{{ link.title | escape | downcase }}">{{ link.title }}</a>
       {% endfor %}
     </nav>
 
     <div class="header-actions">
+      {% if section.settings.show_localization and localization.available_countries.size > 1 %}
+        <details class="header-locale">
+          <summary aria-label="Region and language">{{ localization.country.iso_code }} / {{ localization.language.iso_code | upcase }}</summary>
+          <div class="header-locale-panel">
+            {% form 'localization', class: 'header-locale-form' %}
+              <select name="country_code" onchange="this.form.submit()" aria-label="Country">
+                {% for country in localization.available_countries %}
+                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }})</option>
+                {% endfor %}
+              </select>
+              <select name="language_code" onchange="this.form.submit()" aria-label="Language">
+                {% for lang in localization.available_languages %}
+                  <option value="{{ lang.iso_code }}" {% if lang.iso_code == localization.language.iso_code %}selected{% endif %}>{{ lang.endonym_name }}</option>
+                {% endfor %}
+              </select>
+            {% endform %}
+          </div>
+        </details>
+      {% endif %}
       <button type="button" class="header-icon-btn" aria-label="Search" data-search-open>
         {% render 'icon-search' %}
       </button>
@@ -55,7 +74,8 @@
   "name": "Header",
   "settings": [
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
-    { "type": "url", "id": "account_url", "label": "Account URL (e.g. account.foreverymorning.com)" }
+    { "type": "url", "id": "account_url", "label": "Account URL (e.g. account.foreverymorning.com)" },
+    { "type": "checkbox", "id": "show_localization", "label": "Show country / language switcher", "default": false }
   ]
 }
 {% endschema %}
