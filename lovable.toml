@@ -1,2 +1,2 @@
 [run]
-"build:dev" = "echo 'Shopify theme - no build step required'"
+"build:dev" = "mkdir -p dist && echo '<!doctype html><title>For Every Morning - Shopify Theme</title><h1>For Every Morning</h1><p>This project is a Shopify Liquid theme. Upload the theme files to Shopify to preview.</p>' > dist/index.html"
