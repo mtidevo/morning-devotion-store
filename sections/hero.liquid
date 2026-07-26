@@ -1,58 +1,31 @@
-{% comment %} Hero section with devotion panel {% endcomment %}
-<section id="top" class="hero-section band band-deep">
-  <div class="wrap hero-grid">
-    <div>
-      {% if settings.logo != blank %}
-        <img src="{{ settings.logo | image_url: width: 460 }}" alt="{{ settings.brand_name }}" class="hero-logo" loading="eager">
+{% comment %} Hero — full-bleed image with overlay text and floating rail {% endcomment %}
+<section id="top" class="hero-full" data-hero>
+  {% render 'floating-rail' %}
+
+  <div class="hero-full-media">
+    {% if section.settings.image != blank %}
+      <img src="{{ section.settings.image | image_url: width: 2400 }}" alt="{{ section.settings.image.alt | escape }}" loading="eager" fetchpriority="high">
+    {% else %}
+      <div class="hero-full-fallback"></div>
+    {% endif %}
+    <div class="hero-full-scrim"></div>
+  </div>
+
+  <div class="hero-full-content">
+    <div class="wrap">
+      {% if section.settings.eyebrow != blank %}
+        <span class="hero-full-eyebrow">{{ section.settings.eyebrow }}</span>
       {% endif %}
-
-      <div class="hero-badge">
-        {% render 'icon-sparkles' %}
-        <span>{{ section.settings.badge_text | default: 'No. 01 · August · Morning Mercies' }}</span>
+      <h1 class="hero-full-title">{{ section.settings.heading | default: 'Coffee with something underneath it.' }}</h1>
+      {% if section.settings.description != blank %}
+        <p class="hero-full-lede">{{ section.settings.description }}</p>
+      {% endif %}
+      <div class="hero-full-actions">
+        <a href="{{ section.settings.primary_cta_url | default: '#coffee' }}" class="btn btn-gold">{{ section.settings.primary_cta_text | default: 'Shop this month' }}</a>
+        {% if section.settings.secondary_cta_text != blank %}
+          <a href="{{ section.settings.secondary_cta_url | default: '#devotion' }}" class="btn btn-ghost-light">{{ section.settings.secondary_cta_text }}</a>
+        {% endif %}
       </div>
-
-      <h1 class="hero-title">
-        {{ section.settings.heading | default: 'Coffee with ' }}<em class="italic">{{ section.settings.heading_emphasis | default: 'something underneath it.' }}</em>
-      </h1>
-
-      <p class="lede mt-5 max-w-md">
-        {{ section.settings.description | default: 'Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted. Shows up before you have to think about it.' }}
-      </p>
-
-      <div class="hero-actions">
-        <a href="{{ section.settings.primary_cta_url | default: '#coffee' }}" class="btn btn-gold">{{ section.settings.primary_cta_text | default: 'Start a morning · from $22' }}</a>
-        <a href="{{ section.settings.secondary_cta_url | default: '#idea' }}" class="btn btn-edge">{{ section.settings.secondary_cta_text | default: 'How it works' }}</a>
-      </div>
-
-      <div class="hero-trust">
-        <span>
-          {% render 'icon-book' %}
-          Written by pastors we know
-        </span>
-        <span>
-          <span style="display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--gold);"></span>
-          Roasted in Bend, Oregon
-        </span>
-        <span>
-          <span style="display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--gold);"></span>
-          Cancel any month
-        </span>
-      </div>
-    </div>
-
-    <div>
-      {% render 'devotion-panel',
-        number: section.settings.devotion_number | default: 'No. 01',
-        month: section.settings.devotion_month | default: 'August',
-        title: section.settings.devotion_title | default: 'Morning Mercies',
-        author: section.settings.devotion_author | default: 'Written by Alex Lambert',
-        verse: section.settings.devotion_verse | default: 'Because of the Lord\'s great love we are not consumed, for his compassions never fail. They are new every morning.',
-        citation: section.settings.devotion_citation | default: 'Lamentations 3 : 22–23',
-        body: section.settings.devotion_body | default: 'Jeremiah wrote that looking at a burned city. Not from a good week. Not with anything resolved.\n\nWhatever yesterday cost you, it did not carry over. The mercy waiting this morning is not the remainder of yesterday\'s. It is new, it is enough for today, and there is no version of you too far behind to receive it.' | newline_to_br | split: '<br />',
-        prayer: section.settings.devotion_prayer | default: 'Father, I have carried yesterday into this kitchen with me. Take it. Let me start here, with what is new, and let me be slow to pick it back up.',
-        brand: settings.brand_name,
-        bagline: section.settings.devotion_bagline | default: '12 oz · Whole bean'
-      %}
     </div>
   </div>
 </section>
@@ -61,110 +34,14 @@
 {
   "name": "Hero",
   "settings": [
-    {
-      "type": "text",
-      "id": "badge_text",
-      "label": "Badge text",
-      "default": "No. 01 · August · Morning Mercies"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Coffee with "
-    },
-    {
-      "type": "text",
-      "id": "heading_emphasis",
-      "label": "Heading emphasis",
-      "default": "something underneath it."
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "label": "Description",
-      "default": "Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted. Shows up before you have to think about it."
-    },
-    {
-      "type": "text",
-      "id": "primary_cta_text",
-      "label": "Primary CTA text",
-      "default": "Start a morning · from $22"
-    },
-    {
-      "type": "url",
-      "id": "primary_cta_url",
-      "label": "Primary CTA URL"
-    },
-    {
-      "type": "text",
-      "id": "secondary_cta_text",
-      "label": "Secondary CTA text",
-      "default": "How it works"
-    },
-    {
-      "type": "url",
-      "id": "secondary_cta_url",
-      "label": "Secondary CTA URL"
-    },
-    {
-      "type": "header",
-      "content": "Devotion panel"
-    },
-    {
-      "type": "text",
-      "id": "devotion_number",
-      "label": "Issue number",
-      "default": "No. 01"
-    },
-    {
-      "type": "text",
-      "id": "devotion_month",
-      "label": "Month",
-      "default": "August"
-    },
-    {
-      "type": "text",
-      "id": "devotion_title",
-      "label": "Devotion title",
-      "default": "Morning Mercies"
-    },
-    {
-      "type": "text",
-      "id": "devotion_author",
-      "label": "Author line",
-      "default": "Written by Alex Lambert"
-    },
-    {
-      "type": "textarea",
-      "id": "devotion_verse",
-      "label": "Verse",
-      "default": "Because of the Lord's great love we are not consumed, for his compassions never fail. They are new every morning."
-    },
-    {
-      "type": "text",
-      "id": "devotion_citation",
-      "label": "Citation",
-      "default": "Lamentations 3 : 22–23"
-    },
-    {
-      "type": "textarea",
-      "id": "devotion_body",
-      "label": "Body paragraphs",
-      "default": "Jeremiah wrote that looking at a burned city. Not from a good week. Not with anything resolved.\n\nWhatever yesterday cost you, it did not carry over. The mercy waiting this morning is not the remainder of yesterday's. It is new, it is enough for today, and there is no version of you too far behind to receive it."
-    },
-    {
-      "type": "textarea",
-      "id": "devotion_prayer",
-      "label": "Prayer",
-      "default": "Father, I have carried yesterday into this kitchen with me. Take it. Let me start here, with what is new, and let me be slow to pick it back up."
-    },
-    {
-      "type": "text",
-      "id": "devotion_bagline",
-      "label": "Bagline",
-      "default": "12 oz · Whole bean"
-    }
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "No. 01 · August · Morning Mercies" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Coffee with something underneath it." },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted." },
+    { "type": "text", "id": "primary_cta_text", "label": "Primary CTA", "default": "Shop this month" },
+    { "type": "url", "id": "primary_cta_url", "label": "Primary CTA URL" },
+    { "type": "text", "id": "secondary_cta_text", "label": "Secondary CTA", "default": "Read the devotion" },
+    { "type": "url", "id": "secondary_cta_url", "label": "Secondary CTA URL" }
   ]
 }
 {% endschema %}

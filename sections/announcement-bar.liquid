@@ -1,19 +1,95 @@
-{% comment %} Announcement bar {% endcomment %}
-<div class="announcement-bar" role="region" aria-label="Announcement">
-  <div class="wrap">
-    {{ section.settings.text | default: 'Free US shipping over $40. Subscriptions: skip or cancel any month.' }}
+{% comment %} Announcement bar with social icons, message carousel, locale selectors {% endcomment %}
+<div class="announcement-bar" data-announcement>
+  <div class="announcement-inner">
+    <div class="announcement-socials" aria-label="Social links">
+      {% if section.settings.instagram_url != blank %}
+        <a href="{{ section.settings.instagram_url }}" aria-label="Instagram" target="_blank" rel="noopener">{% render 'icon-instagram' %}</a>
+      {% endif %}
+      {% if section.settings.facebook_url != blank %}
+        <a href="{{ section.settings.facebook_url }}" aria-label="Facebook" target="_blank" rel="noopener">{% render 'icon-facebook' %}</a>
+      {% endif %}
+      {% if section.settings.x_url != blank %}
+        <a href="{{ section.settings.x_url }}" aria-label="X" target="_blank" rel="noopener">{% render 'icon-x' %}</a>
+      {% endif %}
+    </div>
+
+    <div class="announcement-messages" data-announcement-track>
+      <button type="button" class="announcement-arrow" aria-label="Previous message" data-announcement-prev>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <div class="announcement-viewport">
+        {% for block in section.blocks %}
+          <div class="announcement-slide{% if forloop.first %} is-active{% endif %}" data-announcement-slide {{ block.shopify_attributes }}>
+            {% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}
+            <span>{{ block.settings.text }}</span>
+            {% if block.settings.link != blank %}</a>{% endif %}
+          </div>
+        {% else %}
+          <div class="announcement-slide is-active">
+            <span>{{ section.settings.fallback | default: 'Free US shipping over $40. Cancel any month.' }}</span>
+          </div>
+        {% endfor %}
+      </div>
+      <button type="button" class="announcement-arrow" aria-label="Next message" data-announcement-next>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+
+    <div class="announcement-locale">
+      {% if section.settings.show_locale and localization.available_languages.size > 1 %}
+        {% form 'localization', class: 'locale-form' %}
+          <select name="locale_code" onchange="this.form.submit()" aria-label="Language">
+            {% for language in localization.available_languages %}
+              <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+            {% endfor %}
+          </select>
+        {% endform %}
+      {% endif %}
+      {% if section.settings.show_country and localization.available_countries.size > 1 %}
+        {% form 'localization', class: 'locale-form' %}
+          <select name="country_code" onchange="this.form.submit()" aria-label="Country/region">
+            {% for country in localization.available_countries %}
+              <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})</option>
+            {% endfor %}
+          </select>
+        {% endform %}
+      {% endif %}
+    </div>
   </div>
 </div>
 
 {% schema %}
 {
   "name": "Announcement bar",
+  "max_blocks": 6,
   "settings": [
+    { "type": "text", "id": "fallback", "label": "Fallback message", "default": "Free US shipping over $40. Cancel any month." },
+    { "type": "header", "content": "Socials" },
+    { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
+    { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
+    { "type": "url", "id": "x_url", "label": "X URL" },
+    { "type": "header", "content": "Locale" },
+    { "type": "checkbox", "id": "show_locale", "label": "Show language selector", "default": true },
+    { "type": "checkbox", "id": "show_country", "label": "Show country/currency selector", "default": true }
+  ],
+  "blocks": [
     {
-      "type": "text",
-      "id": "text",
-      "label": "Text",
-      "default": "Free US shipping over $40. Subscriptions: skip or cancel any month."
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Free US shipping over $40" },
+        { "type": "url", "id": "link", "label": "Link (optional)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "blocks": [
+        { "type": "message", "settings": { "text": "Free US shipping over $40" } },
+        { "type": "message", "settings": { "text": "A new devotion on the back of every bag" } },
+        { "type": "message", "settings": { "text": "Cancel or skip any month" } }
+      ]
     }
   ]
 }

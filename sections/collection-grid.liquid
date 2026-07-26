@@ -1,0 +1,73 @@
+{% comment %} Collection grid — 3-up rounded image cards {% endcomment %}
+<section class="band collection-grid-section">
+  <div class="wrap">
+    {% if section.settings.heading != blank %}
+      <div class="section-header">
+        <span class="rule">{{ section.settings.eyebrow | default: 'Explore' }}</span>
+        <h2>{{ section.settings.heading }}</h2>
+      </div>
+    {% endif %}
+    <div class="collection-grid">
+      {% for block in section.blocks %}
+        {% assign col = collections[block.settings.collection] %}
+        <a href="{{ block.settings.link | default: col.url | default: '#' }}" class="collection-card" {{ block.shopify_attributes }}>
+          <div class="collection-card-media">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | image_url: width: 900 }}" alt="{{ block.settings.title }}" loading="lazy">
+            {% elsif col.image != blank %}
+              <img src="{{ col.image | image_url: width: 900 }}" alt="{{ col.title }}" loading="lazy">
+            {% elsif col.products.first.featured_image != blank %}
+              <img src="{{ col.products.first.featured_image | image_url: width: 900 }}" alt="{{ col.title }}" loading="lazy">
+            {% else %}
+              <div class="collection-card-fallback"></div>
+            {% endif %}
+          </div>
+          <div class="collection-card-body">
+            <div class="collection-card-title">
+              <span>{{ block.settings.title | default: col.title }}</span>
+              {% if col.products_count > 0 %}<sup>{{ col.products_count }}</sup>{% endif %}
+            </div>
+            {% if block.settings.subtitle != blank %}
+              <div class="collection-card-sub">{{ block.settings.subtitle }}</div>
+            {% endif %}
+            <span class="collection-card-arrow" aria-hidden="true">{% render 'icon-arrow-right' %}</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Explore" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop the morning." }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Image (overrides collection image)" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle" },
+        { "type": "url", "id": "link", "label": "Link (optional)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection grid",
+      "blocks": [
+        { "type": "card", "settings": { "title": "All coffee", "subtitle": "Every bag we roast" } },
+        { "type": "card", "settings": { "title": "Subscriptions", "subtitle": "The devotion, monthly" } },
+        { "type": "card", "settings": { "title": "Fundraisers", "subtitle": "For your church or cause" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

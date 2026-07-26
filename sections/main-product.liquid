@@ -1,76 +1,125 @@
-{% comment %} Main product template section {% endcomment %}
-<section class="product-section">
-  <div class="wrap product-grid">
-    <div class="product-gallery">
+{% comment %} Product template — two-column with sticky info, rotating badge, low-stock bar {% endcomment %}
+<section class="pdp">
+  <div class="wrap pdp-grid">
+    <div class="pdp-media">
+      <div class="pdp-badge-wrap">
+        {% render 'circle-text', text: section.settings.badge_text | default: 'New devotion · Roasted fresh', size: 130 %}
+      </div>
       {% if product.featured_image != blank %}
-        <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | escape }}" loading="eager" width="800" height="1000">
-      {% else %}
-        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--sage-d);">
-          {% render 'icon-shopping-bag' %}
+        <div class="pdp-main-image">
+          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | escape }}" width="1200" loading="eager">
+        </div>
+      {% endif %}
+      {% if product.images.size > 1 %}
+        <div class="pdp-thumbs">
+          {% for img in product.images %}
+            <button type="button" class="pdp-thumb{% if forloop.first %} is-active{% endif %}" data-pdp-thumb="{{ img | image_url: width: 1200 }}" aria-label="View image {{ forloop.index }}">
+              <img src="{{ img | image_url: width: 200 }}" alt="" loading="lazy">
+            </button>
+          {% endfor %}
         </div>
       {% endif %}
     </div>
 
-    <div>
-      <h1 class="product-title">{{ product.title }}</h1>
-      <div class="product-price" data-product-price>{{ product.selected_or_first_available_variant.price | money }}</div>
+    <div class="pdp-info">
+      <div class="pdp-info-inner">
+        {% if product.type != blank %}<span class="rule">{{ product.type }}</span>{% endif %}
+        <h1 class="pdp-title">{{ product.title }}</h1>
 
-      <div class="product-description">
-        {{ product.description }}
-      </div>
+        <div class="pdp-price-row">
+          <span class="pdp-price" data-pdp-price>{{ product.selected_or_first_available_variant.price | money }}</span>
+          {% if product.compare_at_price > product.price %}
+            <span class="pdp-compare">{{ product.compare_at_price | money }}</span>
+          {% endif %}
+          {% if product.selected_or_first_available_variant.available %}
+            <span class="pdp-stock-pill">In stock</span>
+          {% else %}
+            <span class="pdp-stock-pill pdp-stock-pill--out">Sold out</span>
+          {% endif %}
+        </div>
 
-      {% form 'product', product %}
-        {% if product.variants.size > 1 %}
-          {% for option in product.options_with_values %}
-            <div class="product-option">
-              <label for="option-{{ section.id }}-{{ forloop.index }}">{{ option.name }}</label>
-              <select
-                id="option-{{ section.id }}-{{ forloop.index }}"
-                name="{{ option.name | escape }}"
-                data-option-select
-              >
-                {% for value in option.values %}
-                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
-                {% endfor %}
-              </select>
-            </div>
-          {% endfor %}
+        {% assign inv = product.selected_or_first_available_variant.inventory_quantity | default: 0 %}
+        {% if product.selected_or_first_available_variant.inventory_management == 'shopify' and inv > 0 and inv <= 20 %}
+          {% assign pct = inv | times: 5 %}
+          <div class="pdp-stock-bar" role="progressbar" aria-valuemin="0" aria-valuemax="20" aria-valuenow="{{ inv }}">
+            <div class="pdp-stock-bar-fill" style="width: {{ pct }}%;"></div>
+          </div>
+          <p class="pdp-stock-note">Only {{ inv }} left this month</p>
         {% endif %}
 
-        <div class="product-quantity">
-          <label for="quantity">Quantity</label>
-          <input type="number" id="quantity" name="quantity" value="1" min="1">
-        </div>
+        <div class="pdp-desc">{{ product.description }}</div>
 
-        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {% form 'product', product, class: 'pdp-form', data-pdp-form: '' %}
+          {% unless product.has_only_default_variant %}
+            {% for option in product.options_with_values %}
+              <div class="pdp-option">
+                <span class="pdp-option-label">{{ option.name }}</span>
+                <div class="pdp-swatches">
+                  {% for value in option.values %}
+                    <label class="pdp-swatch{% if option.selected_value == value %} is-active{% endif %}">
+                      <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-pdp-option>
+                      <span>{{ value }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+          {% endunless %}
 
-        <button
-          type="submit"
-          class="btn btn-gold product-submit"
-          {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
-        >
-          {% if product.selected_or_first_available_variant.available %}
-            Add to cart — {{ product.selected_or_first_available_variant.price | money }}
-          {% else %}
-            Sold out
-          {% endif %}
-        </button>
-      {% endform %}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-pdp-variant-id>
 
-      {% if product.selling_plan_groups.size > 0 %}
-        <div class="mt-6 p-5" style="border: 1px solid var(--hair); background: var(--sagetint);">
-          <p class="text-sm text-mute leading-1.7">
-            <strong style="color: var(--sage-d);">Subscription available.</strong> Choose a subscription at checkout to save and receive a fresh bag each month.
-          </p>
-        </div>
-      {% endif %}
+          <div class="pdp-qty-row">
+            <div class="pdp-qty">
+              <button type="button" aria-label="Decrease" data-pdp-qty-minus>−</button>
+              <input type="number" name="quantity" value="1" min="1" data-pdp-qty>
+              <button type="button" aria-label="Increase" data-pdp-qty-plus>+</button>
+            </div>
+            <button type="submit" class="btn btn-gold pdp-add" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+              {% if product.selected_or_first_available_variant.available %}Add to cart · <span data-pdp-total>{{ product.selected_or_first_available_variant.price | money }}</span>{% else %}Sold out{% endif %}
+            </button>
+          </div>
+        {% endform %}
+
+        <ul class="pdp-perks">
+          <li>{% render 'icon-truck' %} Free US shipping over $40</li>
+          <li>{% render 'icon-refresh' %} Skip or cancel any month</li>
+          <li>{% render 'icon-book' %} A new devotion on the back</li>
+        </ul>
+
+        {% if section.settings.show_tabs %}
+          <div class="pdp-tabs" data-pdp-tabs>
+            <div class="pdp-tabs-nav" role="tablist">
+              <button type="button" role="tab" aria-selected="true" data-pdp-tab="details">Details</button>
+              <button type="button" role="tab" aria-selected="false" data-pdp-tab="brewing">Brewing</button>
+              <button type="button" role="tab" aria-selected="false" data-pdp-tab="shipping">Shipping</button>
+            </div>
+            <div class="pdp-tabs-panels">
+              <div data-pdp-panel="details" class="is-active">
+                <p>{{ section.settings.details_text | default: 'Specialty grade, small-batch roasted in Bend, Oregon. 12 oz whole bean.' }}</p>
+              </div>
+              <div data-pdp-panel="brewing" hidden>
+                <p>{{ section.settings.brewing_text | default: 'Pour-over: 1:16 ratio. French press: 1:15, 4 min steep. Espresso: 18 g in, 36 g out, 28 s.' }}</p>
+              </div>
+              <div data-pdp-panel="shipping" hidden>
+                <p>{{ section.settings.shipping_text | default: 'Ships within 2 business days of roast. Free on US orders over $40.' }}</p>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Main product",
-  "settings": []
+  "name": "Product",
+  "settings": [
+    { "type": "text", "id": "badge_text", "label": "Rotating badge text", "default": "New devotion · Roasted fresh" },
+    { "type": "checkbox", "id": "show_tabs", "label": "Show product tabs", "default": true },
+    { "type": "textarea", "id": "details_text", "label": "Details tab" },
+    { "type": "textarea", "id": "brewing_text", "label": "Brewing tab" },
+    { "type": "textarea", "id": "shipping_text", "label": "Shipping tab" }
+  ]
 }
 {% endschema %}
