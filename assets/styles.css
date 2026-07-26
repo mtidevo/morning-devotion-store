@@ -1385,11 +1385,11 @@ h3 { font-size: 1.24rem; line-height: 1.28; }
 
 /* ---------- Announcement bar ---------- */
 .announcement-bar {
-  background: var(--sage-d);
-  color: var(--paper);
+  background: var(--paper);
+  color: var(--ink);
   font-size: 12px;
   letter-spacing: 0.04em;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid var(--hair);
 }
 .announcement-inner {
   max-width: 1400px;
@@ -1401,7 +1401,7 @@ h3 { font-size: 1.24rem; line-height: 1.28; }
   gap: 16px;
 }
 .announcement-socials { display: flex; gap: 14px; }
-.announcement-socials a { color: var(--paper); opacity: 0.85; transition: opacity 0.2s; }
+.announcement-socials a { color: var(--ink); opacity: 0.85; transition: opacity 0.2s; }
 .announcement-socials a:hover { opacity: 1; }
 .announcement-messages {
   display: flex; align-items: center; gap: 10px; justify-content: center;
@@ -1417,13 +1417,13 @@ h3 { font-size: 1.24rem; line-height: 1.28; }
 .announcement-slide.is-active { opacity: 1; pointer-events: auto; }
 .announcement-slide a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .announcement-arrow {
-  background: transparent; border: 0; color: var(--paper); opacity: 0.7;
+  background: transparent; border: 0; color: var(--ink); opacity: 0.7;
   cursor: pointer; padding: 4px; display: inline-flex;
 }
 .announcement-arrow:hover { opacity: 1; }
 .announcement-locale { display: flex; gap: 12px; justify-content: flex-end; }
 .announcement-locale select {
-  background: transparent; border: 0; color: var(--paper); font-size: 12px;
+  background: transparent; border: 0; color: var(--ink); font-size: 12px;
   letter-spacing: 0.04em; cursor: pointer;
 }
 .announcement-locale select option { color: #111; }
