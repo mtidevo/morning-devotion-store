@@ -1,4 +1,13 @@
 {% comment %} Product template — two-column with sticky info, rotating badge, low-stock bar {% endcomment %}
+{%- assign is_color_option = false -%}
+{%- for opt in product.options_with_values -%}
+  {%- assign lower = opt.name | downcase -%}
+  {%- if lower contains 'color' or lower contains 'colour' -%}
+    {%- assign is_color_option = true -%}
+    {%- assign color_option_index = forloop.index0 -%}
+  {%- endif -%}
+{%- endfor -%}
+
 <section class="pdp">
   <div class="wrap pdp-grid">
     <div class="pdp-media">
@@ -7,7 +16,7 @@
       </div>
       {% if product.featured_image != blank %}
         <div class="pdp-main-image">
-          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | escape }}" width="1200" loading="eager">
+          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | escape }}" width="1200" loading="eager" data-pdp-main-img>
         </div>
       {% endif %}
       {% if product.images.size > 1 %}
@@ -31,12 +40,31 @@
           {% if product.compare_at_price > product.price %}
             <span class="pdp-compare">{{ product.compare_at_price | money }}</span>
           {% endif %}
+          {%- assign rating = product.metafields.reviews.rating.value -%}
+          {% if rating and rating != blank %}
+            <span class="pdp-rating" aria-label="Rated {{ rating }} out of 5">
+              {% render 'icon-star' %} {{ rating }}
+              {%- assign rating_count = product.metafields.reviews.rating_count.value -%}
+              {% if rating_count %}<span class="pdp-rating-count">({{ rating_count }})</span>{% endif %}
+            </span>
+          {% endif %}
           {% if product.selected_or_first_available_variant.available %}
             <span class="pdp-stock-pill">In stock</span>
           {% else %}
             <span class="pdp-stock-pill pdp-stock-pill--out">Sold out</span>
           {% endif %}
         </div>
+
+        {%- assign countdown_target = section.settings.countdown_target | default: product.metafields.custom.countdown_target -%}
+        {% if countdown_target != blank %}
+          <div class="pdp-countdown" data-countdown-target="{{ countdown_target }}">
+            <span class="pdp-countdown-label">{{ section.settings.countdown_label | default: 'Hurry up!' }}</span>
+            <span class="pdp-countdown-unit"><b data-countdown-days>0</b>d</span>
+            <span class="pdp-countdown-unit"><b data-countdown-hours>00</b>h</span>
+            <span class="pdp-countdown-unit"><b data-countdown-mins>00</b>m</span>
+            <span class="pdp-countdown-unit"><b data-countdown-secs>00</b>s</span>
+          </div>
+        {% endif %}
 
         {% assign inv = product.selected_or_first_available_variant.inventory_quantity | default: 0 %}
         {% if product.selected_or_first_available_variant.inventory_management == 'shopify' and inv > 0 and inv <= 20 %}
@@ -52,13 +80,29 @@
         {% form 'product', product, class: 'pdp-form', data-pdp-form: '' %}
           {% unless product.has_only_default_variant %}
             {% for option in product.options_with_values %}
-              <div class="pdp-option">
-                <span class="pdp-option-label">{{ option.name }}</span>
-                <div class="pdp-swatches">
+              {%- assign opt_lower = option.name | downcase -%}
+              {%- assign is_color = false -%}
+              {%- if opt_lower contains 'color' or opt_lower contains 'colour' -%}{%- assign is_color = true -%}{%- endif -%}
+              <div class="pdp-option{% if is_color %} pdp-option--color{% endif %}">
+                <span class="pdp-option-label">
+                  {{ option.name }}{% if is_color %}: <b data-pdp-color-value>{{ option.selected_value }}</b>{% endif %}
+                </span>
+                <div class="pdp-swatches{% if is_color %} pdp-swatches--image{% endif %}">
                   {% for value in option.values %}
-                    <label class="pdp-swatch{% if option.selected_value == value %} is-active{% endif %}">
+                    {%- assign swatch_img = '' -%}
+                    {%- if is_color -%}
+                      {%- for v in product.variants -%}
+                        {%- assign vopt = v.options[forloop.parentloop.index0] -%}
+                        {%- if vopt == value and v.image != blank and swatch_img == '' -%}
+                          {%- assign swatch_img = v.image | image_url: width: 120 -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+                    <label class="pdp-swatch{% if is_color %} pdp-swatch--image{% endif %}{% if option.selected_value == value %} is-active{% endif %}"
+                           {% if is_color and swatch_img != '' %}style="background-image:url('{{ swatch_img }}');"{% endif %}
+                           title="{{ value | escape }}">
                       <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-pdp-option>
-                      <span>{{ value }}</span>
+                      {% unless is_color %}<span>{{ value }}</span>{% endunless %}
                     </label>
                   {% endfor %}
                 </div>
@@ -79,6 +123,24 @@
             </button>
           </div>
         {% endform %}
+
+        {%- assign upgrade_count = 0 -%}
+        {%- for block in section.blocks -%}{%- if block.type == 'upgrade' and block.settings.product != blank -%}{%- assign upgrade_count = upgrade_count | plus: 1 -%}{%- endif -%}{%- endfor -%}
+        {% if upgrade_count > 0 %}
+          <div class="pdp-upgrades" data-pdp-upgrades>
+            <div class="pdp-upgrades-head">
+              <span>🎁 {{ section.settings.upgrades_title | default: 'Popular upgrades' }}</span>
+              <button type="button" class="pdp-upgrades-close" aria-label="Dismiss" data-pdp-upgrades-close>{% render 'icon-x' %}</button>
+            </div>
+            <div class="pdp-upgrades-list">
+              {% for block in section.blocks %}
+                {% if block.type == 'upgrade' and block.settings.product != blank %}
+                  {% render 'upgrade-row', product: block.settings.product %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
 
         <ul class="pdp-perks">
           <li>{% render 'icon-truck' %} Free US shipping over $40</li>
@@ -119,7 +181,21 @@
     { "type": "checkbox", "id": "show_tabs", "label": "Show product tabs", "default": true },
     { "type": "textarea", "id": "details_text", "label": "Details tab" },
     { "type": "textarea", "id": "brewing_text", "label": "Brewing tab" },
-    { "type": "textarea", "id": "shipping_text", "label": "Shipping tab" }
+    { "type": "textarea", "id": "shipping_text", "label": "Shipping tab" },
+    { "type": "header", "content": "Countdown" },
+    { "type": "text", "id": "countdown_label", "label": "Countdown label", "default": "Hurry up!" },
+    { "type": "text", "id": "countdown_target", "label": "Countdown target (ISO 8601, e.g. 2026-12-31T23:59:00)" },
+    { "type": "header", "content": "Popular upgrades" },
+    { "type": "text", "id": "upgrades_title", "label": "Upgrades title", "default": "Popular upgrades" }
+  ],
+  "blocks": [
+    {
+      "type": "upgrade",
+      "name": "Upgrade",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Upgrade product" }
+      ]
+    }
   ]
 }
 {% endschema %}
