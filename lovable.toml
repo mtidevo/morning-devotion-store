@@ -1,0 +1,2 @@
+[run]
+build:dev = "echo 'Shopify theme - no build step required'"
