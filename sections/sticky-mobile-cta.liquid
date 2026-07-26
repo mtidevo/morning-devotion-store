@@ -1,0 +1,23 @@
+{% comment %} Sticky mobile CTA {% endcomment %}
+<div class="sticky-mobile-cta" data-sticky-cta>
+  <a href="{{ section.settings.url | default: '#coffee' }}" class="btn btn-gold">{{ section.settings.text | default: 'Shop now' }}</a>
+</div>
+
+{% schema %}
+{
+  "name": "Sticky mobile CTA",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Button text",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Button URL"
+    }
+  ]
+}
+{% endschema %}

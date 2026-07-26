@@ -1,0 +1,75 @@
+{% comment %} Trust bar section {% endcomment %}
+<section class="trust-bar" aria-label="What you get">
+  <div class="wrap">
+    <div class="trust-grid">
+      {% for block in section.blocks %}
+        <div class="trust-item" {{ block.shopify_attributes }}>
+          {% case block.settings.icon %}
+            {% when 'coffee' %}
+              {% render 'icon-coffee' %}
+            {% when 'truck' %}
+              {% render 'icon-truck' %}
+            {% when 'book' %}
+              {% render 'icon-book' %}
+            {% when 'refresh' %}
+              {% render 'icon-refresh' %}
+          {% endcase %}
+          <div class="min-w-0">
+            <div class="trust-item-title">{{ block.settings.title }}</div>
+            <div class="trust-item-body">{{ block.settings.body }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust bar",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "coffee", "label": "Coffee" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "book", "label": "Book" },
+            { "value": "refresh", "label": "Refresh" }
+          ],
+          "default": "coffee"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Roasted to order"
+        },
+        {
+          "type": "text",
+          "id": "body",
+          "label": "Body",
+          "default": "Small-batch, shipped within days of roast."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust bar",
+      "blocks": [
+        { "type": "trust_item", "settings": { "icon": "coffee", "title": "Roasted to order", "body": "Small-batch, shipped within days of roast." } },
+        { "type": "trust_item", "settings": { "icon": "book", "title": "Written monthly", "body": "New devotion by a pastor we know. Never reprinted." } },
+        { "type": "trust_item", "settings": { "icon": "truck", "title": "Free US shipping $40+", "body": "Real cost passed through under $40." } },
+        { "type": "trust_item", "settings": { "icon": "refresh", "title": "Cancel any month", "body": "Skip, pause, or stop from your inbox." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

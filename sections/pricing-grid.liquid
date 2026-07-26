@@ -1,0 +1,148 @@
+{% comment %} Pricing grid section {% endcomment %}
+<section id="coffee" class="band band-deep">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="rule">The coffee</span>
+      <h2>{{ section.settings.heading | default: 'Specialty grade. Roasted the week it ships.' }}</h2>
+      <p class="lede mt-4">
+        {{ section.settings.description | default: 'Certified specialty beans, small-batch roasted in Bend, Oregon, independently lab tested. On average just over four days between roaster and post.' }}
+      </p>
+    </div>
+
+    {% assign collection = collections[section.settings.collection] %}
+    {% assign product_handles = section.settings.product_handles | split: ',' %}
+    {% assign products_list = '' %}
+
+    {% if collection.products.size > 0 %}
+      {% assign products_list = collection.products %}
+    {% else %}
+      {% for handle in product_handles %}
+        {% assign handle = handle | strip %}
+        {% if handle != '' %}
+          {% assign product = all_products[handle] %}
+          {% if product != empty %}
+            {% if products_list == '' %}
+              {% assign products_list = product | append: ',' %}
+            {% else %}
+              {% assign products_list = products_list | append: product | append: ',' %}
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% if products_list.size > 0 or collection.products.size > 0 %}
+      <div class="pricing-grid">
+        {% if collection.products.size > 0 %}
+          {% for product in collection.products limit: section.settings.products_to_show %}
+            {% assign popular = false %}
+            {% if forloop.index == 2 and collection.products.size > 2 %}
+              {% assign popular = true %}
+            {% endif %}
+            {% render 'product-card',
+              product: product,
+              section: section,
+              popular: popular
+            %}
+          {% endfor %}
+        {% else %}
+          {% for handle in product_handles limit: section.settings.products_to_show %}
+            {% assign handle = handle | strip %}
+            {% if handle != '' %}
+              {% assign product = all_products[handle] %}
+              {% if product != empty %}
+                {% assign popular = false %}
+                {% if forloop.index == 2 and product_handles.size > 2 %}
+                  {% assign popular = true %}
+                {% endif %}
+                {% render 'product-card',
+                  product: product,
+                  section: section,
+                  popular: popular
+                %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="grid gap-0 grid-cols-1 items-stretch border min-820-grid-cols-2" style="border-color: var(--hair);">
+        <div class="bg-paper p-clamp">
+          <span class="rule mb-3 block">Every bag includes</span>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3 text-13 text-ink leading-1.6">
+              <span style="color: var(--gold-d); flex-shrink: 0;">✓</span>
+              <span>12 oz whole bean, specialty grade</span>
+            </li>
+            <li class="flex items-start gap-3 text-13 text-ink leading-1.6">
+              <span style="color: var(--gold-d); flex-shrink: 0;">✓</span>
+              <span>A new devotion and prayer, written once</span>
+            </li>
+            <li class="flex items-start gap-3 text-13 text-ink leading-1.6">
+              <span style="color: var(--gold-d); flex-shrink: 0;">✓</span>
+              <span>Roasted the week it ships</span>
+            </li>
+            <li class="flex items-start gap-3 text-13 text-ink leading-1.6">
+              <span style="color: var(--gold-d); flex-shrink: 0;">✓</span>
+              <span>Skip or cancel any month</span>
+            </li>
+          </ul>
+          <p class="mt-6 text-12 text-mute leading-1.7">
+            Products are being finalized in the roastery. Join the list below and be first when No. 01 opens — subscribers get first pick.
+          </p>
+        </div>
+        <div class="bg-sagetint p-clamp flex flex-col justify-center">
+          <div class="rule mb-3">Coming soon</div>
+          <h3 class="disp text-15 text-ink leading-1.2 mb-2">No. 01 opens shortly.</h3>
+          <p class="text-sm text-mute leading-1.7 mb-5">One email when the first roast is ready. Nothing else, and nothing sold in between.</p>
+          <a href="#signup" class="btn btn-gold self-start">Be first for No. 01</a>
+        </div>
+      </div>
+    {% endif %}
+
+    <p class="mt-7 py-5 px-6 text-sm text-mute leading-1.75" style="border-left: 2px solid var(--sage); background: var(--sagetint);">
+      <strong style="color: var(--sage-d); font-weight: 600;">On shipping.</strong> Free US shipping over $40. Otherwise $4.50 first bag, $1.25 each after — what the roaster charges us, passed straight through. We would rather show you the real number than fold it into the price and call it free.
+    </p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pricing grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Specialty grade. Roasted the week it ships."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Certified specialty beans, small-batch roasted in Bend, Oregon, independently lab tested. On average just over four days between roaster and post."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "product_handles",
+      "label": "Product handles (comma separated)",
+      "default": "one-bag,two-bags,the-morning,the-table",
+      "info": "Used when no collection is selected. Handles should match the product URL slugs."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    }
+  ]
+}
+{% endschema %}

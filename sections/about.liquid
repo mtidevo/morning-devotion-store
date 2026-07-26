@@ -1,0 +1,47 @@
+{% comment %} About section {% endcomment %}
+<section id="about" class="band band-deep">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-image">
+        {% if section.settings.image != blank %}
+          <img src="{{ section.settings.image | image_url: width: 800 }}" alt="{{ section.settings.image.alt | escape }}" loading="lazy">
+        {% else %}
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--sage-d);">
+            {% render 'icon-coffee' %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="about-body">
+        <span class="rule">About</span>
+        <h2 class="mb-4">{{ section.settings.heading | default: 'Coffee with a devotion on the back of every bag.' }}</h2>
+        <div>{{ section.settings.description | default: '<p>For Every Morning started with a simple idea: the things we do every day should point somewhere good. A bag of coffee is ordinary. A few honest words on the back of it can make it a small altar.</p><p>We roast specialty-grade beans in Bend, Oregon, and write a new devotion and prayer each month. The words are written once, printed once, and never reprinted. When the month is gone, the devotion is gone with it — so the morning stays fresh.</p>' }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Coffee with a devotion on the back of every bag."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>For Every Morning started with a simple idea: the things we do every day should point somewhere good. A bag of coffee is ordinary. A few honest words on the back of it can make it a small altar.</p><p>We roast specialty-grade beans in Bend, Oregon, and write a new devotion and prayer each month. The words are written once, printed once, and never reprinted. When the month is gone, the devotion is gone with it — so the morning stays fresh.</p>"
+    }
+  ]
+}
+{% endschema %}

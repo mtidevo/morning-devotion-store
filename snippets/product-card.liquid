@@ -1,0 +1,65 @@
+{% comment %} Product card snippet for pricing grid {% endcomment %}
+<article class="product-card{% if popular %} popular{% endif %}">
+  {% if popular %}
+    <div class="popular-badge">Most chosen</div>
+  {% endif %}
+
+  <a href="{{ product.url }}" class="product-card-image">
+    {% if product.featured_image != blank %}
+      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" loading="lazy" width="600" height="450">
+    {% else %}
+      <div class="product-card-placeholder">
+        {% render 'icon-shopping-bag' %}
+      </div>
+    {% endif %}
+  </a>
+
+  <div class="product-card-content">
+    <a href="{{ product.url }}" class="product-card-title no-underline">
+      <h3>{{ product.title }}</h3>
+    </a>
+    <p class="product-card-desc">{{ product.description | strip_html | truncatewords: 25 }}</p>
+
+    <div class="product-card-price">
+      <div class="product-card-price-amount" data-product-card-price>{{ product.price | money }}</div>
+      <div class="product-card-price-label">per bag</div>
+    </div>
+
+    {% form 'product', product, class: 'product-card-form' %}
+      {% if product.variants.size > 1 %}
+        <div class="product-card-options">
+          {% for option in product.options_with_values %}
+            <div class="product-card-option">
+              <label for="option-{{ section.id }}-{{ product.id }}-{{ forloop.index }}">{{ option.name }}</label>
+              <select
+                id="option-{{ section.id }}-{{ product.id }}-{{ forloop.index }}"
+                name="{{ option.name | escape }}"
+                data-option-select
+              >
+                {% for value in option.values %}
+                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <input type="hidden" name="quantity" value="1">
+
+      <button
+        type="submit"
+        class="btn btn-gold product-card-submit"
+        {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+      >
+        {% if product.selected_or_first_available_variant.available %}
+          {% render 'icon-shopping-bag' %}
+          Add to cart
+        {% else %}
+          Sold out
+        {% endif %}
+      </button>
+    {% endform %}
+  </div>
+</article>

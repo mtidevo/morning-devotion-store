@@ -1,0 +1,21 @@
+{
+  "current": {
+    "color_paper": "#ffffff",
+    "color_ink": "#2a251a",
+    "color_mute": "#6b6353",
+    "color_espresso": "#1a160e",
+    "color_gold": "#a08957",
+    "color_gold_dark": "#8f7845",
+    "color_gold_light": "#c3a468",
+    "color_champagne": "#f1eada",
+    "color_sage": "#6e7862",
+    "color_sage_dark": "#4f5646",
+    "font_display": "bodoni_moda_n4",
+    "font_body": "jost_n4",
+    "brand_name": "For Every Morning",
+    "brand_tagline": "Rise. Pour. Renew.",
+    "contact_email": "coffee@foreverymorning.com",
+    "contact_city": "Wooster, Ohio",
+    "roastery_location": "Roasted in Bend, Oregon"
+  }
+}

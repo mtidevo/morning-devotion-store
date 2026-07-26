@@ -1,0 +1,51 @@
+{% comment %} Email capture section {% endcomment %}
+<section id="signup" class="band email-capture">
+  <div class="wrap narrow text-center">
+    <span class="rule">Stay in the morning</span>
+    <h2 class="mb-4">{{ section.settings.heading | default: 'Be first for the next roast.' }}</h2>
+    <p class="lede mb-6">
+      {{ section.settings.description | default: 'One email when No. 01 opens. No daily noise, no sales spam — just a heads up when the next devotion and roast are ready.' }}
+    </p>
+
+    {% form 'customer', class: 'email-form' %}
+      {% if form.posted_successfully? %}
+        <p style="color: var(--sage-d); font-size: 14px;">Thanks — you are on the list.</p>
+      {% else %}
+        <input type="email" name="contact[email]" class="email-field" placeholder="{{ section.settings.placeholder | default: 'Your email address' }}" required aria-label="Email address">
+        <button type="submit" class="btn btn-gold">{{ section.settings.button_text | default: 'Join the list' }}</button>
+      {% endif %}
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Email capture",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Be first for the next roast."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "One email when No. 01 opens. No daily noise, no sales spam — just a heads up when the next devotion and roast are ready."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder",
+      "default": "Your email address"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Join the list"
+    }
+  ]
+}
+{% endschema %}

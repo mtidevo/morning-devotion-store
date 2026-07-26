@@ -1,0 +1,79 @@
+{% comment %} Rise / Pour / Renew section {% endcomment %}
+<section id="idea" class="band rise-pour-renew">
+  <div class="wrap">
+    <div class="section-header text-center" style="margin-left: auto; margin-right: auto;">
+      <span class="rule">How it works</span>
+      <h2>{{ section.settings.heading | default: 'A simple morning rhythm.' }}</h2>
+      <p class="lede mt-4">
+        {{ section.settings.description | default: 'No complicated portal. No guilt if you skip. Just good coffee and a few honest words waiting for you.' }}
+      </p>
+    </div>
+
+    <div class="rpr-grid">
+      {% for block in section.blocks %}
+        <div class="rpr-item" {{ block.shopify_attributes }}>
+          <div class="rpr-number">{{ block.settings.number }}</div>
+          <h3 class="rpr-title">{{ block.settings.title }}</h3>
+          <p class="rpr-body">{{ block.settings.body }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Rise / Pour / Renew",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "A simple morning rhythm."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "No complicated portal. No guilt if you skip. Just good coffee and a few honest words waiting for you."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Step number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Rise"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body",
+          "default": "Choose a bag. Pick your grind. We roast and ship before the month turns."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rise / Pour / Renew",
+      "blocks": [
+        { "type": "step", "settings": { "number": "01", "title": "Rise", "body": "Choose a bag. Pick your grind. We roast and ship before the month turns." } },
+        { "type": "step", "settings": { "number": "02", "title": "Pour", "body": "Open the bag. Brew it slowly. The devotion is on the back, short enough to read while the coffee blooms." } },
+        { "type": "step", "settings": { "number": "03", "title": "Renew", "body": "A new bag and a new devotion arrive next month. Skip or cancel anytime from a single email link." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

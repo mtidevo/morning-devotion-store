@@ -1,0 +1,56 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "trust-bar": {
+      "type": "trust-bar",
+      "settings": {}
+    },
+    "rise-pour-renew": {
+      "type": "rise-pour-renew",
+      "settings": {}
+    },
+    "pricing-grid": {
+      "type": "pricing-grid",
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "guarantee",
+      "settings": {}
+    },
+    "fundraisers": {
+      "type": "fundraisers",
+      "settings": {}
+    },
+    "about": {
+      "type": "about",
+      "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {}
+    },
+    "email-capture": {
+      "type": "email-capture",
+      "settings": {}
+    },
+    "sticky-mobile-cta": {
+      "type": "sticky-mobile-cta",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "trust-bar",
+    "rise-pour-renew",
+    "pricing-grid",
+    "guarantee",
+    "fundraisers",
+    "about",
+    "faq",
+    "email-capture",
+    "sticky-mobile-cta"
+  ]
+}

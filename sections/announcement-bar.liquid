@@ -1,0 +1,20 @@
+{% comment %} Announcement bar {% endcomment %}
+<div class="announcement-bar" role="region" aria-label="Announcement">
+  <div class="wrap">
+    {{ section.settings.text | default: 'Free US shipping over $40. Subscriptions: skip or cancel any month.' }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Free US shipping over $40. Subscriptions: skip or cancel any month."
+    }
+  ]
+}
+{% endschema %}

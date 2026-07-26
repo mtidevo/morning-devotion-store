@@ -1,0 +1,94 @@
+{% comment %} Footer section {% endcomment %}
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          {% if settings.logo != blank %}
+            <img src="{{ settings.logo | image_url: width: 120 }}" alt="{{ settings.brand_name }}" width="56" height="56">
+          {% endif %}
+          <div class="min-w-0">
+            <div class="footer-brand-name">{{ settings.brand_name }}</div>
+            <div class="footer-brand-tagline">{{ settings.brand_tagline }}</div>
+          </div>
+        </div>
+        <p class="footer-desc">
+          {{ settings.contact_city }} · {{ settings.roastery_location }}. A new devotion and prayer on the back of every bag. Written once. Never reprinted.
+        </p>
+      </div>
+
+      {% for block in section.blocks %}
+        <div {{ block.shopify_attributes }}>
+          <div class="rule footer-col-title">{{ block.settings.title }}</div>
+          <ul class="footer-links">
+            {% for link in linklists[block.settings.menu].links %}
+              <li>
+                <a href="{{ link.url }}">{{ link.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+
+      <div>
+        <div class="rule footer-col-title">Fine print</div>
+        <ul class="footer-links">
+          {% for link in linklists[section.settings.policy_menu].links %}
+            <li>
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copyright">© {{ 'now' | date: '%Y' }} {{ settings.brand_name }}. All rights reserved.</div>
+      <div class="footer-powered">Secure checkout · Powered by Shopify</div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "policy_menu",
+      "label": "Policy menu",
+      "default": "footer"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu_column",
+      "name": "Menu column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Shop"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "main-menu"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        { "type": "menu_column", "settings": { "title": "Shop", "menu": "main-menu" } },
+        { "type": "menu_column", "settings": { "title": "Company", "menu": "main-menu" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

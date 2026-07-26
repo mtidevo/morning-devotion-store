@@ -1,0 +1,18 @@
+{% comment %} Main article template section {% endcomment %}
+<section class="page-section">
+  <div class="wrap page-content">
+    <span class="rule">{{ blog.title }}</span>
+    <h1 class="mb-6">{{ article.title }}</h1>
+    <p class="text-sm text-mute mb-6">{{ article.published_at | date: "%B %d, %Y" }}</p>
+    <div class="rte">
+      {{ article.content }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main article",
+  "settings": []
+}
+{% endschema %}

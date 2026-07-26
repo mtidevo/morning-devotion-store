@@ -1,0 +1,88 @@
+{% comment %} Fundraisers section {% endcomment %}
+<section id="causes" class="band band-deep">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="rule">Fundraisers</span>
+      <h2>{{ section.settings.heading | default: 'Coffee that funds what you care about.' }}</h2>
+      <p class="lede mt-4">
+        {{ section.settings.description | default: 'Run a month-long campaign with a custom bag and devotion. Your people get fresh coffee; your cause gets a meaningful share of every order.' }}
+      </p>
+    </div>
+
+    <div class="fundraiser-grid">
+      {% for block in section.blocks %}
+        <div class="fundraiser-card" {{ block.shopify_attributes }}>
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.description }}</p>
+          <a href="{{ block.settings.cta_url }}" class="btn btn-edge btn-sm">{{ block.settings.cta_text | default: 'Learn more' }}</a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="mt-8 text-center">
+      <p class="text-sm text-mute">
+        Want to run a fundraiser? Email us at <a href="mailto:{{ settings.contact_email }}" style="text-decoration: underline; text-underline-offset: 4px;">{{ settings.contact_email }}</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fundraisers",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Coffee that funds what you care about."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Run a month-long campaign with a custom bag and devotion. Your people get fresh coffee; your cause gets a meaningful share of every order."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "fundraiser",
+      "name": "Fundraiser",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Church campaign"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "A custom landing page, co-branded bag, and a devotion written for your congregation."
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "CTA text",
+          "default": "Learn more"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "CTA URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fundraisers",
+      "blocks": [
+        { "type": "fundraiser", "settings": { "title": "Church campaign", "description": "A custom landing page, co-branded bag, and a devotion written for your congregation." } },
+        { "type": "fundraiser", "settings": { "title": "Non-profit partnership", "description": "Monthly coffee that quietly supports a cause your community already loves." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

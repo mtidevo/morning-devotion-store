@@ -1,0 +1,81 @@
+{% comment %} FAQ section {% endcomment %}
+<section id="faq" class="band band-deep">
+  <div class="wrap faq-grid">
+    <div>
+      <span class="rule block mb-4">Answers</span>
+      <h2>{{ section.settings.heading | default: 'Questions before your first bag.' }}</h2>
+      <p class="lede mt-5">
+        {{ section.settings.description | default: 'The things people ask us over email, in one place. If your question is not here, we read every reply at ' }}
+        <a href="mailto:{{ settings.contact_email }}" style="text-decoration: underline; text-underline-offset: 4px;">{{ settings.contact_email }}</a>.
+      </p>
+    </div>
+
+    <div class="faq-list">
+      {% for block in section.blocks %}
+        <div class="faq-item" {{ block.shopify_attributes }}>
+          <button type="button" class="faq-question" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+            <span>{{ block.settings.question }}</span>
+            <span class="icon-minus{% unless forloop.first %} hidden{% endunless %}">{% render 'icon-minus' %}</span>
+            <span class="icon-plus{% if forloop.first %} hidden{% endif %}">{% render 'icon-plus' %}</span>
+          </button>
+          <div class="faq-answer" {% unless forloop.first %}hidden{% endunless %}>
+            {{ block.settings.answer }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Questions before your first bag."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "The things people ask us over email, in one place. If your question is not here, we read every reply at"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "When does my bag ship?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Every subscription roasts and ships together at the start of the month. One-off orders roast within two business days and land in about a week.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        { "type": "faq_item", "settings": { "question": "When does my bag ship?", "answer": "<p>Every subscription roasts and ships together at the start of the month. One-off orders roast within two business days and land in about a week.</p>" } },
+        { "type": "faq_item", "settings": { "question": "Can I cancel or skip a month?", "answer": "<p>Yes, any time, from a link in your email. No account to hunt through, no phone call, no retention script.</p>" } },
+        { "type": "faq_item", "settings": { "question": "Whole bean or ground?", "answer": "<p>Whole bean is the default because it keeps longer and tastes better. You can switch to ground at checkout or on any renewal.</p>" } },
+        { "type": "faq_item", "settings": { "question": "Who writes the devotions?", "answer": "<p>Alex writes and edits every month. Some months are written by pastors and leaders we know, credited on the bag. Every month is written once and never reprinted.</p>" } },
+        { "type": "faq_item", "settings": { "question": "Where does the coffee come from?", "answer": "<p>Certified specialty beans, small-batch roasted in Bend, Oregon, independently lab tested. Origins rotate; the roast profile stays consistent.</p>" } },
+        { "type": "faq_item", "settings": { "question": "Is this only for Christians?", "answer": "<p>The devotions are Christian. The coffee is for anyone. Plenty of subscribers gift the bag to someone in their family who reads it before they do.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

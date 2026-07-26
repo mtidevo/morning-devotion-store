@@ -1,0 +1,162 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "For Every Morning",
+    "theme_version": "1.0.0",
+    "theme_author": "For Every Morning",
+    "theme_documentation_url": "https://foreverymorning.com",
+    "theme_support_url": "https://foreverymorning.com"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_paper",
+        "label": "Paper (background)",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_ink",
+        "label": "Ink (text)",
+        "default": "#2a251a"
+      },
+      {
+        "type": "color",
+        "id": "color_mute",
+        "label": "Muted text",
+        "default": "#6b6353"
+      },
+      {
+        "type": "color",
+        "id": "color_espresso",
+        "label": "Espresso (dark panels)",
+        "default": "#1a160e"
+      },
+      {
+        "type": "color",
+        "id": "color_gold",
+        "label": "Gold",
+        "default": "#a08957"
+      },
+      {
+        "type": "color",
+        "id": "color_gold_dark",
+        "label": "Gold dark",
+        "default": "#8f7845"
+      },
+      {
+        "type": "color",
+        "id": "color_gold_light",
+        "label": "Gold light",
+        "default": "#c3a468"
+      },
+      {
+        "type": "color",
+        "id": "color_champagne",
+        "label": "Champagne (light text on dark)",
+        "default": "#f1eada"
+      },
+      {
+        "type": "color",
+        "id": "color_sage",
+        "label": "Sage",
+        "default": "#6e7862"
+      },
+      {
+        "type": "color",
+        "id": "color_sage_dark",
+        "label": "Sage dark",
+        "default": "#4f5646"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_display",
+        "label": "Display font",
+        "default": "bodoni_moda_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body font",
+        "default": "jost_n4"
+      }
+    ]
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Logo width",
+        "min": 40,
+        "max": 240,
+        "step": 10,
+        "default": 160,
+        "unit": "px"
+      },
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Brand name",
+        "default": "For Every Morning"
+      },
+      {
+        "type": "text",
+        "id": "brand_tagline",
+        "label": "Tagline",
+        "default": "Rise. Pour. Renew."
+      }
+    ]
+  },
+  {
+    "name": "Social accounts",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook"
+      }
+    ]
+  },
+  {
+    "name": "Contact",
+    "settings": [
+      {
+        "type": "text",
+        "id": "contact_email",
+        "label": "Contact email",
+        "default": "coffee@foreverymorning.com"
+      },
+      {
+        "type": "text",
+        "id": "contact_city",
+        "label": "City",
+        "default": "Wooster, Ohio"
+      },
+      {
+        "type": "text",
+        "id": "roastery_location",
+        "label": "Roastery location",
+        "default": "Roasted in Bend, Oregon"
+      }
+    ]
+  }
+]

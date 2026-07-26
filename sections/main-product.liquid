@@ -1,0 +1,76 @@
+{% comment %} Main product template section {% endcomment %}
+<section class="product-section">
+  <div class="wrap product-grid">
+    <div class="product-gallery">
+      {% if product.featured_image != blank %}
+        <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | escape }}" loading="eager" width="800" height="1000">
+      {% else %}
+        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--sage-d);">
+          {% render 'icon-shopping-bag' %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div>
+      <h1 class="product-title">{{ product.title }}</h1>
+      <div class="product-price" data-product-price>{{ product.selected_or_first_available_variant.price | money }}</div>
+
+      <div class="product-description">
+        {{ product.description }}
+      </div>
+
+      {% form 'product', product %}
+        {% if product.variants.size > 1 %}
+          {% for option in product.options_with_values %}
+            <div class="product-option">
+              <label for="option-{{ section.id }}-{{ forloop.index }}">{{ option.name }}</label>
+              <select
+                id="option-{{ section.id }}-{{ forloop.index }}"
+                name="{{ option.name | escape }}"
+                data-option-select
+              >
+                {% for value in option.values %}
+                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="product-quantity">
+          <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" name="quantity" value="1" min="1">
+        </div>
+
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+        <button
+          type="submit"
+          class="btn btn-gold product-submit"
+          {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+        >
+          {% if product.selected_or_first_available_variant.available %}
+            Add to cart — {{ product.selected_or_first_available_variant.price | money }}
+          {% else %}
+            Sold out
+          {% endif %}
+        </button>
+      {% endform %}
+
+      {% if product.selling_plan_groups.size > 0 %}
+        <div class="mt-6 p-5" style="border: 1px solid var(--hair); background: var(--sagetint);">
+          <p class="text-sm text-mute leading-1.7">
+            <strong style="color: var(--sage-d);">Subscription available.</strong> Choose a subscription at checkout to save and receive a fresh bag each month.
+          </p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main product",
+  "settings": []
+}
+{% endschema %}

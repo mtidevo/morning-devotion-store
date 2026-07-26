@@ -1,0 +1,32 @@
+<div>
+  <article class="devotion-panel">
+    <div class="devotion-header">
+      <span class="devotion-number">{{ number }}</span>
+      <span class="devotion-month">{{ month }}</span>
+    </div>
+
+    <h3 class="devotion-title">{{ title }}</h3>
+    <div class="devotion-author">{{ author }}</div>
+
+    <blockquote class="devotion-verse">
+      {{ verse }}
+      <cite>{{ citation }}</cite>
+    </blockquote>
+
+    {% for paragraph in body %}
+      <p>{{ paragraph }}</p>
+    {% endfor %}
+
+    <div class="devotion-divider">
+      <span>A prayer</span>
+    </div>
+
+    <p class="devotion-prayer">{{ prayer }}</p>
+
+    <div class="devotion-footer">
+      <span>{{ brand }}</span>
+      <span>{{ bagline }}</span>
+    </div>
+  </article>
+  <p class="devotion-caption">The back of the bag · changes monthly</p>
+</div>

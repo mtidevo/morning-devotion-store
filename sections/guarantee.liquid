@@ -1,0 +1,38 @@
+{% comment %} Guarantee band {% endcomment %}
+<section class="guarantee-band">
+  <div class="wrap">
+    <div class="guarantee-inner">
+      <span class="guarantee-badge">{{ section.settings.label | default: 'Our promise' }}</span>
+      <h2 class="guarantee-title">{{ section.settings.heading | default: 'Love your first bag, or we make it right.' }}</h2>
+      <p class="guarantee-body">
+        {{ section.settings.description | default: 'If the coffee or the devotion does not land the way you hoped, email us. We will refund the bag or send a replacement — no script, no waiting. We are not here to keep your money; we are here to keep you in the morning.' }}
+      </p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Guarantee",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Our promise"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Love your first bag, or we make it right."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "If the coffee or the devotion does not land the way you hoped, email us. We will refund the bag or send a replacement — no script, no waiting. We are not here to keep your money; we are here to keep you in the morning."
+    }
+  ]
+}
+{% endschema %}

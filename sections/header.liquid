@@ -1,0 +1,68 @@
+{% comment %} Header section {% endcomment %}
+<header class="site-header" role="banner">
+  <div class="header-inner wrap">
+    <a href="{{ routes.root_url }}" class="header-logo">
+      {% if settings.logo != blank %}
+        <img src="{{ settings.logo | image_url: width: 120 }}" alt="{{ settings.brand_name }}" width="60" height="60">
+      {% else %}
+        <span class="disp">{{ settings.brand_name }}</span>
+      {% endif %}
+      <span>{{ settings.brand_name }}</span>
+    </a>
+
+    <nav class="header-nav" role="navigation" aria-label="Main">
+      {% for link in linklists.main-menu.links %}
+        <a href="{{ link.url }}" class="nav-link">{{ link.title }}</a>
+      {% endfor %}
+      <a href="{{ section.settings.cta_url | default: '#coffee' }}" class="btn btn-gold btn-sm hidden sm-inline-flex">{{ section.settings.cta_text | default: 'Start a morning' }}</a>
+      <a href="{{ routes.account_url }}" class="nav-link">Account</a>
+      <a href="{{ routes.cart_url }}" class="cart-link nav-link" aria-label="Cart">
+        {% render 'icon-shopping-bag' %}
+        {% if cart.item_count > 0 %}
+          <span class="cart-count">{{ cart.item_count }}</span>
+        {% endif %}
+      </a>
+      <button class="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </nav>
+  </div>
+
+  {% comment %} Mobile menu {% endcomment %}
+  <div class="mobile-menu" hidden style="border-top: 1px solid var(--hair); padding: 16px 26px; background: var(--paper);">
+    {% for link in linklists.main-menu.links %}
+      <a href="{{ link.url }}" style="display: block; padding: 10px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink);">{{ link.title }}</a>
+    {% endfor %}
+    <a href="{{ routes.account_url }}" style="display: block; padding: 10px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink);">Account</a>
+    <a href="{{ routes.cart_url }}" style="display: block; padding: 10px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink);">Cart</a>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Start a morning"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL"
+    }
+  ]
+}
+{% endschema %}
