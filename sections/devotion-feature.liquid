@@ -8,18 +8,7 @@
       <a href="{{ section.settings.cta_url | default: '#coffee' }}" class="btn btn-gold mt-6">{{ section.settings.cta_text | default: 'Start a morning' }}</a>
     </div>
     <div>
-      {% render 'devotion-panel',
-        number: section.settings.devotion_number | default: 'No. 01',
-        month: section.settings.devotion_month | default: 'August',
-        title: section.settings.devotion_title | default: 'Morning Mercies',
-        author: section.settings.devotion_author | default: 'Written by Alex Lambert',
-        verse: section.settings.devotion_verse | default: 'Because of the Lord\'s great love we are not consumed, for his compassions never fail. They are new every morning.',
-        citation: section.settings.devotion_citation | default: 'Lamentations 3 : 22–23',
-        body: section.settings.devotion_body | default: 'Jeremiah wrote that looking at a burned city. Not from a good week. Not with anything resolved.\n\nWhatever yesterday cost you, it did not carry over. The mercy waiting this morning is not the remainder of yesterday\'s. It is new, it is enough for today, and there is no version of you too far behind to receive it.' | newline_to_br | split: '<br />',
-        prayer: section.settings.devotion_prayer | default: 'Father, I have carried yesterday into this kitchen with me. Take it. Let me start here, with what is new, and let me be slow to pick it back up.',
-        brand: settings.brand_name,
-        bagline: section.settings.devotion_bagline | default: '12 oz · Whole bean'
-      %}
+      {% render 'devotion-panel', number: section.settings.devotion_number, default: '12 oz · Whole bean', month: section.settings.devotion_month, title: section.settings.devotion_title, author: section.settings.devotion_author, verse: section.settings.devotion_verse, citation: section.settings.devotion_citation, body: section.settings.devotion_body, split: '<br />', prayer: section.settings.devotion_prayer, brand: settings.brand_name, bagline: section.settings.devotion_bagline %}
     </div>
   </div>
 </section>
@@ -46,3 +35,30 @@
   "presets": [ { "name": "Devotion feature" } ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {% render 'devotion-panel',
+            number: section.settings.devotion_number | default: 'No. 01',
+            month: section.settings.devotion_month | default: 'August',
+            title: section.settings.devotion_title | default: 'Morning Mercies',
+            author: section.settings.devotion_author | default: 'Written by Alex Lambert',
+            verse: section.settings.devotion_verse | default: 'Because of the Lord\'s great love we are not consumed, for his compassions never fail. They are new every morning.',
+            citation: section.settings.devotion_citation | default: 'Lamentations 3 : 22–23',
+            body: section.settings.devotion_body | default: 'Jeremiah wrote that looking at a burned city. Not from a good week. Not with anything resolved.\n\nWhatever yesterday cost you, it did not carry over. The mercy waiting this morning is not the remainder of yesterday\'s. It is new, it is enough for today, and there is no version of you too far behind to receive it.' | newline_to_br | split: '<br />',
+            prayer: section.settings.devotion_prayer | default: 'Father, I have carried yesterday into this kitchen with me. Take it. Let me start here, with what is new, and let me be slow to pick it back up.',
+            brand: settings.brand_name,
+            bagline: section.settings.devotion_bagline | default: '12 oz · Whole bean'
+          %}
+  to: "{% render 'devotion-panel', number: section.settings.devotion_number, default:
+    '12 oz · Whole bean', month: section.settings.devotion_month, title: section.settings.devotion_title,
+    author: section.settings.devotion_author, verse: section.settings.devotion_verse,
+    citation: section.settings.devotion_citation, body: section.settings.devotion_body,
+    split: '<br />', prayer: section.settings.devotion_prayer, brand: settings.brand_name,
+    bagline: section.settings.devotion_bagline %}"
+  position: 830..1309
+{% endcomment %}

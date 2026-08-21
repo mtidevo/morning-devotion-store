@@ -12,7 +12,7 @@
   <div class="wrap pdp-grid">
     <div class="pdp-media">
       <div class="pdp-badge-wrap">
-        {% render 'circle-text', text: section.settings.badge_text | default: 'New devotion · Roasted fresh', size: 130 %}
+        {% render 'circle-text', text: section.settings.badge_text, default: 'New devotion · Roasted fresh', size: 130 %}
       </div>
       {% if product.featured_image != blank %}
         <div class="pdp-main-image">
@@ -199,3 +199,15 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'circle-text', text: section.settings.badge_text | default: 'New
+    devotion · Roasted fresh', size: 130 %}"
+  to: "{% render 'circle-text', text: section.settings.badge_text, default: 'New devotion
+    · Roasted fresh', size: 130 %}"
+  position: 555..668
+{% endcomment %}
