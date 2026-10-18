@@ -49,9 +49,9 @@
             </span>
           {% endif %}
           {% if product.selected_or_first_available_variant.available %}
-            <span class="pdp-stock-pill">In stock</span>
+            <span class="pdp-stock-pill" data-pdp-stock>In stock</span>
           {% else %}
-            <span class="pdp-stock-pill pdp-stock-pill--out">Sold out</span>
+            <span class="pdp-stock-pill pdp-stock-pill--out" data-pdp-stock>Sold out</span>
           {% endif %}
         </div>
 
@@ -78,6 +78,7 @@
         <div class="pdp-desc">{{ product.description }}</div>
 
         {% form 'product', product, class: 'pdp-form', data-pdp-form: '' %}
+          {% render 'variant-json', product: product %}
           {% unless product.has_only_default_variant %}
             {% for option in product.options_with_values %}
               {%- assign opt_lower = option.name | downcase -%}
@@ -101,7 +102,7 @@
                     <label class="pdp-swatch{% if is_color %} pdp-swatch--image{% endif %}{% if option.selected_value == value %} is-active{% endif %}"
                            {% if is_color and swatch_img != '' %}style="background-image:url('{{ swatch_img }}');"{% endif %}
                            title="{{ value | escape }}">
-                      <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-pdp-option>
+                      <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-pdp-option data-option-index="{{ forloop.parentloop.index0 }}">
                       {% unless is_color %}<span>{{ value }}</span>{% endunless %}
                     </label>
                   {% endfor %}
@@ -118,8 +119,8 @@
               <input type="number" name="quantity" value="1" min="1" data-pdp-qty>
               <button type="button" aria-label="Increase" data-pdp-qty-plus>+</button>
             </div>
-            <button type="submit" class="btn btn-gold pdp-add" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-              {% if product.selected_or_first_available_variant.available %}Add to cart · <span data-pdp-total>{{ product.selected_or_first_available_variant.price | money }}</span>{% else %}Sold out{% endif %}
+            <button type="submit" class="btn btn-gold pdp-add" data-pdp-add {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+              <span data-pdp-add-label>{% if product.selected_or_first_available_variant.available %}Add to cart · <span data-pdp-total>{{ product.selected_or_first_available_variant.price | money }}</span>{% else %}Sold out{% endif %}</span>
             </button>
           </div>
         {% endform %}

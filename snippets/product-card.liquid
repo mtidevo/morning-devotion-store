@@ -26,6 +26,7 @@
     </div>
 
     {% form 'product', product, class: 'product-card-form' %}
+      {% render 'variant-json', product: product %}
       {% if product.variants.size > 1 %}
         <div class="product-card-options">
           {% for option in product.options_with_values %}
@@ -33,7 +34,7 @@
               <label for="option-{{ section.id }}-{{ product.id }}-{{ forloop.index }}">{{ option.name }}</label>
               <select
                 id="option-{{ section.id }}-{{ product.id }}-{{ forloop.index }}"
-                name="{{ option.name | escape }}"
+                data-option-index="{{ forloop.index0 }}"
                 data-option-select
               >
                 {% for value in option.values %}
@@ -45,7 +46,7 @@
         </div>
       {% endif %}
 
-      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
       <input type="hidden" name="quantity" value="1">
 
       <button

@@ -29,6 +29,32 @@
 
   {{ content_for_header }}
 
+  <style>
+    :root {
+      --paper: {{ settings.color_paper }};
+      --paper2: {{ settings.color_paper }};
+      --sagetint: {{ settings.color_paper }};
+      --ink: {{ settings.color_ink }};
+      --mute: {{ settings.color_mute }};
+      --espresso: {{ settings.color_espresso }};
+      --bark: #322d21;
+      --gold-d: {{ settings.color_gold_dark }};
+      --gold: {{ settings.color_gold }};
+      --gold-l: {{ settings.color_gold_light }};
+      --champagne: {{ settings.color_champagne }};
+      --sage-d: {{ settings.color_sage_dark }};
+      --sage: {{ settings.color_sage }};
+      --sage-l: #9ba48d;
+    
+      --hair: rgba(78, 86, 70, 0.2);
+      --hairG: rgba(143, 120, 69, 0.3);
+      --hairP: rgba(241, 234, 218, 0.16);
+    
+      --disp: "Bodoni Moda", Didot, Georgia, serif;
+      --sans: "Jost", system-ui, sans-serif;
+    }
+  </style>
+
   {{ 'styles.css' | asset_url | stylesheet_tag }}
 
   <script>
