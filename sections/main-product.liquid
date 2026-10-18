@@ -16,14 +16,14 @@
       </div>
       {% if product.featured_image != blank %}
         <div class="pdp-main-image">
-          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | escape }}" width="1200" loading="eager" data-pdp-main-img>
+          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" width="1200" loading="eager" data-pdp-main-img>
         </div>
       {% endif %}
       {% if product.images.size > 1 %}
         <div class="pdp-thumbs">
           {% for img in product.images %}
             <button type="button" class="pdp-thumb{% if forloop.first %} is-active{% endif %}" data-pdp-thumb="{{ img | image_url: width: 1200 }}" aria-label="View image {{ forloop.index }}">
-              <img src="{{ img | image_url: width: 200 }}" alt="" loading="lazy">
+              <img src="{{ img | image_url: width: 200 }}" alt="{{ img.alt | default: product.title | escape }}" loading="lazy">
             </button>
           {% endfor %}
         </div>
@@ -157,7 +157,7 @@
             </div>
             <div class="pdp-tabs-panels">
               <div data-pdp-panel="details" class="is-active">
-                <p>{{ section.settings.details_text | default: 'Specialty grade, small-batch roasted in Bend, Oregon. 12 oz whole bean.' }}</p>
+                <p>{{ section.settings.details_text | default: 'Specialty grade, small-batch roasted in Bend, Oregon. 12 oz bag, whole bean or ground.' }}</p>
               </div>
               <div data-pdp-panel="brewing" hidden>
                 <p>{{ section.settings.brewing_text | default: 'Pour-over: 1:16 ratio. French press: 1:15, 4 min steep. Espresso: 18 g in, 36 g out, 28 s.' }}</p>
