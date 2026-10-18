@@ -59,17 +59,89 @@
     show();
   }
 
-  // Product card variant selection helper
+  // Variant lookup shared by the product page and product cards
+  function readVariants(form) {
+    const el = form.querySelector('[data-variant-json]');
+    if (!el) return [];
+    try { return JSON.parse(el.textContent); } catch (e) { return []; }
+  }
+  function findVariant(variants, selected) {
+    return variants.find(function (v) {
+      return selected.every(function (val, i) { return val === undefined || v.options[i] === val; });
+    });
+  }
+
+  // Product cards: keep the hidden variant id, price and button in sync with the dropdowns
   function initProductCards() {
     document.querySelectorAll('.product-card-form').forEach(function (form) {
-      const select = form.querySelector('select[name="id"]');
-      if (!select) return;
-      select.addEventListener('change', function () {
-        const selectedOption = select.options[select.selectedIndex];
-        const price = selectedOption.dataset.price;
-        const priceEl = form.closest('.product-card').querySelector('.product-card-price-amount');
-        if (price && priceEl) priceEl.textContent = price;
+      const variants = readVariants(form);
+      const selects = form.querySelectorAll('[data-option-select]');
+      const idInput = form.querySelector('[data-variant-id]');
+      if (!variants.length || !selects.length || !idInput) return;
+      const card = form.closest('.product-card');
+      const update = function () {
+        const selected = [];
+        selects.forEach(function (s) { selected[parseInt(s.dataset.optionIndex, 10)] = s.value; });
+        const v = findVariant(variants, selected);
+        const btn = form.querySelector('.product-card-submit');
+        if (!v) { if (btn) { btn.disabled = true; btn.textContent = 'Unavailable'; } return; }
+        idInput.value = v.id;
+        const priceEl = card && card.querySelector('[data-product-card-price]');
+        if (priceEl) priceEl.textContent = v.price;
+        if (btn) { btn.disabled = !v.available; btn.lastChild.textContent = v.available ? ' Add to cart' : 'Sold out'; }
+      };
+      selects.forEach(function (s) { s.addEventListener('change', update); });
+      update();
+    });
+  }
+
+  // Product page: map the selected options to the right variant
+  function initPDPVariants() {
+    const form = document.querySelector('[data-pdp-form]');
+    if (!form) return;
+    const variants = readVariants(form);
+    const idInput = form.querySelector('[data-pdp-variant-id]');
+    if (!variants.length || !idInput) return;
+    const update = function () {
+      const selected = [];
+      form.querySelectorAll('[data-pdp-option]:checked').forEach(function (r) {
+        selected[parseInt(r.dataset.optionIndex, 10)] = r.value;
       });
+      const v = findVariant(variants, selected);
+      const addBtn = form.querySelector('[data-pdp-add]');
+      const label = form.querySelector('[data-pdp-add-label]');
+      const price = document.querySelector('[data-pdp-price]');
+      const stock = document.querySelector('[data-pdp-stock]');
+      const sticky = document.querySelector('[data-sticky-atc]');
+      if (!v) {
+        if (addBtn) addBtn.disabled = true;
+        if (label) label.textContent = 'Unavailable';
+        return;
+      }
+      idInput.value = v.id;
+      if (price) price.textContent = v.price;
+      if (addBtn) addBtn.disabled = !v.available;
+      if (label) label.innerHTML = v.available ? 'Add to cart · <span data-pdp-total>' + v.price + '</span>' : 'Sold out';
+      if (stock) {
+        stock.textContent = v.available ? 'In stock' : 'Sold out';
+        stock.classList.toggle('pdp-stock-pill--out', !v.available);
+      }
+      if (sticky) {
+        const sp = sticky.querySelector('[data-sticky-atc-price]');
+        const sv = sticky.querySelector('[data-sticky-atc-variant]');
+        const sb = sticky.querySelector('[data-sticky-atc-submit]');
+        if (sp) sp.textContent = v.price;
+        if (sv) sv.textContent = v.title;
+        if (sb) { sb.disabled = !v.available; sb.textContent = v.available ? 'Add to cart' : 'Sold out'; }
+      }
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('variant', v.id);
+        window.history.replaceState({}, '', url.toString());
+      } catch (e) {}
+    };
+    form.addEventListener('change', function (e) {
+      if (e.target.matches('[data-pdp-option]')) update();
     });
   }
 
@@ -140,7 +212,7 @@
 
   // PDP interactions: swatches, qty, thumbs, tabs
   function initPDP() {
-    // Swatch active state (visual only; actual variant selection needs Shopify variant JSON)
+    // Swatch active state (variant id is synced in initPDPVariants)
     document.querySelectorAll('.pdp-swatches').forEach(function (group) {
       group.addEventListener('change', function (e) {
         if (e.target.matches('input[type="radio"]')) {
@@ -206,6 +278,7 @@
     initSearch();
     initCookieBanner();
     initPDP();
+    initPDPVariants();
     initCountdown();
     initLookbook();
   });
