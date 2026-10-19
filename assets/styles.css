@@ -2,6 +2,11 @@
 
 /* Color and font tokens live in layout/theme.liquid so theme settings render. */
 
+/* Anything with the hidden attribute stays hidden, even if a class sets display. */
+[hidden] {
+  display: none !important;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
