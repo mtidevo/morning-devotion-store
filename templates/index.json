@@ -1,54 +1,5 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "announcement_bar_YrBAH6": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_ypEFnq": {
-          "type": "message",
-          "settings": {
-            "text": "Free US shipping over $40",
-            "link": ""
-          }
-        },
-        "message_D9dVxa": {
-          "type": "message",
-          "settings": {
-            "text": "A new devotion on the back of every bag",
-            "link": ""
-          }
-        },
-        "message_aWCUUp": {
-          "type": "message",
-          "settings": {
-            "text": "Cancel or skip any month",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "message_ypEFnq",
-        "message_D9dVxa",
-        "message_aWCUUp"
-      ],
-      "name": "Announcement bar",
-      "settings": {
-        "fallback": "Free US shipping over $40. Cancel any month.",
-        "instagram_url": "https://www.instagram.com/foreverymorning",
-        "facebook_url": "https://www.facebook.com/Foreverymorning",
-        "x_url": "",
-        "show_locale": true,
-        "show_country": true
-      }
-    },
     "hero": {
       "type": "hero",
       "settings": {
@@ -182,7 +133,6 @@
     }
   },
   "order": [
-    "announcement_bar_YrBAH6",
     "hero",
     "collection-grid",
     "devotion-feature",
