@@ -1,31 +1,59 @@
-{% comment %} Hero — full-bleed image with overlay text and floating rail {% endcomment %}
-<section id="top" class="hero-full" data-hero>
-  {% render 'floating-rail' %}
-
-  <div class="hero-full-media">
-    {% if section.settings.image != blank %}
-      <img src="{{ section.settings.image | image_url: width: 2400 }}" alt="{{ section.settings.image.alt | escape }}" loading="eager" fetchpriority="high">
-    {% else %}
-      <div class="hero-full-fallback"></div>
-    {% endif %}
-    <div class="hero-full-scrim"></div>
+{% comment %} Hero: sunrise background, headline and the featured cartons {% endcomment %}
+{%- assign hero_handles = section.settings.product_handles | default: 'steadfast,new-mercies,rise-shine' | split: ',' -%}
+<section id="top" class="hero-sun" data-hero>
+  <div class="hero-sun-bg" aria-hidden="true">
+    <svg class="hero-sun-rays" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice">
+      <g stroke="currentColor" stroke-width="1.2" opacity="0.5">
+        {%- for i in (0..23) -%}
+          {%- assign deg = i | times: 15 -%}
+          <line x1="400" y1="400" x2="400" y2="0" transform="rotate({{ deg }} 400 400)"></line>
+        {%- endfor -%}
+      </g>
+    </svg>
+    <svg class="hero-sun-hills" viewBox="0 0 1440 220" preserveAspectRatio="none">
+      <path d="M0,150 C240,90 420,120 640,96 C860,72 1060,120 1440,84 L1440,220 L0,220 Z" fill="currentColor" opacity="0.07"></path>
+      <path d="M0,190 C260,140 520,170 760,150 C1000,130 1220,170 1440,150 L1440,220 L0,220 Z" fill="currentColor" opacity="0.1"></path>
+    </svg>
   </div>
 
-  <div class="hero-full-content">
-    <div class="wrap">
+  <div class="wrap hero-sun-grid">
+    <div class="hero-sun-copy">
       {% if section.settings.eyebrow != blank %}
-        <span class="hero-full-eyebrow">{{ section.settings.eyebrow }}</span>
+        <span class="hero-sun-eyebrow"><span class="hero-sun-dot" aria-hidden="true"></span>{{ section.settings.eyebrow }}</span>
       {% endif %}
-      <h1 class="hero-full-title">{{ section.settings.heading | default: 'Coffee with something underneath it.' }}</h1>
+      <h1 class="hero-sun-title">{{ section.settings.heading | default: 'Coffee with something underneath it.' }}</h1>
       {% if section.settings.description != blank %}
-        <p class="hero-full-lede">{{ section.settings.description }}</p>
+        <p class="hero-sun-lede">{{ section.settings.description }}</p>
       {% endif %}
-      <div class="hero-full-actions">
-        <a href="{{ section.settings.primary_cta_url | default: '#coffee' }}" class="btn btn-gold">{{ section.settings.primary_cta_text | default: 'Shop this month' }}</a>
+      <div class="hero-sun-actions">
+        <a href="{{ section.settings.primary_cta_url | default: '#coffee' }}" class="btn hero-btn-primary">{{ section.settings.primary_cta_text | default: 'Shop this month' }}</a>
         {% if section.settings.secondary_cta_text != blank %}
-          <a href="{{ section.settings.secondary_cta_url | default: '#devotion' }}" class="btn btn-ghost-light">{{ section.settings.secondary_cta_text }}</a>
+          <a href="{{ section.settings.secondary_cta_url | default: '#devotion' }}" class="btn hero-btn-secondary">{{ section.settings.secondary_cta_text }}</a>
         {% endif %}
       </div>
+      {% if section.settings.trust_line != blank %}
+        <p class="hero-sun-trust">{{ section.settings.trust_line }}</p>
+      {% endif %}
+    </div>
+
+    <div class="hero-sun-media">
+      {% if section.settings.image != blank %}
+        <img class="hero-sun-photo" src="{{ section.settings.image | image_url: width: 1400 }}" srcset="{{ section.settings.image | image_url: width: 700 }} 700w, {{ section.settings.image | image_url: width: 1400 }} 1400w" sizes="(min-width: 900px) 50vw, 100vw" alt="{{ section.settings.image.alt | escape }}" loading="eager" fetchpriority="high">
+      {% else %}
+        <div class="hero-cartons">
+          {%- for handle in hero_handles limit: 3 -%}
+            {%- assign hp = all_products[handle | strip] -%}
+            {%- if hp != empty and hp.featured_image != blank -%}
+              {%- assign hp_alt = hp.featured_image.alt -%}
+              {%- if hp_alt == blank or hp_alt == 'Product Image' -%}{%- assign hp_alt = hp.title -%}{%- endif -%}
+              <a href="{{ hp.url }}" class="hero-carton hero-carton--{{ forloop.index }}">
+                <img src="{{ hp.featured_image | image_url: width: 600 }}" srcset="{{ hp.featured_image | image_url: width: 360 }} 360w, {{ hp.featured_image | image_url: width: 600 }} 600w" sizes="(min-width: 900px) 220px, 34vw" alt="{{ hp_alt | escape }}" {% if forloop.index == 2 %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %} width="600" height="{{ 600 | divided_by: hp.featured_image.aspect_ratio | round }}">
+                <span class="hero-carton-shadow" aria-hidden="true"></span>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -34,14 +62,63 @@
 {
   "name": "Hero",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Background image" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "No. 01 · November · New Mercies" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Coffee with something underneath it." },
-    { "type": "textarea", "id": "description", "label": "Description", "default": "Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted." },
-    { "type": "text", "id": "primary_cta_text", "label": "Primary CTA", "default": "Shop this month" },
-    { "type": "url", "id": "primary_cta_url", "label": "Primary CTA URL" },
-    { "type": "text", "id": "secondary_cta_text", "label": "Secondary CTA", "default": "Read the devotion" },
-    { "type": "url", "id": "secondary_cta_url", "label": "Secondary CTA URL" }
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "No. 01 · November · New Mercies"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Coffee with something underneath it."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted."
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_text",
+      "label": "Primary CTA",
+      "default": "Shop this month"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_url",
+      "label": "Primary CTA URL"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary CTA",
+      "default": "Read the devotion"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_url",
+      "label": "Secondary CTA URL"
+    },
+    {
+      "type": "text",
+      "id": "product_handles",
+      "label": "Featured coffees (product handles, center one second)",
+      "default": "steadfast,new-mercies,rise-shine"
+    },
+    {
+      "type": "text",
+      "id": "trust_line",
+      "label": "Small print under buttons",
+      "default": "Free US shipping over $40 · Whole bean or ground · A new devotion every month"
+    }
   ]
 }
 {% endschema %}
