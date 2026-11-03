@@ -1,0 +1,11 @@
+{% comment %}
+  Variant data for option pickers. Usage: {% render 'variant-json', product: product %}
+  Read by assets/site.js to map selected options to the right variant id.
+{% endcomment %}
+<script type="application/json" data-variant-json>
+  [
+    {%- for v in product.variants -%}
+      {"id": {{ v.id }}, "title": {{ v.title | json }}, "options": {{ v.options | json }}, "available": {{ v.available | json }}, "price": {{ v.price | money | json }}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+</script>

@@ -1,9 +1,45 @@
 {
   "type": "header",
+  "name": "Header group",
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "settings": {}
+      "blocks": {
+        "message_ypEFnq": {
+          "type": "message",
+          "settings": {
+            "text": "Free US shipping over $40",
+            "link": ""
+          }
+        },
+        "message_D9dVxa": {
+          "type": "message",
+          "settings": {
+            "text": "A new devotion on the back of every bag",
+            "link": ""
+          }
+        },
+        "message_aWCUUp": {
+          "type": "message",
+          "settings": {
+            "text": "Cancel or skip any month",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "message_ypEFnq",
+        "message_D9dVxa",
+        "message_aWCUUp"
+      ],
+      "settings": {
+        "fallback": "Free US shipping over $40. Cancel any month.",
+        "instagram_url": "https://www.instagram.com/foreverymorning",
+        "facebook_url": "https://www.facebook.com/Foreverymorning",
+        "x_url": "",
+        "show_locale": true,
+        "show_country": true
+      }
     },
     "header": {
       "type": "header",

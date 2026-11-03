@@ -1,58 +1,9 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "announcement_bar_YrBAH6": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_ypEFnq": {
-          "type": "message",
-          "settings": {
-            "text": "Free US shipping over $40",
-            "link": ""
-          }
-        },
-        "message_D9dVxa": {
-          "type": "message",
-          "settings": {
-            "text": "A new devotion on the back of every bag",
-            "link": ""
-          }
-        },
-        "message_aWCUUp": {
-          "type": "message",
-          "settings": {
-            "text": "Cancel or skip any month",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "message_ypEFnq",
-        "message_D9dVxa",
-        "message_aWCUUp"
-      ],
-      "name": "Announcement bar",
-      "settings": {
-        "fallback": "Free US shipping over $40. Cancel any month.",
-        "instagram_url": "https://www.instagram.com/foreverymorning",
-        "facebook_url": "https://www.facebook.com/Foreverymorning",
-        "x_url": "",
-        "show_locale": true,
-        "show_country": true
-      }
-    },
     "hero": {
       "type": "hero",
       "settings": {
-        "eyebrow": "No. 01 · August · Morning Mercies",
+        "eyebrow": "No. 01 · November · New Mercies",
         "heading": "Coffee with something underneath it.",
         "description": "Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted.",
         "primary_cta_text": "Shop this month",
@@ -76,14 +27,14 @@
         "cta_text": "Start a morning",
         "cta_url": "",
         "devotion_number": "No. 01",
-        "devotion_month": "August",
-        "devotion_title": "Morning Mercies",
+        "devotion_month": "November",
+        "devotion_title": "New Mercies",
         "devotion_author": "Written by Alex Lambert",
-        "devotion_verse": "Because of the Lord's great love we are not consumed, for his compassions never fail. They are new every morning.",
-        "devotion_citation": "Lamentations 3 : 22–23",
-        "devotion_body": "",
-        "devotion_prayer": "",
-        "devotion_bagline": "12 oz · Whole bean"
+        "devotion_verse": "It is of the LORD’s mercies that we are not consumed, because his compassions fail not. They are new every morning: great is thy faithfulness.",
+        "devotion_citation": "Lamentations 3:22–23 (KJV)",
+        "devotion_body": "Lamentations was written over a city in ruins. Yet in the middle of his grief, the writer stops and remembers: God’s mercy has not run out. Most of us wake up carrying yesterday. The sharp word, the unpaid bill, the prayer that seems unanswered. But mercy is not a tank that drains. It is more like the sunrise. It comes back whether you earned it or not. Yesterday is finished. His mercy is not.",
+        "devotion_prayer": "Lord, thank You for this morning. I lay down what I carried in from yesterday. Your mercy is new today. Help me live like someone given a fresh start. Amen.",
+        "devotion_bagline": "12 oz · Whole bean or ground"
       }
     },
     "highlighted-text": {
@@ -102,11 +53,11 @@
     "pricing-grid": {
       "type": "pricing-grid",
       "settings": {
-        "heading": "Specialty grade. Roasted the week it ships.",
+        "heading": "Six coffees. One devotion each month.",
         "description": "Certified specialty beans, small-batch roasted in Bend, Oregon, independently lab tested. On average just over four days between roaster and post.",
-        "collection": "frontpage",
-        "product_handles": "one-bag,two-bags,the-morning,the-table",
-        "products_to_show": 4
+        "collection": "",
+        "product_handles": "rise-shine,new-mercies,steadfast,abide,grateful-heart,anchored",
+        "products_to_show": 6
       }
     },
     "rise-pour-renew": {
@@ -161,7 +112,7 @@
       "type": "email-capture",
       "settings": {
         "heading": "Be first for the next roast.",
-        "description": "One email when No. 01 opens. No daily noise, no sales spam — just a heads up when the next devotion and roast are ready.",
+        "description": "One email when each new devotion and roast is ready. No daily noise, no sales spam.",
         "placeholder": "Your email address",
         "button_text": "Join the list"
       }
@@ -182,7 +133,6 @@
     }
   },
   "order": [
-    "announcement_bar_YrBAH6",
     "hero",
     "collection-grid",
     "devotion-feature",

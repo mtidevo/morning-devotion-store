@@ -16,14 +16,14 @@
       </div>
       {% if product.featured_image != blank %}
         <div class="pdp-main-image">
-          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | escape }}" width="1200" loading="eager" data-pdp-main-img>
+          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" width="1200" loading="eager" data-pdp-main-img>
         </div>
       {% endif %}
       {% if product.images.size > 1 %}
         <div class="pdp-thumbs">
           {% for img in product.images %}
             <button type="button" class="pdp-thumb{% if forloop.first %} is-active{% endif %}" data-pdp-thumb="{{ img | image_url: width: 1200 }}" aria-label="View image {{ forloop.index }}">
-              <img src="{{ img | image_url: width: 200 }}" alt="" loading="lazy">
+              <img src="{{ img | image_url: width: 200 }}" alt="{{ img.alt | default: product.title | escape }}" loading="lazy">
             </button>
           {% endfor %}
         </div>
@@ -49,9 +49,9 @@
             </span>
           {% endif %}
           {% if product.selected_or_first_available_variant.available %}
-            <span class="pdp-stock-pill">In stock</span>
+            <span class="pdp-stock-pill" data-pdp-stock>In stock</span>
           {% else %}
-            <span class="pdp-stock-pill pdp-stock-pill--out">Sold out</span>
+            <span class="pdp-stock-pill pdp-stock-pill--out" data-pdp-stock>Sold out</span>
           {% endif %}
         </div>
 
@@ -78,6 +78,7 @@
         <div class="pdp-desc">{{ product.description }}</div>
 
         {% form 'product', product, class: 'pdp-form', data-pdp-form: '' %}
+          {% render 'variant-json', product: product %}
           {% unless product.has_only_default_variant %}
             {% for option in product.options_with_values %}
               {%- assign opt_lower = option.name | downcase -%}
@@ -101,7 +102,7 @@
                     <label class="pdp-swatch{% if is_color %} pdp-swatch--image{% endif %}{% if option.selected_value == value %} is-active{% endif %}"
                            {% if is_color and swatch_img != '' %}style="background-image:url('{{ swatch_img }}');"{% endif %}
                            title="{{ value | escape }}">
-                      <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-pdp-option>
+                      <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-pdp-option data-option-index="{{ forloop.parentloop.index0 }}">
                       {% unless is_color %}<span>{{ value }}</span>{% endunless %}
                     </label>
                   {% endfor %}
@@ -118,8 +119,8 @@
               <input type="number" name="quantity" value="1" min="1" data-pdp-qty>
               <button type="button" aria-label="Increase" data-pdp-qty-plus>+</button>
             </div>
-            <button type="submit" class="btn btn-gold pdp-add" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-              {% if product.selected_or_first_available_variant.available %}Add to cart · <span data-pdp-total>{{ product.selected_or_first_available_variant.price | money }}</span>{% else %}Sold out{% endif %}
+            <button type="submit" class="btn btn-gold pdp-add" data-pdp-add {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+              <span data-pdp-add-label>{% if product.selected_or_first_available_variant.available %}Add to cart · <span data-pdp-total>{{ product.selected_or_first_available_variant.price | money }}</span>{% else %}Sold out{% endif %}</span>
             </button>
           </div>
         {% endform %}
@@ -157,7 +158,7 @@
             </div>
             <div class="pdp-tabs-panels">
               <div data-pdp-panel="details" class="is-active">
-                <p>{{ section.settings.details_text | default: 'Specialty grade, small-batch roasted in Bend, Oregon. 12 oz whole bean.' }}</p>
+                <p>{{ section.settings.details_text | default: 'Specialty grade, small-batch roasted in Bend, Oregon. 12 oz bag, whole bean or ground.' }}</p>
               </div>
               <div data-pdp-panel="brewing" hidden>
                 <p>{{ section.settings.brewing_text | default: 'Pour-over: 1:16 ratio. French press: 1:15, 4 min steep. Espresso: 18 g in, 36 g out, 28 s.' }}</p>

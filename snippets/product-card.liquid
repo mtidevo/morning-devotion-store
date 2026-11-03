@@ -4,9 +4,9 @@
     <div class="popular-badge">Most chosen</div>
   {% endif %}
 
-  <a href="{{ product.url }}" class="product-card-image">
+  <a href="{{ product.url }}" class="product-card-image" aria-label="{{ product.title | escape }}">
     {% if product.featured_image != blank %}
-      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" loading="lazy" width="600" height="450">
+      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="600" height="450">
     {% else %}
       <div class="product-card-placeholder">
         {% render 'icon-shopping-bag' %}
@@ -22,10 +22,11 @@
 
     <div class="product-card-price">
       <div class="product-card-price-amount" data-product-card-price>{{ product.price | money }}</div>
-      <div class="product-card-price-label">per bag</div>
+      {%- if product.type == 'Coffee' -%}{%- unless product.variants.first.title contains '2 x' -%}<div class="product-card-price-label">per bag</div>{%- endunless -%}{%- endif -%}
     </div>
 
     {% form 'product', product, class: 'product-card-form' %}
+      {% render 'variant-json', product: product %}
       {% if product.variants.size > 1 %}
         <div class="product-card-options">
           {% for option in product.options_with_values %}
@@ -33,7 +34,7 @@
               <label for="option-{{ section.id }}-{{ product.id }}-{{ forloop.index }}">{{ option.name }}</label>
               <select
                 id="option-{{ section.id }}-{{ product.id }}-{{ forloop.index }}"
-                name="{{ option.name | escape }}"
+                data-option-index="{{ forloop.index0 }}"
                 data-option-select
               >
                 {% for value in option.values %}
@@ -45,7 +46,7 @@
         </div>
       {% endif %}
 
-      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
       <input type="hidden" name="quantity" value="1">
 
       <button

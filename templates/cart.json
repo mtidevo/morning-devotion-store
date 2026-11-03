@@ -12,7 +12,7 @@
     "main": {
       "type": "main-cart",
       "settings": {
-        "free_shipping_threshold_cents": 5000
+        "free_shipping_threshold_cents": 4000
       }
     }
   },

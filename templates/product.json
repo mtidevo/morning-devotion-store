@@ -3,9 +3,14 @@
     "main": {
       "type": "main-product",
       "settings": {}
+    },
+    "sticky-atc": {
+      "type": "sticky-atc",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "sticky-atc"
   ]
 }
