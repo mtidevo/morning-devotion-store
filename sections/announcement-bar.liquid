@@ -26,7 +26,7 @@
           </div>
         {% else %}
           <div class="announcement-slide is-active">
-            <span>{{ section.settings.fallback | default: 'Free US shipping over $40. Cancel any month.' }}</span>
+            <span>{{ section.settings.fallback | default: 'Free US shipping over $40.' }}</span>
           </div>
         {% endfor %}
       </div>
@@ -63,7 +63,7 @@
   "name": "Announcement bar",
   "max_blocks": 6,
   "settings": [
-    { "type": "text", "id": "fallback", "label": "Fallback message", "default": "Free US shipping over $40. Cancel any month." },
+    { "type": "text", "id": "fallback", "label": "Fallback message", "default": "Free US shipping over $40." },
     { "type": "header", "content": "Socials" },
     { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
     { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
@@ -88,7 +88,7 @@
       "blocks": [
         { "type": "message", "settings": { "text": "Free US shipping over $40" } },
         { "type": "message", "settings": { "text": "A new devotion on the back of every bag" } },
-        { "type": "message", "settings": { "text": "Cancel or skip any month" } }
+        { "type": "message", "settings": { "text": "Whole bean or ground, 12 oz bags" } }
       ]
     }
   ]

@@ -2065,3 +2065,26 @@ h3 { font-size: 1.24rem; line-height: 1.28; }
 .ba-label--after { right:16px; }
 
 .visually-hidden { position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+/* Dynamic checkout (Shop Pay / Apple Pay) */
+.pdp-dynamic-checkout { margin-top: 12px; }
+.pdp-dynamic-checkout .shopify-payment-button__button { border-radius: 0; min-height: 48px; }
+.pdp-dynamic-checkout .shopify-payment-button__more-options { font-size: 12px; color: var(--mute); }
+
+/* Footer payment icons */
+.footer-powered { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.footer-payments { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.footer-payment-icon { width: 38px; height: 24px; display: block; }
+
+/* Contact form */
+.contact-form { display: grid; gap: 16px; max-width: 560px; margin-top: 28px; }
+.contact-row { display: grid; gap: 6px; }
+.contact-row label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); }
+.contact-row input, .contact-row textarea {
+  font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--hair);
+  background: #fff; color: var(--ink); border-radius: 0;
+}
+.contact-row input:focus-visible, .contact-row textarea:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+.contact-form .btn { justify-self: start; }
+.contact-success { padding: 12px 14px; background: var(--paper2); border-left: 2px solid var(--gold); }
+.contact-errors { padding: 12px 14px; border-left: 2px solid #b3261e; color: #b3261e; }

@@ -21,9 +21,7 @@
     {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
   </title>
 
-  {% if page_description %}
-    <meta name="description" content="{{ page_description | escape }}">
-  {% endif %}
+  <meta name="description" content="{{ page_description | default: shop.description | default: settings.share_description | default: 'Specialty coffee with a new devotion and prayer on the back of every bag.' | escape }}">
 
   {% render 'meta-tags' %}
 
@@ -106,6 +104,6 @@
 
   {% sections 'footer-group' %}
 
-  {{ 'site.js' | asset_url | script_tag }}
+  <script src="{{ 'site.js' | asset_url }}" defer></script>
 </body>
 </html>
