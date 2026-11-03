@@ -38,11 +38,12 @@
 
     <div class="hero-sun-media">
       {% if section.settings.image != blank %}
-        <img class="hero-sun-photo" src="{{ section.settings.image | image_url: width: 1400 }}" srcset="{{ section.settings.image | image_url: width: 700 }} 700w, {{ section.settings.image | image_url: width: 1400 }} 1400w" sizes="(min-width: 900px) 50vw, 100vw" alt="{{ section.settings.image.alt | escape }}" loading="eager" fetchpriority="high">
+        <img class="hero-sun-photo" src="{{ section.settings.image | image_url: width: 1400 }}" srcset="{{ section.settings.image | image_url: width: 700 }} 700w, {{ section.settings.image | image_url: width: 1400 }} 1400w" sizes="(min-width: 900px) 50vw, 100vw" alt="{{ section.settings.image.alt | escape }}" width="1400" height="{{ 1400 | divided_by: section.settings.image.aspect_ratio | round }}" loading="eager" fetchpriority="high">
       {% else %}
         <div class="hero-cartons">
           {%- for handle in hero_handles limit: 3 -%}
-            {%- assign hp = all_products[handle | strip] -%}
+            {%- assign hero_handle = handle | strip -%}
+            {%- assign hp = all_products[hero_handle] -%}
             {%- if hp != empty and hp.featured_image != blank -%}
               {%- assign hp_alt = hp.featured_image.alt -%}
               {%- if hp_alt == blank or hp_alt == 'Product Image' -%}{%- assign hp_alt = hp.title -%}{%- endif -%}
