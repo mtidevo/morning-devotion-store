@@ -2088,3 +2088,10 @@ h3 { font-size: 1.24rem; line-height: 1.28; }
 .contact-form .btn { justify-self: start; }
 .contact-success { padding: 12px 14px; background: var(--paper2); border-left: 2px solid var(--gold); }
 .contact-errors { padding: 12px 14px; border-left: 2px solid #b3261e; color: #b3261e; }
+
+/* App blocks (Judge.me reviews) */
+.pdp-app-block { margin: 4px 0 10px; }
+.apps-heading { margin-bottom: 24px; }
+.product-card-rating { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--ink); margin: 2px 0 6px; }
+.product-card-rating svg { width: 13px; height: 13px; color: var(--gold); }
+.product-card-rating-count { color: var(--mute); }

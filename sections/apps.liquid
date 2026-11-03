@@ -1,0 +1,29 @@
+{% comment %} Apps section: holds app blocks such as the Judge.me review widget {% endcomment %}
+{%- if section.blocks.size > 0 -%}
+<section class="band apps-section">
+  <div class="wrap">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="apps-heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- for block in section.blocks -%}
+      {% render block %}
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Apps",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading" }
+  ],
+  "blocks": [
+    { "type": "@app" }
+  ],
+  "presets": [
+    { "name": "Apps" }
+  ]
+}
+{% endschema %}

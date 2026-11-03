@@ -38,14 +38,19 @@
       <div class="pdp-info-inner">
         {% if product.type != blank %}<span class="rule">{{ product.type }}</span>{% endif %}
         <h1 class="pdp-title">{{ product.title }}</h1>
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}
+            <div class="pdp-app-block">{% render block %}</div>
+          {%- endif -%}
+        {%- endfor -%}
 
         <div class="pdp-price-row">
           <span class="pdp-price" data-pdp-price>{{ product.selected_or_first_available_variant.price | money }}</span>
           {% if product.compare_at_price > product.price %}
             <span class="pdp-compare">{{ product.compare_at_price | money }}</span>
           {% endif %}
-          {%- assign rating = product.metafields.reviews.rating.value -%}
-          {% if rating and rating != blank %}
+          {%- assign rating = product.metafields.reviews.rating.value.rating | round: 1 -%}
+          {% if rating and rating != blank and rating > 0 %}
             <span class="pdp-rating" aria-label="Rated {{ rating }} out of 5">
               {% render 'icon-star' %} {{ rating }}
               {%- assign rating_count = product.metafields.reviews.rating_count.value -%}
@@ -254,6 +259,9 @@
           "label": "Upgrade product"
         }
       ]
+    },
+    {
+      "type": "@app"
     }
   ]
 }
