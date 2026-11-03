@@ -38,13 +38,30 @@
               <a href="{{ link.url }}">{{ link.title }}</a>
             </li>
           {% endfor %}
+          {% for policy in shop.policies %}
+            {%- unless policy.body == blank -%}
+              <li><a href="{{ policy.url }}">{{ policy.title }}</a></li>
+            {%- endunless -%}
+          {% endfor %}
+          {% if settings.contact_email != blank %}
+            <li><a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>
 
     <div class="footer-bottom">
       <div class="footer-copyright">© {{ 'now' | date: '%Y' }} {{ settings.brand_name }}. All rights reserved.</div>
-      <div class="footer-powered">Secure checkout · Powered by Shopify</div>
+      <div class="footer-powered">
+        <span>Secure checkout</span>
+        {%- if shop.enabled_payment_types.size > 0 -%}
+          <ul class="footer-payments" role="list" aria-label="Payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              <li>{{ type | payment_type_svg_tag: class: 'footer-payment-icon' }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 </footer>

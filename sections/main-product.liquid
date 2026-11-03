@@ -10,20 +10,24 @@
 
 <section class="pdp">
   <div class="wrap pdp-grid">
+    {%- assign main_alt = product.featured_image.alt -%}
+    {%- if main_alt == blank or main_alt == 'Product Image' -%}{%- assign main_alt = product.title | append: ' coffee, 12 oz carton' -%}{%- endif -%}
     <div class="pdp-media">
       <div class="pdp-badge-wrap">
         {% render 'circle-text', text: section.settings.badge_text, default: 'New devotion · Roasted fresh', size: 130 %}
       </div>
       {% if product.featured_image != blank %}
         <div class="pdp-main-image">
-          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" width="1200" loading="eager" data-pdp-main-img>
+          <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ main_alt | escape }}" width="1200" height="{{ 1200 | divided_by: product.featured_image.aspect_ratio | round }}" loading="eager" fetchpriority="high" data-pdp-main-img>
         </div>
       {% endif %}
       {% if product.images.size > 1 %}
         <div class="pdp-thumbs">
           {% for img in product.images %}
+            {%- assign thumb_alt = img.alt -%}
+            {%- if thumb_alt == blank or thumb_alt == 'Product Image' -%}{%- assign thumb_alt = product.title | append: ' coffee carton, view ' | append: forloop.index -%}{%- endif -%}
             <button type="button" class="pdp-thumb{% if forloop.first %} is-active{% endif %}" data-pdp-thumb="{{ img | image_url: width: 1200 }}" aria-label="View image {{ forloop.index }}">
-              <img src="{{ img | image_url: width: 200 }}" alt="{{ img.alt | default: product.title | escape }}" loading="lazy">
+              <img src="{{ img | image_url: width: 200 }}" alt="{{ thumb_alt | escape }}" width="100" height="{{ 100 | divided_by: img.aspect_ratio | round }}" loading="lazy">
             </button>
           {% endfor %}
         </div>
@@ -123,6 +127,7 @@
               <span data-pdp-add-label>{% if product.selected_or_first_available_variant.available %}Add to cart · <span data-pdp-total>{{ product.selected_or_first_available_variant.price | money }}</span>{% else %}Sold out{% endif %}</span>
             </button>
           </div>
+          <div class="pdp-dynamic-checkout">{{ form | payment_button }}</div>
         {% endform %}
 
         {%- assign upgrade_count = 0 -%}
@@ -145,8 +150,9 @@
 
         <ul class="pdp-perks">
           <li>{% render 'icon-truck' %} Free US shipping over $40</li>
-          <li>{% render 'icon-refresh' %} Skip or cancel any month</li>
+          {% if product.selling_plan_groups.size > 0 %}<li>{% render 'icon-refresh' %} Skip or cancel any month</li>{% endif %}
           <li>{% render 'icon-book' %} A new devotion on the back</li>
+          <li>{% render 'icon-sparkles' %} {{ section.settings.guarantee_text | default: 'Love your first bag, or we make it right' }}</li>
         </ul>
 
         {% if section.settings.show_tabs %}
@@ -178,23 +184,75 @@
 {
   "name": "Product",
   "settings": [
-    { "type": "text", "id": "badge_text", "label": "Rotating badge text", "default": "New devotion · Roasted fresh" },
-    { "type": "checkbox", "id": "show_tabs", "label": "Show product tabs", "default": true },
-    { "type": "textarea", "id": "details_text", "label": "Details tab" },
-    { "type": "textarea", "id": "brewing_text", "label": "Brewing tab" },
-    { "type": "textarea", "id": "shipping_text", "label": "Shipping tab" },
-    { "type": "header", "content": "Countdown" },
-    { "type": "text", "id": "countdown_label", "label": "Countdown label", "default": "Hurry up!" },
-    { "type": "text", "id": "countdown_target", "label": "Countdown target (ISO 8601, e.g. 2026-12-31T23:59:00)" },
-    { "type": "header", "content": "Popular upgrades" },
-    { "type": "text", "id": "upgrades_title", "label": "Upgrades title", "default": "Popular upgrades" }
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Rotating badge text",
+      "default": "New devotion · Roasted fresh"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tabs",
+      "label": "Show product tabs",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "details_text",
+      "label": "Details tab"
+    },
+    {
+      "type": "textarea",
+      "id": "brewing_text",
+      "label": "Brewing tab"
+    },
+    {
+      "type": "textarea",
+      "id": "shipping_text",
+      "label": "Shipping tab"
+    },
+    {
+      "type": "header",
+      "content": "Countdown"
+    },
+    {
+      "type": "text",
+      "id": "countdown_label",
+      "label": "Countdown label",
+      "default": "Hurry up!"
+    },
+    {
+      "type": "text",
+      "id": "countdown_target",
+      "label": "Countdown target (ISO 8601, e.g. 2026-12-31T23:59:00)"
+    },
+    {
+      "type": "header",
+      "content": "Popular upgrades"
+    },
+    {
+      "type": "text",
+      "id": "upgrades_title",
+      "label": "Upgrades title",
+      "default": "Popular upgrades"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Guarantee line",
+      "default": "Love your first bag, or we make it right"
+    }
   ],
   "blocks": [
     {
       "type": "upgrade",
       "name": "Upgrade",
       "settings": [
-        { "type": "product", "id": "product", "label": "Upgrade product" }
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Upgrade product"
+        }
       ]
     }
   ]

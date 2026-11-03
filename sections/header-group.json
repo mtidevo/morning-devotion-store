@@ -22,7 +22,7 @@
         "message_aWCUUp": {
           "type": "message",
           "settings": {
-            "text": "Cancel or skip any month",
+            "text": "Whole bean or ground, 12 oz bags",
             "link": ""
           }
         }
@@ -33,7 +33,7 @@
         "message_aWCUUp"
       ],
       "settings": {
-        "fallback": "Free US shipping over $40. Cancel any month.",
+        "fallback": "Free US shipping over $40.",
         "instagram_url": "https://www.instagram.com/foreverymorning",
         "facebook_url": "https://www.facebook.com/Foreverymorning",
         "x_url": "",

@@ -6,7 +6,9 @@
 
   <a href="{{ product.url }}" class="product-card-image" aria-label="{{ product.title | escape }}">
     {% if product.featured_image != blank %}
-      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="600" height="450">
+      {%- assign card_alt = product.featured_image.alt -%}
+      {%- if card_alt == blank or card_alt == 'Product Image' -%}{%- assign card_alt = product.title | append: ' coffee, 12 oz carton' -%}{%- endif -%}
+      <img src="{{ product.featured_image | image_url: width: 600 }}" srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 600 }} 600w, {{ product.featured_image | image_url: width: 900 }} 900w" sizes="(min-width: 1100px) 360px, (min-width: 700px) 45vw, 92vw" alt="{{ card_alt | escape }}" loading="lazy" width="600" height="450">
     {% else %}
       <div class="product-card-placeholder">
         {% render 'icon-shopping-bag' %}

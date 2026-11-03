@@ -118,6 +118,19 @@
         "id": "brand_tagline",
         "label": "Tagline",
         "default": "Rise. Pour. Renew."
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Social sharing image",
+        "info": "Shown when the site is shared. 1200 x 628 px works best."
+      },
+      {
+        "type": "textarea",
+        "id": "share_description",
+        "label": "Default description",
+        "info": "Used for search results and sharing when a page has none.",
+        "default": "Specialty coffee with a new devotion and prayer on the back of every bag."
       }
     ]
   },
