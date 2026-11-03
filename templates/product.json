@@ -7,10 +7,15 @@
     "sticky-atc": {
       "type": "sticky-atc",
       "settings": {}
+    },
+    "apps": {
+      "type": "apps",
+      "settings": {}
     }
   },
   "order": [
     "main",
+    "apps",
     "sticky-atc"
   ]
 }

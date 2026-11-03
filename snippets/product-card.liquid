@@ -20,6 +20,13 @@
     <a href="{{ product.url }}" class="product-card-title no-underline">
       <h3>{{ product.title }}</h3>
     </a>
+    {%- assign card_rating = product.metafields.reviews.rating.value.rating | round: 1 -%}
+    {%- if card_rating and card_rating > 0 -%}
+      {%- assign card_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+      <div class="product-card-rating" aria-label="Rated {{ card_rating }} out of 5 from {{ card_count }} reviews">
+        {% render 'icon-star' %} <span>{{ card_rating }}</span>{% if card_count > 0 %} <span class="product-card-rating-count">({{ card_count }})</span>{% endif %}
+      </div>
+    {%- endif -%}
     <p class="product-card-desc">{{ product.description | strip_html | truncatewords: 25 }}</p>
 
     <div class="product-card-price">
