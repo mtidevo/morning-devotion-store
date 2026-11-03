@@ -9,7 +9,9 @@
         "primary_cta_text": "Shop this month",
         "primary_cta_url": "",
         "secondary_cta_text": "Read the devotion",
-        "secondary_cta_url": ""
+        "secondary_cta_url": "",
+        "product_handles": "steadfast,new-mercies,rise-shine",
+        "trust_line": "Free US shipping over $40 · Whole bean or ground · A new devotion every month"
       }
     },
     "collection-grid": {
@@ -17,7 +19,38 @@
       "settings": {
         "eyebrow": "Explore",
         "heading": "Shop the morning."
-      }
+      },
+      "blocks": {
+        "card_single": {
+          "type": "card",
+          "settings": {
+            "collection": "single-origin",
+            "title": "Single Origin",
+            "subtitle": "Brazil and Guatemala"
+          }
+        },
+        "card_decaf": {
+          "type": "card",
+          "settings": {
+            "collection": "decaf",
+            "title": "Decaf",
+            "subtitle": "All of the cup, none of the rush"
+          }
+        },
+        "card_seasonal": {
+          "type": "card",
+          "settings": {
+            "collection": "seasonal",
+            "title": "Seasonal",
+            "subtitle": "Here for Christmas only"
+          }
+        }
+      },
+      "block_order": [
+        "card_single",
+        "card_seasonal",
+        "card_decaf"
+      ]
     },
     "devotion-feature": {
       "type": "devotion-feature",
@@ -64,8 +97,39 @@
       "type": "rise-pour-renew",
       "settings": {
         "heading": "A simple morning rhythm.",
-        "description": "No complicated portal. No guilt if you skip. Just good coffee and a few honest words waiting for you."
-      }
+        "description": "Good coffee and a few honest words, waiting for you every morning."
+      },
+      "blocks": {
+        "step_rise": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "Rise",
+            "body": "Choose a coffee and your grind, whole bean or ground. We roast it and send it your way."
+          }
+        },
+        "step_pour": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "Pour",
+            "body": "Open the bag and brew it slowly. The devotion is on the back, short enough to read while the coffee blooms."
+          }
+        },
+        "step_renew": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "Renew",
+            "body": "Each month brings a new devotion and prayer, so the morning never repeats."
+          }
+        }
+      },
+      "block_order": [
+        "step_rise",
+        "step_pour",
+        "step_renew"
+      ]
     },
     "guarantee": {
       "type": "guarantee",
@@ -134,11 +198,11 @@
   },
   "order": [
     "hero",
-    "collection-grid",
     "devotion-feature",
     "highlighted-text",
     "trust-bar",
     "pricing-grid",
+    "collection-grid",
     "rise-pour-renew",
     "guarantee",
     "fundraisers",
