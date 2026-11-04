@@ -12,7 +12,7 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "eyebrow": "No. 01 · November · New Mercies",
+        "eyebrow": "",
         "heading": "Coffee with something underneath it.",
         "description": "Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted.",
         "primary_cta_text": "Shop this month",
@@ -23,44 +23,6 @@
         "trust_line": "Free US shipping over $40 · Whole bean or ground · A new devotion every month"
       }
     },
-    "collection-grid": {
-      "type": "collection-grid",
-      "settings": {
-        "eyebrow": "Explore",
-        "heading": "Shop the morning."
-      },
-      "blocks": {
-        "card_single": {
-          "type": "card",
-          "settings": {
-            "collection": "single-origin",
-            "title": "Single Origin",
-            "subtitle": "Brazil and Guatemala"
-          }
-        },
-        "card_decaf": {
-          "type": "card",
-          "settings": {
-            "collection": "decaf",
-            "title": "Decaf",
-            "subtitle": "All of the cup, none of the rush"
-          }
-        },
-        "card_seasonal": {
-          "type": "card",
-          "settings": {
-            "collection": "seasonal",
-            "title": "Seasonal",
-            "subtitle": "Here for Christmas only"
-          }
-        }
-      },
-      "block_order": [
-        "card_single",
-        "card_seasonal",
-        "card_decaf"
-      ]
-    },
     "devotion-feature": {
       "type": "devotion-feature",
       "settings": {
@@ -68,7 +30,7 @@
         "description": "Every month we write and print one devotion and prayer on the back of the bag. When the month ends, that bag ends. The next one comes with something new to sit with.",
         "cta_text": "Start a morning",
         "cta_url": "",
-        "devotion_number": "No. 01",
+        "devotion_number": "",
         "devotion_month": "November",
         "devotion_title": "New Mercies",
         "devotion_author": "Written by Alex Lambert",
@@ -102,12 +64,49 @@
         "products_to_show": 6
       }
     },
+    "collection-grid": {
+      "type": "collection-grid",
+      "blocks": {
+        "card_single": {
+          "type": "card",
+          "settings": {
+            "collection": "single-origin",
+            "title": "Single Origin",
+            "subtitle": "Brazil and Guatemala",
+            "link": ""
+          }
+        },
+        "card_seasonal": {
+          "type": "card",
+          "settings": {
+            "collection": "seasonal",
+            "title": "Seasonal",
+            "subtitle": "Here for Christmas only",
+            "link": ""
+          }
+        },
+        "card_decaf": {
+          "type": "card",
+          "settings": {
+            "collection": "decaf",
+            "title": "Decaf",
+            "subtitle": "All of the cup, none of the rush",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_single",
+        "card_seasonal",
+        "card_decaf"
+      ],
+      "settings": {
+        "eyebrow": "Explore",
+        "heading": "Shop the morning."
+      }
+    },
     "rise-pour-renew": {
       "type": "rise-pour-renew",
-      "settings": {
-        "heading": "A simple morning rhythm.",
-        "description": "Good coffee and a few honest words, waiting for you every morning."
-      },
       "blocks": {
         "step_rise": {
           "type": "step",
@@ -138,7 +137,11 @@
         "step_rise",
         "step_pour",
         "step_renew"
-      ]
+      ],
+      "settings": {
+        "heading": "A simple morning rhythm.",
+        "description": "Good coffee and a few honest words, waiting for you every morning."
+      }
     },
     "guarantee": {
       "type": "guarantee",
