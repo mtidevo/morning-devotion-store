@@ -11,7 +11,16 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": {}
+      "settings": {
+        "badge_text": "New devotion \u00b7 Roasted fresh",
+        "show_tabs": true,
+        "details_text": "",
+        "brewing_text": "",
+        "shipping_text": "",
+        "countdown_label": "Hurry up!",
+        "countdown_target": "",
+        "upgrades_title": "Popular upgrades"
+      }
     },
     "sticky-atc": {
       "type": "sticky-atc",
@@ -19,7 +28,21 @@
     },
     "apps": {
       "type": "apps",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "judge_me_reviews_review_widget_hiTQFL": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_hiTQFL"
+      ]
     }
   },
   "order": [
