@@ -1,0 +1,55 @@
+{% comment %}
+  Red "save at checkout" line for gift basket products.
+  Shopify only applies automatic discounts in the cart, so the amounts come from
+  Theme settings > Christmas gift baskets (keep them matching the discounts in Shopify).
+  Hidden when the product has a compare-at price (Shopify then shows its own sale price) or after the end date.
+  Usage: {% render 'gift-basket-discount', product: product, size: 'lg' %}
+{% endcomment %}
+{%- liquid
+  assign gb_tag = settings.gb_picker_tag | default: 'gift-basket'
+  assign amt = 0
+  if product.tags contains gb_tag
+    if settings.gb_two_blend_product != blank and product.id == settings.gb_two_blend_product.id
+      assign amt = settings.gb_discount_two | default: 0
+    else
+      assign amt = settings.gb_discount_one | default: 0
+    endif
+  endif
+  assign v = product.selected_or_first_available_variant
+  if v.compare_at_price > v.price
+    assign amt = 0
+  endif
+  if settings.gb_discount_end != blank
+    assign now_s = 'now' | date: '%s' | plus: 0
+    assign end_s = settings.gb_discount_end | date: '%s' | plus: 0
+    if now_s > end_s
+      assign amt = 0
+    endif
+  endif
+-%}
+{%- if amt > 0 -%}
+  {%- liquid
+    assign amt_cents = amt | times: 100
+    assign final_cents = v.price | minus: amt_cents
+    capture amt_s
+      echo amt_cents | money_without_trailing_zeros
+    endcapture
+    capture final_s
+      echo final_cents | money_without_trailing_zeros
+    endcapture
+    assign txt = settings.gb_discount_text | default: 'Save [amount] at checkout, no code needed. You pay [final].'
+    assign txt = txt | replace: '[amount]', amt_s | replace: '[final]', final_s
+  -%}
+  <p class="gbd gbd--{{ size | default: 'sm' }}" style="--gbd:{{ settings.gb_discount_color | default: '#B3261E' }}">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+    <span>{{ txt }}</span>
+  </p>
+  {%- unless gbd_css_done -%}
+  <style>
+    .gbd { display:flex; gap:7px; align-items:flex-start; margin:6px 0 0; color:var(--gbd); font-weight:600; line-height:1.4; font-family:var(--sans,'Jost',sans-serif); }
+    .gbd svg { flex:none; margin-top:2px; }
+    .gbd--sm { font-size:13.5px; }
+    .gbd--lg { font-size:16px; margin:10px 0 16px; padding:10px 14px; border-radius:12px; background:color-mix(in srgb, var(--gbd) 8%, #fff); border:1px solid color-mix(in srgb, var(--gbd) 30%, transparent); }
+  </style>
+  {%- endunless -%}
+{%- endif -%}

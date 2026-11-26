@@ -1,0 +1,223 @@
+{% comment %}
+  Christmas Morning Gift Basket feature. Image left, copy and basket cards right; stacks on mobile.
+  The homepage hero lives inside the "Homepage v2" section, so with "Place directly below the hero" on,
+  this section moves itself right under the hero as the page loads (before it paints).
+  Basket buttons link to the product page so customers can choose their blends.
+{% endcomment %}
+{%- liquid
+  assign p_two = section.settings.product_two
+  assign p_one = section.settings.product_one
+  assign lead = p_two | default: p_one
+  assign hero_img = section.settings.image | default: lead.featured_image
+  assign hero_alt = hero_img.alt | default: section.settings.image_alt
+  assign now_s = 'now' | date: '%s' | plus: 0
+  assign deadline_passed = false
+  if section.settings.deadline != blank
+    assign dl_s = section.settings.deadline | date: '%s' | plus: 0
+    if now_s > dl_s
+      assign deadline_passed = true
+    endif
+  endif
+-%}
+<div class="gbf" id="{{ section.settings.anchor | default: 'gift-baskets' | handle }}" data-gbf data-gbf-move="{{ section.settings.below_hero }}" data-gbf-deadline="{{ section.settings.deadline | escape }}">
+  <style>
+    .gbf { --gbf-bg:#F8F6F0; --gbf-forest:#334538; --gbf-ink:#231d15; --gbf-mute:#5f5649; --gbf-gold:#a8843f; --gbf-hair:rgba(51,69,56,.16);
+      background:var(--gbf-bg); color:var(--gbf-ink); padding:clamp(48px,7vw,104px) 0; scroll-margin-top:90px; }
+    .gbf * { box-sizing:border-box; }
+    .gbf__grid { width:min(1240px, 100% - 32px); margin-inline:auto; display:grid; grid-template-columns:minmax(0,1fr); gap:clamp(28px,4vw,64px); align-items:center; }
+    .gbf__media { position:relative; border-radius:28px; overflow:hidden; background:#ece6d9; }
+    .gbf__media img { width:100%; height:auto; display:block; }
+    .gbf__eyebrow { font-family:var(--sans,'Jost',sans-serif); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gbf-forest); margin:0 0 14px; font-weight:500; }
+    .gbf__eyebrow::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--gbf-gold); margin-right:10px; vertical-align:2px; }
+    .gbf h2 { font-family:var(--disp,'Bodoni Moda',serif); font-weight:400; font-size:clamp(34px,4.4vw,60px); line-height:1.04; letter-spacing:-.01em; margin:0 0 18px; color:var(--gbf-forest); }
+    .gbf__body { font-family:var(--sans,'Jost',sans-serif); font-size:clamp(16px,1.25vw,18px); line-height:1.7; color:var(--gbf-mute); margin:0 0 22px; max-width:48ch; }
+    .gbf__list { list-style:none; margin:0 0 26px; padding:0; display:grid; grid-template-columns:1fr; gap:8px 22px; font-size:15px; color:var(--gbf-ink); }
+    .gbf__list li { display:flex; gap:10px; align-items:flex-start; line-height:1.45; }
+    .gbf__list svg { flex:none; width:18px; height:18px; margin-top:2px; color:var(--gbf-forest); }
+    .gbf__cards { display:grid; grid-template-columns:1fr; gap:14px; margin:0 0 18px; }
+    .gbf__card { background:#fff; border:1px solid var(--gbf-hair); border-radius:18px; padding:18px; display:grid; grid-template-columns:84px 1fr; gap:12px 16px; align-items:center; }
+    .gbf__card img { width:84px; height:84px; object-fit:cover; border-radius:12px; background:#ece6d9; }
+    .gbf__card-name { font-family:var(--disp,'Bodoni Moda',serif); font-size:21px; line-height:1.2; margin:0 0 4px; color:var(--gbf-ink); }
+    .gbf__price { font-size:15px; display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline; }
+    .gbf__price s { color:var(--gbf-mute); font-size:14px; }
+    .gbf__save { font-size:13px; color:var(--gbf-forest); font-weight:500; }
+    .gbf__btn { display:flex; justify-content:center; align-items:center; gap:8px; min-height:48px; padding:12px 22px; border-radius:999px; background:var(--gbf-forest); color:#F8F6F0; font-family:var(--sans,'Jost',sans-serif); font-size:13px; letter-spacing:.12em; text-transform:uppercase; text-decoration:none; transition:background .25s, transform .3s; }
+    .gbf__btn:hover { background:#26352a; transform:translateY(-1px); }
+    .gbf__btn:focus-visible { outline:2px solid var(--gbf-forest); outline-offset:3px; }
+    .gbf__btn[aria-disabled="true"] { background:#8a918b; pointer-events:none; }
+    .gbf__trust { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gbf-mute); margin:0; line-height:1.8; }
+    .gbf__clock { display:flex; align-items:center; gap:10px; margin:0 0 16px; padding:10px 14px; border-radius:12px; background:rgba(51,69,56,.07); font-size:14px; color:var(--gbf-forest); }
+    .gbf__clock b { font-weight:600; font-variant-numeric:tabular-nums; }
+    .gbf__clock[hidden], .gbf__late[hidden] { display:none; }
+    .gbf__late { margin:0 0 16px; padding:10px 14px; border-radius:12px; background:rgba(168,132,63,.12); font-size:14px; color:#5b4520; }
+    .gbf__sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+    .gbf__note { font-size:13px; color:var(--gbf-mute); padding:14px; border:1px dashed var(--gbf-hair); border-radius:12px; }
+    @media (min-width: 600px) {
+      .gbf__list { grid-template-columns:1fr 1fr; }
+    }
+    @media (min-width: 900px) {
+      .gbf__grid { grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; }
+      .gbf__media { position:sticky; top:110px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .gbf__btn { transition:none; } }
+    /* basket cards: compact, image keeps its own shape */
+    .gbf__card { grid-template-columns:64px 1fr; grid-template-areas:"thumb info" "save save" "cta cta"; gap:10px 14px; padding:14px 16px; }
+    .gbf__card > img, .gbf__card > span:first-child { grid-area:thumb; width:64px; height:64px; }
+    .gbf__card > div { grid-area:info; }
+    .gbf__card .gbd { grid-area:save; margin:0; font-size:13px; }
+    .gbf__card .gbf__btn { grid-area:cta; min-height:44px; padding:10px 18px; font-size:12px; }
+    .gbf__card-name { font-size:19px; }
+    .gbf__body { margin-bottom:18px; }
+    .gbf__list { margin-bottom:20px; font-size:14.5px; }
+    .gbf__clock { margin-bottom:12px; }
+    @media (min-width: 1100px) {
+      .gbf__card { grid-template-columns:64px 1fr auto; grid-template-areas:"thumb info cta" "thumb save cta"; align-items:center; }
+      .gbf__card .gbf__btn { align-self:center; white-space:nowrap; }
+    }
+    @media (max-width: 899px) {
+      .gbf__media { border-radius:20px; }
+    }
+  </style>
+
+  <div class="gbf__grid">
+    <div class="gbf__media">
+      {%- if hero_img != blank -%}
+        {{ hero_img | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200, 1400', sizes: '(min-width: 900px) 52vw, 100vw', alt: hero_alt }}
+      {%- else -%}
+        <img src="{{ 'fem-scene-christmas.jpg' | file_img_url: '1400x' }}" alt="{{ section.settings.image_alt | escape }}" loading="lazy" width="1400" height="1750">
+      {%- endif -%}
+    </div>
+
+    <div class="gbf__copy">
+      {%- if section.settings.eyebrow != blank -%}<p class="gbf__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.body != blank -%}<p class="gbf__body">{{ section.settings.body }}</p>{%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="gbf__list" aria-label="{{ section.settings.list_label | escape }}">
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>{{ block.settings.text }}</span></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if section.settings.show_countdown and section.settings.deadline != blank -%}
+        <p class="gbf__clock" data-gbf-clock {% if deadline_passed %}hidden{% endif %}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg>
+          <span>{{ section.settings.countdown_prefix }} <b data-gbf-left>&nbsp;</b></span>
+        </p>
+      {%- endif -%}
+      {%- if section.settings.late_message != blank -%}
+        <p class="gbf__late" data-gbf-late {% unless deadline_passed %}hidden{% endunless %}>{{ section.settings.late_message }}</p>
+      {%- endif -%}
+
+      <div class="gbf__cards">
+        {%- for i in (1..2) -%}
+          {%- if forloop.first -%}{%- assign bp = p_two -%}{%- else -%}{%- assign bp = p_one -%}{%- endif -%}
+          {%- if bp != blank -%}
+            {%- assign v = bp.selected_or_first_available_variant -%}
+            <div class="gbf__card">
+              {%- if bp.featured_image -%}{{ bp.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', width: 72, height: 72, alt: '' }}{%- else -%}<span></span>{%- endif -%}
+              <div>
+                <p class="gbf__card-name">{{ bp.title }}</p>
+                <div class="gbf__price">
+                  <span>{{ v.price | money }}</span>
+                  {%- if v.compare_at_price > v.price -%}
+                    <s><span class="gbf__sr">Regular price </span>{{ v.compare_at_price | money }}</s>
+                  {%- endif -%}
+                </div>
+              </div>
+              {% render 'gift-basket-discount', product: bp %}
+              {%- if bp.available -%}
+                <a class="gbf__btn" href="{{ bp.url }}" aria-label="{{ section.settings.button_label | escape }}: {{ bp.title | escape }}">{{ section.settings.button_label }} <span aria-hidden="true">→</span></a>
+              {%- else -%}
+                <a class="gbf__btn" aria-disabled="true" role="link">{{ section.settings.sold_out_label }}</a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if p_two == blank and p_one == blank and request.design_mode -%}
+          <p class="gbf__note">Pick the two basket products in this section's settings. Draft products show here once they're published to the Online Store.</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.trust != blank -%}<p class="gbf__trust">{{ section.settings.trust }}</p>{%- endif -%}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-gbf]');
+      if (!root) return;
+      /* Move the section right under the homepage hero so it reads as the second thing on the page. */
+      if (root.getAttribute('data-gbf-move') === 'true') {
+        var wrap = root.closest('.shopify-section') || root;
+        var hero = document.querySelector('.v2-hero');
+        var after = hero && hero.nextElementSibling && hero.nextElementSibling.classList.contains('v2-marquee') ? hero.nextElementSibling : hero;
+        if (after && after.parentNode && !wrap.contains(after)) after.parentNode.insertBefore(wrap, after.nextSibling);
+      }
+      var dl = Date.parse(root.getAttribute('data-gbf-deadline') || '');
+      if (isNaN(dl)) return;
+      var clock = root.querySelector('[data-gbf-clock]'), out = root.querySelector('[data-gbf-left]'), late = root.querySelector('[data-gbf-late]');
+      function tick() {
+        var ms = dl - Date.now();
+        if (ms <= 0) { if (clock) clock.hidden = true; if (late) late.hidden = false; return false; }
+        if (late) late.hidden = true;
+        if (clock && out) {
+          clock.hidden = false;
+          var d = Math.floor(ms / 864e5), h = Math.floor(ms % 864e5 / 36e5), m = Math.floor(ms % 36e5 / 6e4);
+          out.textContent = d > 0 ? d + (d === 1 ? ' day ' : ' days ') + h + (h === 1 ? ' hr' : ' hrs') : h + ' hr ' + m + ' min';
+        }
+        return true;
+      }
+      if (tick()) setInterval(tick, 60000);
+    })();
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Gift basket feature",
+  "class": "gbf-section",
+  "settings": [
+    { "type": "checkbox", "id": "below_hero", "label": "Place directly below the homepage hero", "default": true, "info": "The hero is built into the Homepage v2 section, so this moves the basket feature up under it. Turn off to leave it where it sits in the section list." },
+    { "type": "text", "id": "anchor", "label": "Anchor (for links like /#gift-baskets)", "default": "gift-baskets" },
+    { "type": "header", "content": "Baskets" },
+    { "type": "product", "id": "product_two", "label": "Two Blends basket" },
+    { "type": "product", "id": "product_one", "label": "One Blend basket" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Choose your blends" },
+    { "type": "text", "id": "sold_out_label", "label": "Sold out label", "default": "Sold out" },
+    { "type": "header", "content": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the Two Blends basket's featured image." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text (fallback)", "default": "The Christmas Morning Gift Basket with coffee, a verse mug, a gratitude journal and a devotion card" },
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Limited Christmas pre-order" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A Christmas Morning, Wrapped and Ready" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Two holiday blends, a verse mug, a gratitude journal, and a little chocolate for the season, gathered in a basket and sent with a devotion for the first quiet cup of Christmas." },
+    { "type": "text", "id": "list_label", "label": "Contents list label (screen readers)", "default": "What's in the basket" },
+    { "type": "text", "id": "trust", "label": "Trust line", "default": "Pre-order · Ships by Dec 10 · Order by Dec 7 for Christmas · Flat $14.95 shipping" },
+    { "type": "header", "content": "Countdown" },
+    { "type": "checkbox", "id": "show_countdown", "label": "Show countdown", "default": true },
+    { "type": "text", "id": "deadline", "label": "Order-by date and time", "default": "2026-12-07T23:59:59-05:00", "info": "Format: 2026-12-07T23:59:59-05:00 (Eastern time)." },
+    { "type": "text", "id": "countdown_prefix", "label": "Countdown label", "default": "Order for Christmas delivery in" },
+    { "type": "text", "id": "late_message", "label": "Message after the order-by date", "default": "Last few baskets, ships next day" }
+  ],
+  "blocks": [
+    { "type": "item", "name": "Contents item", "settings": [ { "type": "text", "id": "text", "label": "Text", "default": "Basket item" } ] }
+  ],
+  "presets": [
+    {
+      "name": "Gift basket feature",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Emmanuel and/or Joy to the World, 12 oz" } },
+        { "type": "item", "settings": { "text": "Bible-verse ceramic mug" } },
+        { "type": "item", "settings": { "text": "Linen gratitude journal" } },
+        { "type": "item", "settings": { "text": "Leather Bible-verse bookmark" } },
+        { "type": "item", "settings": { "text": "Chocolate-covered espresso beans" } },
+        { "type": "item", "settings": { "text": "Devotion card in a woven rope basket" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

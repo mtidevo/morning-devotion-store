@@ -1,0 +1,35 @@
+{% comment %}
+  Links a lifestyle photo to the coffee(s) shown in it.
+  Usage: {% render 'scene-shop', scene: 'fem-scene-windowsill-trio.jpg', exclude: product.handle, cover: true, align: 'right' %}
+  One coffee in the photo: the whole photo links to it (unless cover: false) and a tag is shown.
+  Several coffees: one tag per coffee.
+{% endcomment %}
+{%- assign handles = '' -%}
+{%- case scene -%}
+  {%- when 'fem-scene-kitchen-table.jpg' -%}{%- assign handles = 'new-mercies' -%}
+  {%- when 'fem-scene-windowsill-trio.jpg' -%}{%- assign handles = 'rise-shine,new-mercies,steadfast' -%}
+  {%- when 'fem-scene-porch-dawn.jpg' -%}{%- assign handles = 'steadfast' -%}
+  {%- when 'fem-scene-evening-reading.jpg' -%}{%- assign handles = 'abide' -%}
+  {%- when 'fem-scene-roastery.jpg' -%}{%- assign handles = 'grateful-heart,anchored' -%}
+  {%- when 'fem-scene-christmas.jpg' -%}{%- assign handles = 'emmanuel,joy-to-the-world' -%}
+{%- endcase -%}
+{%- if handles != '' -%}
+  {%- assign hs = handles | split: ',' -%}
+  {%- assign shown = '' -%}
+  {%- for h in hs -%}
+    {%- if h != exclude and all_products[h].id -%}{%- assign shown = shown | append: h | append: ',' -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign shown_list = shown | split: ',' -%}
+  {%- if shown_list.size > 0 -%}
+    {%- if shown_list.size == 1 and cover != false -%}
+      {%- assign sp = all_products[shown_list[0]] -%}
+      <a class="scene-cover" href="{{ sp.url }}" aria-label="Shop {{ sp.title | escape }}"></a>
+    {%- endif -%}
+    <div class="scene-tags{% if align == 'right' %} scene-tags--right{% endif %}">
+      {%- for h in shown_list -%}
+        {%- assign sp = all_products[h] -%}
+        <a class="scene-tag" href="{{ sp.url }}">Shop {{ sp.title }} <span aria-hidden="true">&rarr;</span></a>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}

@@ -1,0 +1,150 @@
+{% comment %} Roast profile: tasting, origin and the roast curve. Renders only when the product has the fem.roast_profile metafield. {% endcomment %}
+{%- assign rp = product.metafields.fem.roast_profile.value -%}
+{%- if rp -%}
+<section class="frp" id="roast-profile">
+  <style>
+    .frp { --cream:#f6efe2; --cream2:#efe5d2; --paper:#fbf7ef; --ink:#231d15; --mute:#6f6455; --gold:#a8843f; --gold-l:#d8b878; --esp:#5a3d26; --line:rgba(35,29,21,.12); background:var(--paper); color:var(--ink); padding:clamp(60px,8vw,110px) 0; font-family:var(--sans, 'Jost', sans-serif); }
+    .frp * { box-sizing:border-box; }
+    .frp__wrap { width:min(1240px, 100% - 40px); margin:0 auto; }
+    .frp__eyebrow { font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin:0 0 12px; }
+    .frp h2 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:400; font-size:clamp(32px,4vw,52px); line-height:1.06; margin:0 0 14px; }
+    .frp__lede { color:var(--mute); font-size:17px; line-height:1.7; max-width:60ch; margin:0 0 44px; }
+    .frp__grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.45fr); gap:clamp(28px,4vw,56px); align-items:start; }
+    .frp__label { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--mute); margin:0 0 10px; }
+    .frp__level { margin:0 0 30px; }
+    .frp__meter { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin:0 0 8px; }
+    .frp__meter span { height:8px; border-radius:99px; background:var(--cream2); }
+    .frp__meter span.on { background:linear-gradient(90deg, #c9a46a, #8a5a34); }
+    .frp__meter-ends { display:flex; justify-content:space-between; font-size:12px; color:var(--mute); }
+    .frp__level-name { font-family:var(--disp, 'Bodoni Moda', serif); font-size:26px; margin:0 0 12px; }
+    .frp__notes { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 30px; padding:0; list-style:none; }
+    .frp__notes li { background:var(--cream); border:1px solid var(--line); border-radius:999px; padding:8px 14px; font-size:14px; }
+    .frp__facts { margin:0; border-top:1px solid var(--line); }
+    .frp__fact { display:grid; grid-template-columns:120px 1fr; gap:14px; padding:13px 0; border-bottom:1px solid var(--line); font-size:15px; line-height:1.5; }
+    .frp__fact dt { color:var(--mute); font-size:12px; letter-spacing:.14em; text-transform:uppercase; padding-top:2px; }
+    .frp__fact dd { margin:0; }
+    .frp__card { background:#fff; border:1px solid var(--line); border-radius:22px; padding:clamp(18px,2.4vw,30px); box-shadow:0 30px 60px -45px rgba(35,29,21,.35); }
+    .frp__card-head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+    .frp__card-head h3 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:400; font-size:24px; margin:0; }
+    .frp__legend { display:flex; gap:16px; font-size:12px; color:var(--mute); }
+    .frp__legend i { display:inline-block; width:18px; height:0; border-top:2.5px solid var(--esp); vertical-align:middle; margin-right:6px; }
+    .frp__legend i.ror { border-top:2px dashed var(--gold); }
+    .frp__chart { position:relative; width:100%; }
+    .frp__chart svg { width:100%; height:auto; display:block; overflow:visible; }
+    .frp__chart text { font-family:var(--sans, 'Jost', sans-serif); font-size:11px; fill:#8a7f70; }
+    .frp__tip { position:absolute; pointer-events:none; background:var(--ink); color:#fff; font-size:12px; line-height:1.4; padding:7px 10px; border-radius:8px; white-space:nowrap; transform:translate(-50%, -110%); opacity:0; transition:opacity .15s; }
+    .frp__stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; }
+    .frp__stat { background:var(--paper); border-radius:14px; padding:12px 14px; }
+    .frp__stat b { display:block; font-family:var(--disp, 'Bodoni Moda', serif); font-weight:400; font-size:22px; }
+    .frp__stat span { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); }
+    .frp__how { margin:18px 0 0; padding:0; list-style:none; display:grid; gap:8px; font-size:14px; line-height:1.6; color:var(--mute); }
+    .frp__how strong { color:var(--ink); font-weight:500; }
+    .frp__fine { font-size:12px; color:var(--mute); margin:14px 0 0; font-style:italic; }
+    @media (max-width: 900px) { .frp__grid { grid-template-columns:1fr; } .frp__stats { grid-template-columns:repeat(2,1fr); } }
+  </style>
+
+  <div class="frp__wrap">
+    <p class="frp__eyebrow">Inside the roast</p>
+    <h2>How {{ product.title }} is roasted.</h2>
+    <p class="frp__lede">What&rsquo;s in the bag, where it&rsquo;s grown and how it&rsquo;s roasted, so you know what to expect before you brew.</p>
+
+    <div class="frp__grid">
+      <div>
+        <div class="frp__level">
+          <p class="frp__label">Roast level</p>
+          <p class="frp__level-name">{{ rp.level }}</p>
+          <div class="frp__meter" aria-hidden="true">
+            {%- for i in (1..5) -%}<span{% if i <= rp.lv %} class="on"{% endif %}></span>{%- endfor -%}
+          </div>
+          <div class="frp__meter-ends"><span>Light</span><span>Dark</span></div>
+        </div>
+
+        <p class="frp__label">Tasting notes</p>
+        <ul class="frp__notes">
+          {%- for n in rp.notes -%}<li>{{ n }}</li>{%- endfor -%}
+        </ul>
+
+        <dl class="frp__facts">
+          <div class="frp__fact"><dt>Origin</dt><dd>{{ rp.origin }}{% if rp.region %} &middot; {{ rp.region }}{% endif %}</dd></div>
+          <div class="frp__fact"><dt>Altitude</dt><dd>{{ rp.altitude }} above sea level</dd></div>
+          <div class="frp__fact"><dt>Process</dt><dd>{{ rp.process }}</dd></div>
+          <div class="frp__fact"><dt>Varietals</dt><dd>{{ rp.varietals }}</dd></div>
+          <div class="frp__fact"><dt>In the cup</dt><dd>{{ rp.body }}</dd></div>
+          <div class="frp__fact"><dt>Cup score</dt><dd>{{ rp.score }} <span style="color:var(--mute)">(specialty grade is 80+)</span></dd></div>
+        </dl>
+      </div>
+
+      <div class="frp__card">
+        <div class="frp__card-head">
+          <h3>Roast curve</h3>
+          <div class="frp__legend"><span><i></i>Bean temp</span><span><i class="ror"></i>Rate of rise</span></div>
+        </div>
+        <div class="frp__chart" data-frp-chart>
+          <svg viewBox="0 0 640 330" role="img" aria-label="Roast curve for {{ product.title | escape }}: bean temperature and rate of rise over time"></svg>
+          <div class="frp__tip"></div>
+        </div>
+        <div class="frp__stats" data-frp-stats></div>
+        <ul class="frp__how">
+          <li><strong>Bean temp</strong> dips as the green coffee goes into a hot roaster, then climbs as it roasts.</li>
+          <li><strong>First crack</strong> is when the beans audibly pop. Lighter roasts finish soon after; darker roasts keep going.</li>
+          <li><strong>Development</strong> is the time after first crack, where sweetness and body build.</li>
+        </ul>
+        <p class="frp__fine">Sample batch from our roasting partner. Every batch follows this profile, with small natural differences from batch to batch.</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-frp-data>{{ product.metafields.fem.roast_profile.value | json }}</script>
+  <script>
+  (function(){
+    var root = document.getElementById('roast-profile'); if (!root) return;
+    var d = JSON.parse(root.querySelector('[data-frp-data]').textContent);
+    var svg = root.querySelector('[data-frp-chart] svg'), tip = root.querySelector('.frp__tip');
+    var NS = 'http://www.w3.org/2000/svg', W = 640, H = 330, L = 46, R = 40, T = 14, B = 34;
+    var end = d.bt[d.bt.length-1][0], xMax = Math.ceil(end / 60) * 60;
+    var tMin = 200, tMax = 450, rMax = 35;
+    function x(s){ return L + (s / xMax) * (W - L - R); }
+    function yT(v){ return T + (1 - (v - tMin) / (tMax - tMin)) * (H - T - B); }
+    function yR(v){ return T + (1 - v / rMax) * (H - T - B); }
+    function el(n, a, txt){ var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; }
+    function mmss(s){ s = Math.round(s); return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
+    for (var t = tMin; t <= tMax; t += 50) { el('line', {x1:L, x2:W-R, y1:yT(t), y2:yT(t), stroke:'rgba(35,29,21,.08)'}); el('text', {x:L-8, y:yT(t)+4, 'text-anchor':'end'}, t + '°'); }
+    for (var r = 0; r <= 30; r += 10) el('text', {x:W-R+8, y:yR(r)+4}, r);
+    for (var m = 0; m <= xMax; m += 120) el('text', {x:x(m), y:H-10, 'text-anchor':'middle'}, (m/60) + 'm');
+    el('text', {x:W-R+8, y:T-2, style:'font-size:10px'}, '°F/min');
+    var fx = x(d.fc);
+    el('rect', {x:fx, y:T, width:x(end)-fx, height:H-T-B, fill:'rgba(168,132,63,.08)'});
+    el('line', {x1:fx, x2:fx, y1:T, y2:H-B, stroke:'#a8843f', 'stroke-dasharray':'3 4'});
+    el('text', {x:fx+6, y:T+12, style:'fill:#a8843f;font-size:11px;letter-spacing:.08em'}, 'FIRST CRACK ' + mmss(d.fc));
+    var pr = d.ror.map(function(p,i){ return (i?'L':'M') + x(p[0]).toFixed(1) + ' ' + yR(p[1]).toFixed(1); }).join(' ');
+    el('path', {d:pr, fill:'none', stroke:'#a8843f', 'stroke-width':2, 'stroke-dasharray':'5 4', 'stroke-linejoin':'round'});
+    var pb = d.bt.map(function(p,i){ return (i?'L':'M') + x(p[0]).toFixed(1) + ' ' + yT(p[1]).toFixed(1); }).join(' ');
+    var bt = el('path', {d:pb, fill:'none', stroke:'#5a3d26', 'stroke-width':2.6, 'stroke-linejoin':'round', 'stroke-linecap':'round'});
+    var len = bt.getTotalLength ? bt.getTotalLength() : 0;
+    if (len && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+      bt.style.strokeDasharray = len; bt.style.strokeDashoffset = len;
+      var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { bt.style.transition = 'stroke-dashoffset 2.2s cubic-bezier(.4,0,.2,1)'; bt.style.strokeDashoffset = 0; io.disconnect(); } }); }, {threshold:.3});
+      io.observe(svg);
+    }
+    var dot = el('circle', {r:4.5, fill:'#5a3d26', stroke:'#fff', 'stroke-width':2, opacity:0});
+    function near(arr, s){ var b = arr[0]; for (var i=0;i<arr.length;i++){ if (Math.abs(arr[i][0]-s) < Math.abs(b[0]-s)) b = arr[i]; } return b; }
+    svg.addEventListener('mousemove', function(e){
+      var bx = svg.getBoundingClientRect(), sx = (e.clientX - bx.left) / bx.width * W;
+      var s = Math.max(0, Math.min(end, (sx - L) / (W - L - R) * xMax));
+      var p = near(d.bt, s), q = d.ror.length ? near(d.ror, s) : null;
+      dot.setAttribute('cx', x(p[0])); dot.setAttribute('cy', yT(p[1])); dot.setAttribute('opacity', 1);
+      tip.innerHTML = mmss(p[0]) + ' &middot; ' + Math.round(p[1]) + '°F' + (q && p[0] >= d.ror[0][0] ? '<br>Rising ' + q[1] + '°F/min' : '');
+      tip.style.left = (x(p[0]) / W * 100) + '%'; tip.style.top = (yT(p[1]) / H * 100) + '%'; tip.style.opacity = 1;
+    });
+    svg.addEventListener('mouseleave', function(){ tip.style.opacity = 0; dot.setAttribute('opacity', 0); });
+    var dev = end - d.fc;
+    var stats = [[Math.round(d.bt[0][1]) + '°F', 'Charge temp'], [Math.round(d.bt[d.bt.length-1][1]) + '°F', 'Finish temp'], [mmss(end), 'Total time'], [mmss(dev), 'Development &middot; ' + Math.round(dev / end * 100) + '%']];
+    root.querySelector('[data-frp-stats]').innerHTML = stats.map(function(s){ return '<div class="frp__stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></div>'; }).join('');
+  })();
+  </script>
+</section>
+{%- endif -%}
+
+{% schema %}
+{ "name": "Roast profile", "settings": [], "presets": [{ "name": "Roast profile" }] }
+{% endschema %}

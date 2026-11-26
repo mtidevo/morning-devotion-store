@@ -1,0 +1,112 @@
+{% comment %} Side cart behaviour: add to cart without leaving the page, open the drawer from the header bag. {% endcomment %}
+<script>
+  (function () {
+    var onCartPage = document.body.classList.contains('template-cart');
+    var root = document.querySelector('[data-cd]');
+    if (!root) return;
+    var lastFocus = null;
+
+    function body() { return root.querySelector('[data-cd-body]'); }
+
+    function open() {
+      lastFocus = document.activeElement;
+      root.classList.add('is-open');
+      root.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('cd-lock');
+      var c = root.querySelector('.cd__close'); if (c) c.focus();
+    }
+    function close() {
+      root.classList.remove('is-open');
+      root.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('cd-lock');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function setCount(n) {
+      document.querySelectorAll('.cart-link').forEach(function (link) {
+        var badge = link.querySelector('.cart-count');
+        if (n > 0) {
+          if (!badge) { badge = document.createElement('span'); badge.className = 'cart-count'; link.appendChild(badge); }
+          badge.textContent = n;
+        } else if (badge) { badge.remove(); }
+      });
+    }
+    function showError(msg) {
+      var box = root.querySelector('[data-cd-error]');
+      if (box) box.innerHTML = msg ? '<div class="cd__error" role="alert"></div>' : '';
+      if (msg && box) box.firstChild.textContent = msg;
+    }
+    function refresh() {
+      return fetch('/?sections=cart-drawer', { headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var doc = new DOMParser().parseFromString(data['cart-drawer'], 'text/html');
+          var fresh = doc.querySelector('[data-cd-body]');
+          if (fresh) {
+            body().innerHTML = fresh.innerHTML;
+            setCount(parseInt(fresh.getAttribute('data-count') || '0', 10));
+          }
+        });
+    }
+
+    window.FEMCart = { open: open, close: close, refresh: refresh };
+
+    root.addEventListener('click', function (e) {
+      if (e.target.closest('[data-cd-close]')) { close(); return; }
+      var btn = e.target.closest('[data-cd-line]');
+      if (!btn) return;
+      root.classList.add('is-busy');
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ line: Number(btn.getAttribute('data-cd-line')), quantity: Number(btn.getAttribute('data-cd-qty')) })
+      })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.description || j.message || 'Could not update your cart.'); }); })
+        .then(refresh)
+        .catch(function (err) { refresh().then(function () { showError(err.message); }); })
+        .finally(function () { root.classList.remove('is-busy'); });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && root.classList.contains('is-open')) close(); });
+
+    if (onCartPage) return;
+
+    /* Header bag (and mobile menu Cart link) opens the drawer */
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('.cart-link, .mobile-menu a[href$="/cart"]');
+      if (!link || e.metaKey || e.ctrlKey) return;
+      e.preventDefault();
+      var menu = document.querySelector('.mobile-menu');
+      if (menu && !menu.hidden && link.closest('.mobile-menu')) { menu.hidden = true; var t = document.querySelector('.mobile-menu-toggle'); if (t) t.setAttribute('aria-expanded', 'false'); }
+      open();
+    });
+
+    /* Any add-to-cart form: add in the background, then open the drawer */
+    document.addEventListener('submit', function (e) {
+      var form = e.target;
+      if (!form || !form.action || form.action.indexOf('/cart/add') === -1) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var fd = new FormData(form);
+      fd.delete('return_to');
+      var btn = form.querySelector('[type=submit]');
+      var label = btn ? btn.innerHTML : '';
+      if (btn) { btn.disabled = true; btn.setAttribute('aria-busy', 'true'); }
+      var req;
+      var upgrades = form.matches('[data-pdp-form]') ? document.querySelectorAll('.upgrade-check:checked') : [];
+      if (upgrades.length) {
+        var items = [{ id: fd.get('id'), quantity: Number(fd.get('quantity') || 1) }];
+        if (fd.get('selling_plan')) items[0].selling_plan = fd.get('selling_plan');
+        var props = {}; fd.forEach(function (val, key) { var m = key.match(/^properties\[(.+)\]$/); if (m) props[m[1]] = val; }); if (Object.keys(props).length) items[0].properties = props;
+        upgrades.forEach(function (c) { items.push({ id: c.getAttribute('data-upgrade-variant'), quantity: 1 }); });
+        req = fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) });
+      } else {
+        req = fetch('/cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: fd });
+      }
+      req
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.description || j.message || 'Could not add that to your cart.'); }); })
+        .then(refresh)
+        .then(function () { showError(''); open(); })
+        .catch(function (err) { refresh().then(function () { showError(err.message); open(); }); })
+        .finally(function () { if (btn) { btn.disabled = false; btn.removeAttribute('aria-busy'); btn.innerHTML = label; } });
+    }, true);
+  })();
+</script>

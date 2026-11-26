@@ -1,0 +1,154 @@
+{%- assign f_school = 'fem-fundraiser-school.png' | file_img_url: '900x' -%}
+{%- assign f_sports = 'fem-fundraiser-sports.png' | file_img_url: '900x' -%}
+{%- assign f_church = 'fem-fundraiser-church.png' | file_img_url: '900x' -%}
+<style>
+  .v2f { --cream:#f6efe2; --cream2:#efe5d2; --ink:#231d15; --mute:#6f6455; --gold:#a8843f; --gold-l:#d8b878; --esp:#1d1812; background:var(--cream2); color:var(--ink); padding:clamp(70px,10vw,130px) 0; font-family:var(--sans, 'Jost', sans-serif); }
+  .v2f * { box-sizing:border-box; }
+  .v2f__wrap { width:min(1240px, 100% - 40px); margin:0 auto; }
+  .v2f__eyebrow { font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin:0 0 14px; }
+  .v2f h2 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:500; font-size:clamp(34px,4.6vw,62px); line-height:1.04; margin:0 0 18px; max-width:16ch; }
+  .v2f__lede { font-size:17px; line-height:1.7; color:var(--mute); max-width:58ch; margin:0; }
+  .v2f__head { display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:end; margin-bottom:56px; }
+  .v2f__head-cta { justify-self:end; }
+  .v2f__btn { display:inline-flex; align-items:center; gap:10px; padding:16px 30px; border-radius:999px; font-size:13px; letter-spacing:.14em; text-transform:uppercase; text-decoration:none; border:0; cursor:pointer; font-family:inherit; transition:transform .4s cubic-bezier(.2,.8,.2,1), background .3s; background:var(--gold); color:#fff; }
+  .v2f__btn:hover { transform:translateY(-2px); background:#8f6f31; }
+  .v2f__cards { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .v2f__card { background:var(--cream); border-radius:22px; overflow:hidden; display:flex; flex-direction:column; transition:transform .6s cubic-bezier(.2,.8,.2,1), box-shadow .6s; }
+  .v2f__card:hover { transform:translateY(-6px); box-shadow:0 26px 50px -30px rgba(35,29,21,.45); }
+  .v2f__stage { position:relative; aspect-ratio:4/4.3; display:flex; align-items:flex-end; justify-content:center; padding:34px 20px 0; background:radial-gradient(120% 80% at 50% 100%, var(--tint) 0%, transparent 70%), var(--cream); }
+  .v2f__stage img { height:94%; width:auto; max-width:100%; object-fit:contain; filter:drop-shadow(0 22px 22px rgba(0,0,0,.28)); transition:transform .8s cubic-bezier(.2,.8,.2,1); }
+  .v2f__card:hover .v2f__stage img { transform:translateY(-8px) rotate(-1.5deg); }
+  .v2f__tag { position:absolute; top:18px; left:18px; font-size:11px; letter-spacing:.18em; text-transform:uppercase; background:rgba(255,255,255,.75); backdrop-filter:blur(6px); padding:7px 12px; border-radius:999px; color:var(--ink); }
+  .v2f__info { padding:24px 26px 28px; }
+  .v2f__info h3 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:500; font-size:26px; margin:0 0 8px; }
+  .v2f__info p { margin:0; color:var(--mute); line-height:1.65; font-size:15px; }
+  .v2f__note { margin:18px 0 0; font-size:13px; color:var(--mute); text-align:center; font-style:italic; }
+  .v2f__steps { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin:70px 0; padding:34px 0; border-top:1px solid rgba(35,29,21,.14); border-bottom:1px solid rgba(35,29,21,.14); }
+  .v2f__step span { font-family:var(--disp, 'Bodoni Moda', serif); font-size:15px; color:var(--gold); }
+  .v2f__step h4 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:500; font-size:22px; margin:6px 0 6px; }
+  .v2f__step p { margin:0; color:var(--mute); line-height:1.6; font-size:15px; }
+  .v2f__formwrap { display:grid; grid-template-columns:1fr 1.35fr; gap:clamp(30px,5vw,70px); background:var(--esp); color:var(--cream); border-radius:28px; padding:clamp(34px,5vw,64px); }
+  .v2f__formwrap h3 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:500; font-size:clamp(30px,3.4vw,44px); line-height:1.08; margin:0 0 16px; }
+  .v2f__formwrap > div > p { color:rgba(246,239,226,.75); line-height:1.7; margin:0 0 14px; }
+  .v2f__list { list-style:none; padding:0; margin:18px 0 0; display:grid; gap:10px; }
+  .v2f__list li { display:flex; gap:10px; color:rgba(246,239,226,.85); }
+  .v2f__list li::before { content:"✦"; color:var(--gold-l); }
+  .v2f form { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .v2f label { display:flex; flex-direction:column; gap:6px; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:rgba(246,239,226,.7); }
+  .v2f input, .v2f select, .v2f textarea { font:inherit; font-size:16px; letter-spacing:0; text-transform:none; color:var(--cream); background:rgba(255,255,255,.06); border:1px solid rgba(246,239,226,.22); border-radius:12px; padding:13px 14px; width:100%; }
+  .v2f select option { color:#231d15; }
+  .v2f input:focus, .v2f select:focus, .v2f textarea:focus { outline:none; border-color:var(--gold-l); background:rgba(255,255,255,.1); }
+  .v2f textarea { min-height:110px; resize:vertical; }
+  .v2f .full { grid-column:1 / -1; }
+  .v2f__fine { font-size:12px; color:rgba(246,239,226,.55); text-transform:none; letter-spacing:0; margin:0; }
+  .v2f__ok, .v2f__err { grid-column:1 / -1; border-radius:12px; padding:14px 16px; font-size:15px; }
+  .v2f__ok { background:rgba(168,132,63,.2); border:1px solid var(--gold-l); }
+  .v2f__err { background:rgba(180,60,60,.2); border:1px solid #c66; }
+  .v2f [data-reveal] { opacity:0; transform:translateY(26px); transition:opacity 1s cubic-bezier(.2,.8,.2,1) var(--d,0s), transform 1s cubic-bezier(.2,.8,.2,1) var(--d,0s); }
+  .v2f [data-reveal].is-in { opacity:1; transform:none; }
+  @media (max-width: 900px) {
+    .v2f__head, .v2f__formwrap { grid-template-columns:1fr; }
+    .v2f__head-cta { justify-self:start; }
+    .v2f__cards { grid-template-columns:1fr; max-width:460px; margin:0 auto; }
+    .v2f__steps { grid-template-columns:1fr; }
+    .v2f form { grid-template-columns:1fr; }
+  }
+  .v2f__formwrap { background:#fff; color:var(--ink); border:1px solid rgba(35,29,21,.1); border-radius:24px; padding:clamp(28px,5vw,56px); box-shadow:0 30px 60px -40px rgba(40,25,10,.35); } .v2f__formwrap .v2f__eyebrow { color:var(--gold) !important; } .v2f__formwrap > div > p { color:var(--mute); } .v2f__list { padding:16px; margin:22px 0 0; border-radius:14px; background:var(--cream); font-size:14px; } .v2f__list li { align-items:center; color:var(--ink); } .v2f__list li::before { content:"\2713"; width:18px; height:18px; flex:none; border-radius:50%; background:var(--gold); color:#fff; display:grid; place-items:center; font-size:11px; } .v2f label { color:var(--mute); } .v2f input, .v2f select, .v2f textarea { color:var(--ink); background:#fff; border:1px solid rgba(35,29,21,.18); transition:border-color .2s, box-shadow .2s; } .v2f input::placeholder, .v2f textarea::placeholder { color:rgba(111,100,85,.7); } .v2f input:focus, .v2f select:focus, .v2f textarea:focus { border-color:var(--gold); background:#fff; box-shadow:0 0 0 3px rgba(168,132,63,.15); } .v2f__fine { color:var(--mute); } .v2f__ok { background:rgba(168,132,63,.12); color:var(--ink); } .v2f__err { background:#fbeeee; border-color:#d99; color:#7a2b2b; } @media (prefers-reduced-motion: reduce) { .v2f [data-reveal] { opacity:1; transform:none; transition:none; } }
+</style>
+
+<section class="v2f" id="fundraisers">
+  <div class="v2f__wrap">
+    <div class="v2f__head">
+      <div>
+        <p class="v2f__eyebrow" data-reveal>Fundraisers</p>
+        <h2 data-reveal style="--d:.08s">Your cause. Your bag. Coffee worth reordering.</h2>
+        <p class="v2f__lede" data-reveal style="--d:.16s">We design a fully custom bag for your school, team or church, with your name, your colors and your story. We roast it to order and ship it fresh. Your supporters get great coffee, and your cause gets a share of every bag.</p>
+      </div>
+      <div class="v2f__head-cta" data-reveal style="--d:.24s"><a class="v2f__btn" href="#fundraiser-interest">Start a fundraiser</a></div>
+    </div>
+
+    <div class="v2f__cards">
+      <article class="v2f__card" data-reveal style="--d:0s;--tint:#c9d3e0">
+        <div class="v2f__stage"><span class="v2f__tag">Schools &amp; PTOs</span><img src="{{ f_school }}" alt="Sample custom school fundraiser coffee bag" loading="lazy"></div>
+        <div class="v2f__info"><h3>Schools</h3><p>PTOs, booster clubs, band trips and class projects. A bag parents are proud to buy, and a far better fundraiser than another box of candy.</p></div>
+      </article>
+      <article class="v2f__card" data-reveal style="--d:.12s;--tint:#e8c3c6">
+        <div class="v2f__stage"><span class="v2f__tag">Teams &amp; boosters</span><img src="{{ f_sports }}" alt="Sample custom sports booster coffee bag" loading="lazy"></div>
+        <div class="v2f__info"><h3>Sports teams</h3><p>Uniforms, travel and gear. Your mascot and colors on a bag fans keep on the counter all season long.</p></div>
+      </article>
+      <article class="v2f__card" data-reveal style="--d:.24s;--tint:#dcd0b0">
+        <div class="v2f__stage"><span class="v2f__tag">Churches &amp; ministries</span><img src="{{ f_church }}" alt="Sample custom church mission trip coffee bag" loading="lazy"></div>
+        <div class="v2f__info"><h3>Churches</h3><p>Mission trips, youth groups, building funds and outreach. Your verse and your vision on every bag.</p></div>
+      </article>
+    </div>
+    <p class="v2f__note">Sample designs with example names. Every fundraiser bag is designed with you.</p>
+
+    <div class="v2f__steps">
+      <div class="v2f__step" data-reveal><span>01</span><h4>Tell us about your group</h4><p>Fill out the short form below. We&rsquo;ll reach out personally to plan your campaign.</p></div>
+      <div class="v2f__step" data-reveal style="--d:.12s"><span>02</span><h4>We design your bag</h4><p>Your name, colors, logo and message on a fully custom bag. You approve every detail.</p></div>
+      <div class="v2f__step" data-reveal style="--d:.24s"><span>03</span><h4>Sell, roast, ship</h4><p>Your supporters order, we roast to order and ship fresh, and your cause gets its share.</p></div>
+    </div>
+
+    <div class="v2f__formwrap" id="fundraiser-interest">
+      <div>
+        <p class="v2f__eyebrow" style="color:var(--gold-l)">Interest form</p>
+        <h3>Let&rsquo;s plan your fundraiser.</h3>
+        <p>Tell us a little about your group. A real person on our team will follow up personally.</p>
+        <ul class="v2f__list">
+          <li>Fully custom bag design</li>
+          <li>Specialty coffee, roasted to order</li>
+          <li>Personal help from planning to delivery</li>
+        </ul>
+      </div>
+      {%- form 'contact', id: 'fem-fundraiser-form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="v2f__ok" role="status">Thank you. We have your details and will be in touch soon.</p>
+        {%- elsif form.errors -%}
+          <div class="v2f__err" role="alert">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        <input type="hidden" name="contact[Form]" value="Fundraiser interest">
+        <label>Your name<input type="text" name="contact[name]" autocomplete="name" required></label>
+        <label>Email<input type="email" name="contact[email]" autocomplete="email" required></label>
+        <label>Phone<input type="tel" name="contact[Phone]" autocomplete="tel"></label>
+        <label>Organization<input type="text" name="contact[Organization]" required></label>
+        <label>Type of group
+          <select name="contact[Group type]" required>
+            <option value="">Choose one</option>
+            <option>School or PTO</option>
+            <option>Sports team or boosters</option>
+            <option>Church or ministry</option>
+            <option>Nonprofit or other</option>
+          </select>
+        </label>
+        <label>Expected supporters
+          <select name="contact[Expected supporters]">
+            <option value="">Choose one</option>
+            <option>Under 50</option>
+            <option>50 to 150</option>
+            <option>150 to 500</option>
+            <option>500+</option>
+          </select>
+        </label>
+        <label class="full">When would you like to run it?<input type="text" name="contact[Timing]" placeholder="For example, February or spring season"></label>
+        <label class="full">What are you raising money for?<textarea name="contact[body]" placeholder="Tell us about your goal, timeline and anything else we should know"></textarea></label>
+        <div class="full" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+          <p class="v2f__fine">We only use this to plan your fundraiser. No mailing lists.</p>
+          <button type="submit" class="v2f__btn">Send my details</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function(){
+    var els = document.querySelectorAll('.v2f [data-reveal]');
+    if (!('IntersectionObserver' in window)) { els.forEach(function(e){ e.classList.add('is-in'); }); return; }
+    var io = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } }); }, { threshold: .15 });
+    els.forEach(function(e){ io.observe(e); });
+  })();
+</script>
+
+{% schema %}
+{ "name": "FEM fundraisers v2", "settings": [], "presets": [{ "name": "FEM fundraisers v2" }] }
+{% endschema %}

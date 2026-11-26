@@ -9,175 +9,121 @@
  */
 {
   "sections": {
-    "hero": {
-      "type": "hero",
-      "settings": {
-        "eyebrow": "",
-        "heading": "Coffee with something underneath it.",
-        "description": "Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted.",
-        "primary_cta_text": "Shop this month",
-        "primary_cta_url": "",
-        "secondary_cta_text": "Read the devotion",
-        "secondary_cta_url": "",
-        "product_handles": "steadfast,new-mercies,rise-shine",
-        "trust_line": "Free US shipping over $40 · Whole bean or ground · A new devotion every month"
-      }
-    },
-    "devotion-feature": {
-      "type": "devotion-feature",
-      "settings": {
-        "heading": "A new devotion, printed once, gone with the month.",
-        "description": "Every month we write and print one devotion and prayer on the back of the bag. When the month ends, that bag ends. The next one comes with something new to sit with.",
-        "cta_text": "Start a morning",
-        "cta_url": "",
-        "devotion_number": "",
-        "devotion_month": "November",
-        "devotion_title": "New Mercies",
-        "devotion_author": "Written by Alex Lambert",
-        "devotion_verse": "It is of the LORD’s mercies that we are not consumed, because his compassions fail not. They are new every morning: great is thy faithfulness.",
-        "devotion_citation": "Lamentations 3:22–23 (KJV)",
-        "devotion_body": "Lamentations was written over a city in ruins. Yet in the middle of his grief, the writer stops and remembers: God’s mercy has not run out. Most of us wake up carrying yesterday. The sharp word, the unpaid bill, the prayer that seems unanswered. But mercy is not a tank that drains. It is more like the sunrise. It comes back whether you earned it or not. Yesterday is finished. His mercy is not.",
-        "devotion_prayer": "Lord, thank You for this morning. I lay down what I carried in from yesterday. Your mercy is new today. Help me live like someone given a fresh start. Amen.",
-        "devotion_bagline": "12 oz · Whole bean or ground"
-      }
-    },
-    "highlighted-text": {
-      "type": "highlighted-text",
-      "settings": {
-        "eyebrow": "Our promise",
-        "heading": "Written once. Never reprinted.",
-        "highlight": "Never reprinted",
-        "body": "<p>Every devotion on the back of every bag is written for one month, printed on that month's bag, then retired. What arrives at your door won't arrive again. The morning stays fresh because it never repeats.</p>"
-      }
-    },
-    "trust-bar": {
-      "type": "trust-bar",
+    "v2": {
+      "type": "fem-home-v2",
       "settings": {}
-    },
-    "pricing-grid": {
-      "type": "pricing-grid",
-      "settings": {
-        "heading": "Every coffee. One devotion each month.",
-        "description": "Certified specialty beans, small-batch roasted in Bend, Oregon, independently lab tested. On average just over four days between roaster and post.",
-        "collection": "",
-        "product_handles": "rise-shine,new-mercies,steadfast,abide,grateful-heart,anchored",
-        "products_to_show": 6
-      }
-    },
-    "collection-grid": {
-      "type": "collection-grid",
-      "blocks": {
-        "card_single": {
-          "type": "card",
-          "settings": {
-            "collection": "single-origin",
-            "title": "Single Origin",
-            "subtitle": "Brazil and Guatemala",
-            "link": ""
-          }
-        },
-        "card_seasonal": {
-          "type": "card",
-          "settings": {
-            "collection": "seasonal",
-            "title": "Seasonal",
-            "subtitle": "Here for Christmas only",
-            "link": ""
-          }
-        },
-        "card_decaf": {
-          "type": "card",
-          "settings": {
-            "collection": "decaf",
-            "title": "Decaf",
-            "subtitle": "All of the cup, none of the rush",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "card_single",
-        "card_seasonal",
-        "card_decaf"
-      ],
-      "settings": {
-        "eyebrow": "Explore",
-        "heading": "Shop the morning."
-      }
-    },
-    "rise-pour-renew": {
-      "type": "rise-pour-renew",
-      "blocks": {
-        "step_rise": {
-          "type": "step",
-          "settings": {
-            "number": "01",
-            "title": "Rise",
-            "body": "Choose a coffee and your grind, whole bean or ground. We roast it and send it your way."
-          }
-        },
-        "step_pour": {
-          "type": "step",
-          "settings": {
-            "number": "02",
-            "title": "Pour",
-            "body": "Open the bag and brew it slowly. The devotion is on the back, short enough to read while the coffee blooms."
-          }
-        },
-        "step_renew": {
-          "type": "step",
-          "settings": {
-            "number": "03",
-            "title": "Renew",
-            "body": "Each month brings a new devotion and prayer, so the morning never repeats."
-          }
-        }
-      },
-      "block_order": [
-        "step_rise",
-        "step_pour",
-        "step_renew"
-      ],
-      "settings": {
-        "heading": "A simple morning rhythm.",
-        "description": "Good coffee and a few honest words, waiting for you every morning."
-      }
     },
     "guarantee": {
       "type": "guarantee",
       "settings": {
         "label": "Our promise",
         "heading": "Love your first bag, or we make it right.",
-        "description": "If the coffee or the devotion does not land the way you hoped, email us. We will refund the bag or send a replacement — no script, no waiting. We are not here to keep your money; we are here to keep you in the morning."
+        "description": "If the coffee or the devotion does not land the way you hoped, email us within 30 days. We will refund the bag or send a replacement, no script, no waiting. We are not here to keep your money; we are here to keep you in the morning."
       }
     },
-    "fundraisers": {
-      "type": "fundraisers",
+    "gift-card-cta": {
+      "type": "gift-card-cta",
       "settings": {
-        "heading": "Coffee that funds what you care about.",
-        "description": "Run a month-long campaign with a custom bag and devotion. Your people get fresh coffee; your cause gets a meaningful share of every order."
-      }
-    },
-    "about": {
-      "type": "about",
-      "settings": {
-        "heading": "Coffee with a devotion on the back of every bag.",
-        "description": "<p>For Every Morning started with a simple idea: the things we do every day should point somewhere good. A bag of coffee is ordinary. A few honest words on the back of it can make it a small altar.</p><p>We roast specialty-grade beans in Bend, Oregon, and write a new devotion and prayer each month. The words are written once, printed once, and never reprinted. When the month is gone, the devotion is gone with it — so the morning stays fresh.</p>"
+        "label": "Gift cards",
+        "heading": "Give the gift of a better morning.",
+        "body": "Let them pick their coffee. Delivered instantly by email, never expires.",
+        "button_text": "Shop gift cards",
+        "url": "/products/for-every-morning-gift-card"
       }
     },
     "faq": {
       "type": "faq",
       "blocks": {
-        "faq_item_KQmGDL": {
+        "faq_01": {
           "type": "faq_item",
           "settings": {
             "question": "When does my bag ship?",
-            "answer": "<p>Every subscription roasts and ships together at the start of the month. One-off orders roast within two business days and land in about a week.</p>"
+            "answer": "<p>One-time orders roast within 2 business days and arrive in about a week. Subscription orders roast and ship together at the start of each month, so the new devotion reaches you right when it is released.</p>"
+          }
+        },
+        "faq_02": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How does the subscription work?",
+            "answer": "<p>Pick a coffee and grind, choose <strong>Subscribe &amp; save</strong>, and save 10% on every bag. A fresh bag with the new month's devotion arrives each month. Skip, pause, change coffees, or cancel anytime from your account.</p>"
+          }
+        },
+        "faq_03": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is the devotion on the back of the bag?",
+            "answer": "<p>A short Scripture passage, a few honest words on it, and a prayer. It is short enough to read while your coffee brews. Each month's devotion is written once, printed on that month's bags, and never reprinted.</p>"
+          }
+        },
+        "faq_04": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Who writes the devotions?",
+            "answer": "<p>Alex Lambert writes and edits every month. Scripture is quoted from the King James Version.</p>"
+          }
+        },
+        "faq_05": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Whole bean or ground?",
+            "answer": "<p>Whole bean stays fresh longer and tastes best if you have a grinder. Choose ground for drip, pour-over, or French press if you do not. You can pick either for every coffee.</p>"
+          }
+        },
+        "faq_06": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Which coffee should I start with?",
+            "answer": "<p>Start with <a href=\"/products/new-mercies\">New Mercies</a>, our light-medium Colombian flagship. Like it bright? Try Rise &amp; Shine. Like it bold? Try Steadfast. Want no caffeine? Try Abide.</p>"
+          }
+        },
+        "faq_07": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Where does the coffee come from?",
+            "answer": "<p>Certified specialty-grade beans, small-batch roasted to order in Bend, Oregon, and independently lab tested. Our single origins come from Brazil, Colombia and Guatemala.</p>"
+          }
+        },
+        "faq_08": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How much is shipping?",
+            "answer": "<p>Coffee ships free on US orders of 2 or more bags, one-time or subscription (pod boxes count too). A single bag ships for a flat $4.50. Brewing gear, mugs and filters ship separately from our partners, and their shipping cost is shown at checkout.</p>"
+          }
+        },
+        "faq_09": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What if I don't love it?",
+            "answer": "<p>Love your first bag, or we make it right. Email <a href=\"mailto:coffee@foreverymorning.com\">coffee@foreverymorning.com</a> within 30 days of delivery and we will refund the bag or send a replacement. You do not need to send anything back. <a href=\"/policies/refund-policy\">Read the full refund policy</a>.</p>"
+          }
+        },
+        "faq_10": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I send it as a gift?",
+            "answer": "<p>Yes. Ship any bag to someone else at checkout and add a note in the order instructions. The devotion makes it more than a bag of coffee.</p>"
+          }
+        },
+        "faq_11": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is this only for Christians?",
+            "answer": "<p>The devotions are Christian. The coffee is for anyone.</p>"
           }
         }
       },
       "block_order": [
-        "faq_item_KQmGDL"
+        "faq_01",
+        "faq_02",
+        "faq_03",
+        "faq_04",
+        "faq_05",
+        "faq_06",
+        "faq_07",
+        "faq_08",
+        "faq_09",
+        "faq_10",
+        "faq_11"
       ],
       "settings": {
         "heading": "Questions before your first bag.",
@@ -206,19 +152,86 @@
         "text": "Shop now",
         "url": ""
       }
+    },
+    "fundraise-v2": {
+      "type": "fem-fundraise-v2",
+      "disabled": true,
+      "settings": {}
+    },
+    "gear": {
+      "type": "fem-gear",
+      "settings": {
+        "collection": "gear-accessories",
+        "eyebrow": "For the ritual",
+        "heading": "Brew it slow.",
+        "body": "Brewing gear, mugs and filters for a few quiet minutes before the day starts. Pair them with any For Every Morning coffee.",
+        "button_label": "Shop all gear",
+        "limit": 4
+      }
+    },
+    "gift-baskets": {
+      "type": "gift-basket-feature",
+      "blocks": {
+        "i1": {
+          "type": "item",
+          "settings": {
+            "text": "Emmanuel and/or Joy to the World, 12 oz"
+          }
+        },
+        "i2": {
+          "type": "item",
+          "settings": {
+            "text": "Bible-verse ceramic mug"
+          }
+        },
+        "i3": {
+          "type": "item",
+          "settings": {
+            "text": "Linen gratitude journal"
+          }
+        },
+        "i4": {
+          "type": "item",
+          "settings": {
+            "text": "Leather Bible-verse bookmark"
+          }
+        },
+        "i5": {
+          "type": "item",
+          "settings": {
+            "text": "Chocolate-covered espresso beans"
+          }
+        },
+        "i6": {
+          "type": "item",
+          "settings": {
+            "text": "Devotion card in a woven rope basket"
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "settings": {
+        "below_hero": true,
+        "anchor": "gift-baskets",
+        "product_two": "christmas-morning-gift-basket-two-blends",
+        "product_one": "christmas-morning-gift-basket-single-bag"
+      }
     }
   },
   "order": [
-    "hero",
-    "devotion-feature",
-    "highlighted-text",
-    "trust-bar",
-    "pricing-grid",
-    "collection-grid",
-    "rise-pour-renew",
+    "v2",
+    "gift-baskets",
+    "gear",
     "guarantee",
-    "fundraisers",
-    "about",
+    "gift-card-cta",
+    "fundraise-v2",
     "faq",
     "email-capture",
     "cookie-banner",

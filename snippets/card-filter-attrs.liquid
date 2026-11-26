@@ -1,0 +1,9 @@
+{%- comment -%} Filter data for the coffee collection: roast level 1-5, taste family, single origin or blend, decaf. Values live in the fem.roast_profile / fem.roast_level and fem.shop_filters product metafields. {%- endcomment -%}
+{%- liquid
+  assign rp = product.metafields.fem.roast_profile.value
+  if rp == blank or rp.lv == blank
+    assign rp = product.metafields.fem.roast_level.value
+  endif
+  assign sf = product.metafields.fem.shop_filters.value
+-%}
+{%- if rp.lv or sf.taste -%}data-lv="{{ rp.lv }}" data-taste="{{ sf.taste }}" data-origin="{{ sf.origin }}" data-decaf="{% if sf.decaf %}1{% else %}0{% endif %}"{%- endif -%}

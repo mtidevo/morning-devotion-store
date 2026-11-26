@@ -1,0 +1,83 @@
+{% comment %} Homepage gear rail: pulls brewing gear and accessories from a collection, so new gear shows up automatically. {% endcomment %}
+{%- liquid
+  assign gear = section.settings.collection
+  if gear == blank
+    assign gear = collections['gear-accessories']
+  endif
+-%}
+{%- if gear.products_count > 0 -%}
+<section class="v2gear">
+  <style>
+    .v2gear { --cream:#f6efe2; --cream2:#efe5d2; --ink:#231d15; --mute:#6f6455; --gold:#a8843f; background:var(--cream2); color:var(--ink); padding:clamp(70px,10vw,130px) 0; }
+    .v2gear * { box-sizing:border-box; }
+    .v2gear__wrap { width:min(1240px, 100% - 40px); margin:0 auto; }
+    .v2gear__head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px 40px; flex-wrap:wrap; margin-bottom:32px; }
+    .v2gear__head > div { max-width:560px; }
+    .v2gear__eyebrow { font-family:var(--sans, 'Jost', sans-serif); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin:0 0 14px; }
+    .v2gear h2 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:400; font-size:clamp(34px,4.4vw,58px); line-height:1.05; margin:0 0 18px; }
+    .v2gear__body { color:var(--mute); font-size:17px; line-height:1.75; margin:0; }
+    .v2gear__btn { display:inline-flex; align-items:center; gap:10px; padding:16px 30px; border-radius:999px; border:1px solid rgba(35,29,21,.35); color:var(--ink); font-family:var(--sans, 'Jost', sans-serif); font-size:13px; letter-spacing:.14em; text-transform:uppercase; text-decoration:none; transition:background .3s, color .3s, transform .4s; }
+    .v2gear__btn:hover { background:var(--ink); color:var(--cream); transform:translateY(-2px); }
+    .v2gear__grid { display:grid; grid-template-columns:repeat(var(--cols, 4), minmax(0, 1fr)); gap:22px; }
+    .v2gear__card { background:#fff; border-radius:22px; overflow:hidden; text-decoration:none; color:inherit; display:flex; flex-direction:column; transition:transform .6s cubic-bezier(.2,.8,.2,1), box-shadow .6s; }
+    .v2gear__card:hover { transform:translateY(-6px); box-shadow:0 30px 60px -30px rgba(40,25,10,.3); }
+    .v2gear__img { aspect-ratio:1/1; background:#fff; display:grid; place-items:center; overflow:hidden; }
+    .v2gear__img img { width:84%; height:auto; transition:transform .8s cubic-bezier(.2,.8,.2,1); }
+    .v2gear__card:hover .v2gear__img img { transform:scale(1.04); }
+    .v2gear__info { padding:20px 22px 22px; border-top:1px solid rgba(35,29,21,.06); display:flex; flex-direction:column; gap:6px; flex:1; }
+    .v2gear__type { font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); }
+    .v2gear__title { font-family:var(--disp, 'Bodoni Moda', serif); font-size:22px; line-height:1.2; }
+    .v2gear__price { margin-top:auto; padding-top:10px; font-size:15px; }
+    @media (max-width: 860px) {
+      .v2gear__head { margin-bottom:24px; }
+      .v2gear__grid { grid-auto-flow:column; grid-template-columns:none; grid-auto-columns:minmax(240px, 78%); overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:10px; scrollbar-width:none; }
+      .v2gear__grid::-webkit-scrollbar { display:none; }
+      .v2gear__card { scroll-snap-align:start; }
+    }
+    @media (prefers-reduced-motion: reduce) { .v2gear__card, .v2gear__img img, .v2gear__btn { transition:none; } }
+  </style>
+  {%- assign cols = section.settings.limit -%}
+  {%- if gear.products_count < cols -%}{%- assign cols = gear.products_count -%}{%- endif -%}
+  <div class="v2gear__wrap">
+    <div class="v2gear__head">
+      <div>
+        <p class="v2gear__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2>{{ section.settings.heading }}</h2>
+        {%- if section.settings.body != blank -%}<p class="v2gear__body">{{ section.settings.body }}</p>{%- endif -%}
+      </div>
+      <a class="v2gear__btn" href="{{ gear.url }}">{{ section.settings.button_label }} <span aria-hidden="true">&rarr;</span></a>
+    </div>
+    <div class="v2gear__grid" style="--cols:{{ cols }}">
+      {%- for p in gear.products limit: cols -%}
+        <a class="v2gear__card" href="{{ p.url }}">
+          <div class="v2gear__img">
+            {%- if p.featured_image != blank -%}
+              <img src="{{ p.featured_image | image_url: width: 700 }}" alt="{{ p.featured_image.alt | default: p.title | escape }}" loading="lazy" width="700" height="700">
+            {%- endif -%}
+          </div>
+          <div class="v2gear__info">
+            {%- if p.type != blank -%}<span class="v2gear__type">{{ p.type }}</span>{%- endif -%}
+            <span class="v2gear__title">{{ p.title }}</span>
+            <span class="v2gear__price">{{ p.price | money }}</span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Gear rail",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Gear collection" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "For the ritual" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Brew it slow." },
+    { "type": "textarea", "id": "body", "label": "Text", "default": "Simple, well-made gear for a few quiet minutes before the day starts. Pair it with any For Every Morning coffee." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop gear" },
+    { "type": "range", "id": "limit", "label": "Products to show (one row)", "min": 2, "max": 5, "step": 1, "default": 4 }
+  ],
+  "presets": [{ "name": "Gear rail" }]
+}
+{% endschema %}

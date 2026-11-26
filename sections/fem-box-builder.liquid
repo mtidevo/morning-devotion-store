@@ -1,0 +1,219 @@
+{%- comment -%} Build-your-box: subscription-only Devotion Club box. Mix any coffees, ships monthly. Free shipping on 2+ bags; 3+ subscription bags get an extra 5% off (automatic discount). One-time buyers are pointed to the coffee collection. {%- endcomment -%}
+{%- assign tint_handles = 'new-mercies,rise-shine,steadfast,abide,grateful-heart,anchored,emmanuel,joy-to-the-world' | split: ',' -%}
+{%- assign tints = '#6f8a74,#e3c98f,#3b3d44,#d9cfb8,#8a3b3f,#3d5a78,#5a4470,#b5414a' | split: ',' -%}
+<section class="bx" data-bx>
+  <style>
+    .bx { --cream:#f6efe2; --cream2:#efe5d2; --ink:#231d15; --mute:#6f6455; --gold:#a8843f; --gold-l:#d8b878; --sage:#55634f; --esp:#1d1812; background:var(--cream); color:var(--ink); padding:clamp(40px,6vw,80px) 0 120px; }
+    .bx * { box-sizing:border-box; }
+    .bx__wrap { width:min(1240px, 100% - 40px); margin:0 auto; display:grid; grid-template-columns:1.6fr 1fr; gap:clamp(24px,4vw,56px); align-items:start; }
+    .bx__eyebrow { font-family:var(--sans); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin:0 0 12px; }
+    .bx h1 { font-family:var(--disp); font-weight:400; font-size:clamp(40px,5vw,68px); line-height:1.02; margin:0 0 14px; }
+    .bx__lede { color:var(--mute); font-size:17px; line-height:1.7; margin:0 0 12px; max-width:52ch; }
+    .bx__single { display:inline-block; margin:0 0 28px; font-size:14px; color:var(--ink); text-decoration:underline; text-underline-offset:4px; text-decoration-color:var(--gold); }
+    .bx__single:hover { color:var(--gold); }
+    .bx__grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:16px; }
+    .bx__card { background:#fff; border-radius:20px; overflow:hidden; display:flex; flex-direction:column; border:2px solid transparent; transition:border-color .3s, transform .4s; }
+    .bx__card.is-on { border-color:var(--tint); }
+    .bx__card.is-off { opacity:.45; }
+    .bx__stage { aspect-ratio:1/0.9; display:grid; place-items:center; background:radial-gradient(110% 90% at 50% 100%, var(--tint) 0%, color-mix(in srgb, var(--tint) 45%, #fff) 100%); position:relative; }
+    .bx__stage img { width:52%; height:auto; filter:drop-shadow(0 18px 16px rgba(0,0,0,.3)); }
+    .bx__info { padding:16px 16px 18px; display:flex; flex-direction:column; gap:8px; flex:1; }
+    .bx__notes { font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); }
+    .bx__title { font-family:var(--disp); font-size:24px; }
+    .bx__price { font-size:14px; color:var(--mute); }
+    .bx__row { display:flex; gap:8px; align-items:center; margin-top:auto; }
+    .bx__row select { flex:1; min-width:0; font:inherit; font-size:13px; padding:9px 10px; border:1px solid rgba(35,29,21,.18); border-radius:10px; background:#fff; color:var(--ink); }
+    .bx__fmt { flex:1; min-width:0; font-size:13px; color:var(--mute); }
+    .bx__qty { display:flex; align-items:center; border:1px solid rgba(35,29,21,.18); border-radius:999px; }
+    .bx__qty button { width:34px; height:34px; border:0; background:transparent; font-size:18px; cursor:pointer; color:var(--ink); }
+    .bx__qty span { min-width:20px; text-align:center; font-size:15px; }
+    .bx__sum { position:sticky; top:100px; background:#fff; color:var(--ink); border:1px solid rgba(35,29,21,.1); border-radius:24px; padding:26px; box-shadow:0 30px 60px -40px rgba(40,25,10,.35); }
+    .bx__sum h2 { font-family:var(--disp); font-weight:400; font-size:30px; margin:0 0 16px; }
+    .bx__lines { list-style:none; padding:0; margin:0 0 16px; display:grid; gap:8px; font-size:14px; color:var(--ink); max-height:220px; overflow:auto; }
+    .bx__lines li { display:flex; justify-content:space-between; gap:10px; }
+    .bx__empty { color:var(--mute); font-size:14px; margin:0 0 16px; }
+    .bx__tiers { display:grid; gap:8px; margin:0 0 18px; padding:14px; border-radius:14px; background:var(--cream); font-size:13px; }
+    .bx__tier { display:flex; gap:10px; align-items:center; color:var(--mute); }
+    .bx__tier i { width:18px; height:18px; border-radius:50%; border:1.5px solid rgba(35,29,21,.25); flex:none; display:grid; place-items:center; font-style:normal; font-size:11px; }
+    .bx__tier.is-hit { color:var(--ink); }
+    .bx__tier.is-hit i { background:var(--gold); border-color:var(--gold); color:#fff; }
+    .bx__totals { display:grid; gap:6px; font-size:14px; margin-bottom:18px; }
+    .bx__totals div { display:flex; justify-content:space-between; }
+    .bx__total { font-family:var(--disp); font-size:30px; }
+    .bx__was { text-decoration:line-through; color:var(--mute); font-size:15px; margin-right:8px; }
+    .bx__save { color:var(--sage); font-weight:500; }
+    .bx__cta { width:100%; border:0; border-radius:999px; background:var(--gold); color:#fff; padding:17px; font-family:var(--sans); font-size:13px; letter-spacing:.14em; text-transform:uppercase; cursor:pointer; }
+    .bx__cta[disabled] { opacity:.45; cursor:not-allowed; }
+    .bx__nudge { margin:12px 0 0; font-size:13px; color:var(--gold); text-align:center; min-height:18px; }
+    .bx__ship { margin-top:18px; padding-top:16px; border-top:1px solid rgba(35,29,21,.1); font-size:13px; line-height:1.6; color:var(--mute); }
+    .bx__ship strong { color:var(--ink); }
+    .bx__cal { display:grid; gap:6px; margin-top:10px; }
+    .bx__cal div { display:flex; justify-content:space-between; padding:8px 12px; border-radius:10px; background:var(--cream); }
+    .bx__cal div.is-next { background:rgba(168,132,63,.16); color:var(--ink); font-weight:500; }
+    .bx__fine { margin:14px 0 0; font-size:12px; color:var(--mute); }
+    .bx__bar { display:none; }
+    @media (max-width: 900px) {
+      .bx__wrap { grid-template-columns:1fr; }
+      .bx__sum { position:static; }
+      .bx__grid { grid-template-columns:1fr 1fr; gap:10px; }
+      .bx__title { font-size:19px; }
+      .bx__row { flex-direction:column; align-items:stretch; }
+      .bx__qty { justify-content:space-between; }
+      .bx__bar { display:flex; position:fixed; left:0; right:0; bottom:0; z-index:50; gap:12px; align-items:center; justify-content:space-between; padding:12px 16px calc(12px + env(safe-area-inset-bottom)); background:#fff; color:var(--ink); border-top:1px solid rgba(35,29,21,.12); box-shadow:0 -10px 30px -20px rgba(40,25,10,.4); }
+      .bx__bar span { font-size:14px; }
+      .bx__bar button { border:0; border-radius:999px; background:var(--gold); color:#fff; padding:12px 18px; font-size:12px; letter-spacing:.12em; text-transform:uppercase; }
+    }
+  </style>
+
+  <div class="bx__wrap">
+    <div>
+      <p class="bx__eyebrow">Build your Devotion Club box</p>
+      <h1>Pick your mornings.</h1>
+      <p class="bx__lede">Mix any coffees in one box that arrives every month with the new devotion. Save 10% on every bag, save an extra 5% on 3 or more, and 2 or more bags ship free. Skip, swap or cancel anytime.</p>
+      <a class="bx__single" href="/collections/coffee">Just want to try a bag first? Shop single bags &rarr;</a>
+      <div class="bx__grid">
+        {%- for p in collections['coffee'].products limit: 24 -%}
+          {%- if p.available and p.gift_card? == false and p.selling_plan_groups.size > 0 -%}
+            {%- assign h = p.handle -%}
+            {%- assign ti = forloop.index0 | modulo: 8 -%}{%- assign tint = tints[ti] -%}
+            {%- for th in tint_handles -%}{%- if th == h -%}{%- assign tint = tints[forloop.index0] -%}{%- endif -%}{%- endfor -%}
+            {%- assign plan_id = p.selling_plan_groups[0].selling_plans[0].id -%}
+            {%- assign parts = p.description | split: '</p>' -%}
+            <article class="bx__card" style="--tint:{{ tint }}" data-bx-card data-handle="{{ h }}" data-title="{{ p.title | escape }}" data-price="{{ p.price }}" data-plan="{{ plan_id }}">
+              <div class="bx__stage">
+                <img src="{{ p.featured_image | image_url: width: 500 }}" alt="{{ p.featured_image.alt | escape }}" loading="lazy" width="250" height="250">
+              </div>
+              <div class="bx__info">
+                <span class="bx__notes">{{ parts[0] | strip_html | strip | truncate: 52 }}</span>
+                <a class="bx__title" href="{{ p.url }}" style="color:inherit;text-decoration:none">{{ p.title }}</a>
+                <span class="bx__price" data-bx-price>{{ p.price | money }}</span>
+                <div class="bx__row">
+                  {%- if p.has_only_default_variant -%}
+                    <input type="hidden" value="{{ p.variants.first.id }}" data-bx-variant>
+                    <span class="bx__fmt">{% if p.tags contains 'pods' %}Single-serve pods{% endif %}</span>
+                  {%- else -%}
+                  <select aria-label="Grind for {{ p.title | escape }}" data-bx-variant>
+                    {%- for v in p.variants -%}<option value="{{ v.id }}" {% unless v.available %}disabled{% endunless %}>{{ v.title }}</option>{%- endfor -%}
+                  </select>
+                  {%- endif -%}
+                  <div class="bx__qty">
+                    <button type="button" aria-label="Remove one {{ p.title | escape }}" data-bx-minus>&minus;</button>
+                    <span data-bx-qty>0</span>
+                    <button type="button" aria-label="Add one {{ p.title | escape }}" data-bx-plus>+</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <aside class="bx__sum" aria-live="polite">
+      <h2>Your box</h2>
+      <p class="bx__empty" data-bx-empty>Add a coffee to start your box.</p>
+      <ul class="bx__lines" data-bx-lines></ul>
+      <div class="bx__tiers">
+        <div class="bx__tier" data-bx-tier="sub"><i>&#10003;</i>10% off every bag</div>
+        <div class="bx__tier" data-bx-tier="2"><i>&#10003;</i>2+ bags: free US shipping</div>
+        <div class="bx__tier" data-bx-tier="3"><i>&#10003;</i>3+ bags: extra 5% off</div>
+      </div>
+      <div class="bx__totals">
+        <div><span>Bags</span><span data-bx-count>0</span></div>
+        <div><span>Shipping</span><span data-bx-ship>$4.50</span></div>
+        <div><span>You save</span><span class="bx__save" data-bx-saved>$0.00</span></div>
+        <div style="align-items:baseline;margin-top:6px"><span>Each month</span><span><span class="bx__was" data-bx-was></span><span class="bx__total" data-bx-total>$0.00</span></span></div>
+      </div>
+      <button type="button" class="bx__cta" data-bx-add disabled>Start my box</button>
+      <p class="bx__nudge" data-bx-nudge></p>
+      <div class="bx__ship">
+        <div data-bx-ship-sub><strong>Your first box ships now.</strong> It roasts within 2 business days, then your box ships on the 1st of every month with the new devotion. Skip, swap or cancel anytime.</div>
+        <div data-bx-ship-one hidden></div>
+        <div class="bx__cal" data-bx-cal></div>
+      </div>
+      <p class="bx__fine">Discounts apply at checkout. Shipping is calculated at checkout.</p>
+    </aside>
+  </div>
+
+  <div class="bx__bar"><span data-bx-bar>0 bags &middot; $0.00</span><button type="button" data-bx-add>Start my box</button></div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-bx]'); if (!root) return;
+      var money = function (c) { return '$' + (Math.round(c) / 100).toFixed(2); };
+      var mode = 'sub';
+      var cards = [].slice.call(root.querySelectorAll('[data-bx-card]'));
+      var qty = {}; cards.forEach(function (c) { qty[c.dataset.handle] = 0; });
+
+      function canSub(c) { return !!c.dataset.plan; }
+      function render() {
+        var count = 0, subCount = 0, full = 0, net = 0, lines = [];
+        cards.forEach(function (c) {
+          var q = qty[c.dataset.handle], price = Number(c.dataset.price);
+          var sub = mode === 'sub' && canSub(c);
+          c.classList.toggle('is-on', q > 0);
+          c.querySelector('[data-bx-qty]').textContent = q;
+          c.querySelector('[data-bx-price]').innerHTML = sub ? money(price * 0.9) + ' <s style="opacity:.6">' + money(price) + '</s>' : money(price);
+          if (q > 0) { count += q; if (sub) subCount += q; lines.push({ t: c.dataset.title, q: q, sub: sub, price: price }); }
+        });
+        var extra = subCount >= 3;
+        lines.forEach(function (l) {
+          var each = l.sub ? l.price * 0.9 * (extra ? 0.95 : 1) : l.price;
+          full += l.price * l.q; net += each * l.q;
+        });
+        var ship = count >= 2 || count === 0 ? 0 : 450;
+        var ul = root.querySelector('[data-bx-lines]');
+        ul.innerHTML = lines.map(function (l) { return '<li><span>' + l.q + ' &times; ' + l.t + '</span><span>' + money((l.sub ? l.price * 0.9 * (extra ? 0.95 : 1) : l.price) * l.q) + '</span></li>'; }).join('');
+        root.querySelector('[data-bx-empty]').hidden = count > 0;
+        root.querySelector('[data-bx-count]').textContent = count;
+        root.querySelector('[data-bx-ship]').textContent = count === 0 ? '—' : (ship === 0 ? 'Free' : money(ship));
+        var was = full + (count ? 450 : 0), total = net + ship, saved = count ? was - total : 0;
+        root.querySelector('[data-bx-saved]').textContent = money(saved);
+        root.querySelector('[data-bx-was]').textContent = saved > 0.5 ? money(was) : '';
+        root.querySelector('[data-bx-total]').textContent = money(net + ship);
+        root.querySelector('[data-bx-tier="2"]').classList.toggle('is-hit', count >= 2);
+        root.querySelector('[data-bx-tier="sub"]').classList.toggle('is-hit', subCount > 0);
+        root.querySelector('[data-bx-tier="3"]').classList.toggle('is-hit', extra);
+        var nudge = '';
+        if (count === 1) nudge = 'Add one more bag for free shipping.';
+        else if (subCount === 2) nudge = 'Add one more bag for an extra 5% off.';
+        root.querySelector('[data-bx-nudge]').textContent = nudge;
+        root.querySelectorAll('[data-bx-add]').forEach(function (b) { b.disabled = count === 0; });
+        root.querySelector('[data-bx-bar]').textContent = count + (count === 1 ? ' bag' : ' bags') + ' · ' + money(net + ship) + '/mo';
+      }
+
+      cards.forEach(function (c) {
+        c.querySelector('[data-bx-plus]').addEventListener('click', function () { qty[c.dataset.handle]++; render(); });
+        c.querySelector('[data-bx-minus]').addEventListener('click', function () { if (qty[c.dataset.handle] > 0) qty[c.dataset.handle]--; render(); });
+      });
+
+      /* Monthly ship calendar: real dates only. Subscriptions renew on the 1st. */
+      var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var now = new Date(), cal = root.querySelector('[data-bx-cal]'), rows = [];
+      for (var i = 1; i <= 3; i++) {
+        var d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+        rows.push('<div' + (i === 1 ? ' class="is-next"' : '') + '><span>' + months[d.getMonth()] + ' 1</span><span>' + (i === 1 ? 'Next monthly shipment' : 'Monthly shipment') + '</span></div>');
+      }
+      cal.innerHTML = rows.join('');
+
+      function addToCart(btn) {
+        var items = [];
+        cards.forEach(function (c) {
+          var q = qty[c.dataset.handle]; if (!q) return;
+          items.push({ id: Number(c.querySelector('[data-bx-variant]').value), quantity: q, selling_plan: Number(c.dataset.plan) });
+        });
+        if (!items.length) return;
+        root.querySelectorAll('[data-bx-add]').forEach(function (b) { b.disabled = true; b.textContent = 'Adding…'; });
+        fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: items }) })
+          .then(function (r) { if (!r.ok) throw new Error('add failed'); window.location.href = '/cart'; })
+          .catch(function () { root.querySelectorAll('[data-bx-add]').forEach(function (b) { b.disabled = false; b.textContent = 'Try again'; }); });
+      }
+      root.querySelectorAll('[data-bx-add]').forEach(function (b) { b.addEventListener('click', function () { addToCart(b); }); });
+      render();
+    })();
+  </script>
+</section>
+
+{% schema %}
+{ "name": "Build your box", "settings": [], "presets": [{ "name": "Build your box" }] }
+{% endschema %}

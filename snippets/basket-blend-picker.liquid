@@ -1,0 +1,116 @@
+{% comment %}
+  Blend picker for gift basket products. Rendered inside the product form on main-product,
+  only for products carrying the tag set in Theme settings > Christmas gift baskets.
+  Two Blends basket: "First blend" + "Second blend". Any other basket: "Blend".
+  Picks are saved as line item properties, so they show in the cart, on the order,
+  on the packing slip and in order emails. Price doesn't change with the picks.
+  Usage: {% render 'basket-blend-picker', product: product %}
+{% endcomment %}
+{%- liquid
+  assign blend_col = settings.gb_blend_collection | default: collections['coffee']
+  assign holiday_col = settings.gb_holiday_collection | default: collections['seasonal']
+  assign holiday_ids = ','
+  for hp in holiday_col.products
+    assign holiday_ids = holiday_ids | append: hp.id | append: ','
+  endfor
+  assign two = false
+  if settings.gb_two_blend_product != blank and settings.gb_two_blend_product.id == product.id
+    assign two = true
+  elsif product.title contains 'Two'
+    assign two = true
+  endif
+  assign basket_tag = settings.gb_picker_tag | default: 'gift-basket'
+  assign l1 = settings.gb_blend_label_first | default: 'First blend'
+  assign l2 = settings.gb_blend_label_second | default: 'Second blend'
+  assign l0 = settings.gb_blend_label_one | default: 'Blend'
+  if two
+    assign labels = l1 | append: '||' | append: l2 | split: '||'
+  else
+    assign labels = l0 | split: '||'
+  endif
+  assign shown_label_one = settings.gb_blend_shown_label_one | default: 'Your blend'
+  assign uid = product.id
+-%}
+{% render 'gift-basket-discount', product: product, size: 'lg' %}
+<fieldset class="bbp" data-bbp>
+  <style>
+    .bbp { border:0; margin:0 0 18px; padding:0; display:grid; gap:14px; min-width:0; }
+    .bbp legend { font-family:var(--disp,'Bodoni Moda',serif); font-size:20px; color:#334538; margin:0 0 4px; padding:0; }
+    .bbp__help { font-size:13.5px; color:#5f5649; margin:-6px 0 2px; line-height:1.5; }
+    .bbp__field { display:grid; gap:6px; }
+    .bbp__field label { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:#231d15; }
+    .bbp__field label span { color:#7a2b2b; }
+    .bbp select { width:100%; min-height:48px; font:inherit; font-size:15px; padding:10px 40px 10px 14px; border:1px solid rgba(51,69,56,.35); border-radius:12px; background:#fff; color:#231d15; appearance:none; -webkit-appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23334538' stroke-width='1.6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; }
+    .bbp select:focus-visible { outline:2px solid #334538; outline-offset:2px; }
+    .bbp select[aria-invalid="true"] { border-color:#7a2b2b; }
+    .bbp__notes { font-size:12.5px; color:#5f5649; margin:0; min-height:1.2em; }
+    .bbp__err { margin:0; padding:10px 12px; border-radius:10px; background:rgba(122,43,43,.08); color:#7a2b2b; font-size:13.5px; }
+    .bbp__err[hidden] { display:none; }
+  </style>
+  <legend>{{ settings.gb_picker_heading | default: 'Choose your blends' }}</legend>
+  {%- if settings.gb_picker_help != blank -%}<p class="bbp__help">{{ settings.gb_picker_help }}</p>{%- endif -%}
+  {%- for prop in labels -%}
+    {%- if forloop.first -%}{%- assign def = settings.gb_default_first.title | default: 'Emmanuel' -%}{%- else -%}{%- assign def = settings.gb_default_second.title | default: 'Joy to the World' -%}{%- endif -%}
+    {%- if two -%}{%- assign shown = prop -%}{%- else -%}{%- assign shown = shown_label_one -%}{%- endif -%}
+    <div class="bbp__field">
+      <label for="bbp-{{ uid }}-{{ forloop.index }}">{{ shown }} <span aria-hidden="true">*</span></label>
+      <select id="bbp-{{ uid }}-{{ forloop.index }}" name="properties[{{ prop | escape }}]" required aria-required="true" aria-describedby="bbp-{{ uid }}-{{ forloop.index }}-notes" data-bbp-select>
+        <option value="">{{ settings.gb_picker_placeholder | default: 'Select a blend' }}</option>
+        {%- for c in blend_col.products -%}
+          {%- liquid
+            if c.id == product.id or c.tags contains basket_tag or c.tags contains 'pods' or c.handle contains '-pods'
+              continue
+            endif
+            if c.type != blank and c.type != 'Coffee'
+              continue
+            endif
+            assign cid = ',' | append: c.id | append: ','
+            assign is_holiday = false
+            if holiday_ids contains cid
+              assign is_holiday = true
+            endif
+            assign notes = c.description | split: '</p>' | first | strip_html | strip | truncate: 70
+          -%}
+          <option value="{{ c.title | escape }}" data-notes="{{ notes | escape }}" {% if c.title == def %}selected{% endif %} {% unless c.available %}disabled{% endunless %}>{{ c.title }}{% if is_holiday %} · {{ settings.gb_holiday_label | default: 'Holiday' }}{% endif %}{% unless c.available %} · sold out{% endunless %}</option>
+        {%- endfor -%}
+      </select>
+      <p class="bbp__notes" id="bbp-{{ uid }}-{{ forloop.index }}-notes" data-bbp-notes></p>
+    </div>
+  {%- endfor -%}
+  <p class="bbp__err" role="alert" data-bbp-err hidden>{{ settings.gb_picker_error | default: 'Please choose a blend for each bag before adding the basket to your cart.' }}</p>
+</fieldset>
+<script>
+  (function () {
+    var box = document.currentScript.previousElementSibling;
+    if (!box || !box.matches('[data-bbp]')) return;
+    var form = box.closest('form');
+    var selects = box.querySelectorAll('[data-bbp-select]');
+    var err = box.querySelector('[data-bbp-err]');
+    function addBtns() { return form ? form.querySelectorAll('[type=submit], [data-pdp-add]') : []; }
+    function notes(sel) {
+      var o = sel.options[sel.selectedIndex], n = sel.parentNode.querySelector('[data-bbp-notes]');
+      if (n) n.textContent = o && o.value ? (o.getAttribute('data-notes') || '') : '';
+    }
+    function missing() { return Array.prototype.filter.call(selects, function (s) { return !s.value; }); }
+    function sync(showErr) {
+      var miss = missing();
+      selects.forEach(function (s) { s.setAttribute('aria-invalid', showErr && !s.value ? 'true' : 'false'); });
+      if (err) err.hidden = !(showErr && miss.length);
+      addBtns().forEach(function (b) {
+        if (miss.length) { b.setAttribute('data-bbp-locked', ''); b.disabled = true; }
+        else if (b.hasAttribute('data-bbp-locked')) { b.removeAttribute('data-bbp-locked'); b.disabled = false; }
+      });
+      document.querySelectorAll('[data-sticky-atc-submit]').forEach(function (b) { b.disabled = !!miss.length; });
+      return miss;
+    }
+    selects.forEach(function (s) { notes(s); s.addEventListener('change', function () { notes(s); sync(true); }); });
+    sync(false);
+    /* Runs before the cart drawer's submit handler, so a basket can't be added without its blends. */
+    window.addEventListener('submit', function (e) {
+      if (e.target !== form) return;
+      var miss = sync(true);
+      if (miss.length) { e.preventDefault(); e.stopImmediatePropagation(); miss[0].focus(); }
+    }, true);
+  })();
+</script>

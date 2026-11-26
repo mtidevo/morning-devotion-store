@@ -11,26 +11,49 @@
   "sections": {
     "main": {
       "type": "main-product",
+      "blocks": {
+        "subscriptions_app_block_fnx6Ag": {
+          "type": "shopify://apps/subscriptions/blocks/app-block/a3bfe9ec-96f8-4508-a003-df608a36d2ad",
+          "settings": {
+            "widget_style": "card",
+            "widget_style_card_selector": "radio_button",
+            "subscription_policy_url": "",
+            "color_text_body": "#6D7175",
+            "dividers_color": "#8F8D8D",
+            "background_color": "#FFFFFF",
+            "border_thickness": 1,
+            "border_radius": 0,
+            "product": "{{product}}"
+          }
+        }
+      },
+      "block_order": [
+        "subscriptions_app_block_fnx6Ag"
+      ],
       "settings": {
-        "badge_text": "New devotion \u00b7 Roasted fresh",
+        "badge_text": "New devotion · Roasted fresh",
         "show_tabs": true,
-        "details_text": "",
+        "details_text": "Specialty grade, small-batch roasted to order in Bend, Oregon, and independently lab tested. 12 oz bag, whole bean or ground. This month's devotion and prayer is printed on the back.",
         "brewing_text": "",
-        "shipping_text": "",
+        "shipping_text": "Roasted to order. One-time orders roast within 2 business days and arrive in about a week. Free US shipping on 2 or more bags; a single bag ships for a flat $4.50.",
         "countdown_label": "Hurry up!",
         "countdown_target": "",
-        "upgrades_title": "Popular upgrades"
+        "upgrades_title": "Popular upgrades",
+        "guarantee_text": "Love your first bag, or we make it right"
       }
     },
-    "sticky-atc": {
-      "type": "sticky-atc",
+    "roast-profile": {
+      "type": "fem-roast-profile",
+      "settings": {}
+    },
+    "lifestyle": {
+      "type": "fem-product-lifestyle",
       "settings": {}
     },
     "apps": {
       "type": "apps",
-      "settings": {},
       "blocks": {
-        "judge_me_reviews_review_widget_hiTQFL": {
+        "judge_me_reviews_review_widget_affYXd": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
             "review_data": "sample_data",
@@ -41,12 +64,21 @@
         }
       },
       "block_order": [
-        "judge_me_reviews_review_widget_hiTQFL"
-      ]
+        "judge_me_reviews_review_widget_affYXd"
+      ],
+      "settings": {
+        "heading": ""
+      }
+    },
+    "sticky-atc": {
+      "type": "sticky-atc",
+      "settings": {}
     }
   },
   "order": [
     "main",
+    "roast-profile",
+    "lifestyle",
     "apps",
     "sticky-atc"
   ]
