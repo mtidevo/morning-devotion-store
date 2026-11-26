@@ -17,22 +17,22 @@
         "message_ypEFnq": {
           "type": "message",
           "settings": {
-            "text": "Free US shipping on 2+ bags",
-            "link": ""
+            "text": "Weekend coffee sale, Thu 6 PM to Mon midnight ET. Up to 20% off, no code.",
+            "link": "shopify://collections/coffee"
           }
         },
         "message_D9dVxa": {
           "type": "message",
           "settings": {
-            "text": "A new devotion on the back of every bag",
-            "link": ""
+            "text": "Weekend coffee sale, Thu 6 PM to Mon midnight ET. Up to 20% off, no code.",
+            "link": "shopify://collections/coffee"
           }
         },
         "message_aWCUUp": {
           "type": "message",
           "settings": {
-            "text": "Whole bean or ground, 12 oz bags",
-            "link": ""
+            "text": "Weekend coffee sale, Thu 6 PM to Mon midnight ET. Up to 20% off, no code.",
+            "link": "shopify://collections/coffee"
           }
         }
       },
@@ -42,7 +42,7 @@
         "message_aWCUUp"
       ],
       "settings": {
-        "fallback": "Free US shipping on 2+ bags.",
+        "fallback": "Weekend coffee sale, Thu 6 PM to Mon midnight ET. Up to 20% off, no code.",
         "instagram_url": "https://www.instagram.com/foreverymorning",
         "facebook_url": "https://www.facebook.com/Foreverymorning",
         "x_url": "",
