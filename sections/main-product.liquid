@@ -1,4 +1,4 @@
-{% comment %} Product template — two-column with sticky info, rotating badge, low-stock bar {% endcomment %}
+{% comment %} Product template — two-column with sticky info, low-stock bar {% endcomment %}<style>.pdp { background:#f6efe2; } .pdp-main-image { background:#fff; border:1px solid rgba(35,29,21,.08); border-radius:24px; overflow:hidden; } .pdp-thumb { background:#fff; border-radius:12px; } @media (min-width: 901px) { .pdp-media { position:sticky; top:110px; align-self:start; } } .apps-section { background:#f6efe2; } #judgeme_product_reviews { --jdgm-primary-color:#a8843f; --jdgm-secondary-color:rgba(168,132,63,.12); --jdgm-star-color:#a8843f; --jdgm-paginate-color:#a8843f; --jdgm-btn-bg:#a8843f; } #judgeme_product_reviews .jdgm-write-rev-link, #judgeme_product_reviews button { background:#a8843f !important; border-color:#a8843f !important; color:#fff !important; border-radius:999px !important; }</style>{%- assign fem_rc = product.metafields.reviews.rating_count.value | default: 0 -%}{%- if fem_rc == 0 -%}<style>.apps-section { display:none; }</style>{%- endif -%}
 {%- assign is_color_option = false -%}
 {%- for opt in product.options_with_values -%}
   {%- assign lower = opt.name | downcase -%}
@@ -13,9 +13,6 @@
     {%- assign main_alt = product.featured_image.alt -%}
     {%- if main_alt == blank or main_alt == 'Product Image' -%}{%- assign main_alt = product.title | append: ' coffee, 12 oz carton' -%}{%- endif -%}
     <div class="pdp-media">
-      <div class="pdp-badge-wrap">
-        {% render 'circle-text', text: section.settings.badge_text, default: 'New devotion · Roasted fresh', size: 130 %}
-      </div>
       {% if product.featured_image != blank %}
         <div class="pdp-main-image">
           <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ main_alt | escape }}" width="1200" height="{{ 1200 | divided_by: product.featured_image.aspect_ratio | round }}" loading="eager" fetchpriority="high" data-pdp-main-img>
@@ -84,7 +81,7 @@
           <p class="pdp-stock-note">Only {{ inv }} left this month</p>
         {% endif %}
 
-        <div class="pdp-desc">{{ product.description }}</div>
+        {% if product.type == 'Coffee' %}<p class="pdp-ship-note" style="margin:10px 0 0;font-size:14px;color:var(--mute);">{% render 'icon-truck' %} <strong style="color:var(--ink);font-weight:500;">$4.50 shipping</strong> on 1 bag &middot; <strong style="color:var(--ink);font-weight:500;">free</strong> on 2 or more. Mix any coffees.</p>{% endif %}<div class="pdp-desc">{{ product.description }}</div>
 
         {% form 'product', product, class: 'pdp-form', data-pdp-form: '' %}
           {% render 'variant-json', product: product %}
@@ -121,6 +118,7 @@
           {% endunless %}
 
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-pdp-variant-id>
+          {%- assign gb_tag = settings.gb_picker_tag | default: 'gift-basket' -%}{%- if product.tags contains gb_tag -%}{% render 'basket-blend-picker', product: product %}{%- endif -%}
 
           <div class="pdp-qty-row">
             <div class="pdp-qty">
@@ -140,7 +138,7 @@
         {% if upgrade_count > 0 %}
           <div class="pdp-upgrades" data-pdp-upgrades>
             <div class="pdp-upgrades-head">
-              <span>🎁 {{ section.settings.upgrades_title | default: 'Popular upgrades' }}</span>
+              <span>{{ section.settings.upgrades_title | default: 'Popular upgrades' }}</span>
               <button type="button" class="pdp-upgrades-close" aria-label="Dismiss" data-pdp-upgrades-close>{% render 'icon-x' %}</button>
             </div>
             <div class="pdp-upgrades-list">
@@ -153,14 +151,22 @@
           </div>
         {% endif %}
 
+        {%- assign is_gear = false -%}
+        {%- if product.tags contains 'accessories' or product.type == 'Brewing Gear' -%}{%- assign is_gear = true -%}{%- endif -%}
+        {%- assign is_basket = false -%}{%- assign gb_tag = settings.gb_picker_tag | default: 'gift-basket' -%}{%- if product.tags contains gb_tag -%}{%- assign is_basket = true -%}{%- endif -%}
         <ul class="pdp-perks">
-          <li>{% render 'icon-truck' %} Free US shipping over $40</li>
-          {% if product.selling_plan_groups.size > 0 %}<li>{% render 'icon-refresh' %} Skip or cancel any month</li>{% endif %}
-          <li>{% render 'icon-book' %} A new devotion on the back</li>
-          <li>{% render 'icon-sparkles' %} {{ section.settings.guarantee_text | default: 'Love your first bag, or we make it right' }}</li>
+          {% if is_gear %}
+            <li>{% render 'icon-truck' %} Ships separately from our brewing partners</li>
+            <li>{% render 'icon-coffee' %} Pairs with any For Every Morning coffee</li>
+          {% else %}
+            {%- if is_basket -%}<li>{% render 'icon-truck' %} {{ settings.gb_perk_shipping }}</li>{%- else -%}            <li>{% render 'icon-truck' %} Free shipping on 2+ bags ($4.50 for one)</li>{%- endif -%}
+            {% if product.selling_plan_groups.size > 0 %}<li>{% render 'icon-refresh' %} Skip or cancel any month</li>{% endif %}
+            {%- if is_basket -%}<li>{% render 'icon-book' %} {{ settings.gb_perk_devotion }}</li>{%- else -%}            <li>{% render 'icon-book' %} A new devotion on the back</li>{%- endif -%}
+            <li>{% render 'icon-sparkles' %} {{ section.settings.guarantee_text | default: 'Love your first bag, or we make it right' }}</li>
+          {% endif %}
         </ul>
 
-        {% if section.settings.show_tabs %}
+        {% if section.settings.show_tabs and is_gear == false %}
           <div class="pdp-tabs" data-pdp-tabs>
             <div class="pdp-tabs-nav" role="tablist">
               <button type="button" role="tab" aria-selected="true" data-pdp-tab="details">Details</button>
@@ -169,13 +175,13 @@
             </div>
             <div class="pdp-tabs-panels">
               <div data-pdp-panel="details" class="is-active">
-                <p>{{ section.settings.details_text | default: 'Specialty grade, small-batch roasted in Bend, Oregon. 12 oz bag, whole bean or ground.' }}</p>
+                <p>{%- if is_basket -%}{{ settings.gb_details_text }}{%- else -%}{{ section.settings.details_text | default: 'Specialty grade, small-batch roasted in Bend, Oregon. 12 oz bag, whole bean or ground.' }}{%- endif -%}</p>
               </div>
               <div data-pdp-panel="brewing" hidden>
                 <p>{{ section.settings.brewing_text | default: 'Pour-over: 1:16 ratio. French press: 1:15, 4 min steep. Espresso: 18 g in, 36 g out, 28 s.' }}</p>
               </div>
               <div data-pdp-panel="shipping" hidden>
-                <p>{{ section.settings.shipping_text | default: 'Ships within 2 business days of roast. Free on US orders over $40.' }}</p>
+                <p>{%- if is_basket -%}{{ settings.gb_shipping_text }}{%- else -%}{{ section.settings.shipping_text | default: 'Ships within 2 business days of roast. Free US shipping on 2 or more bags.' }}{%- endif -%}</p>
               </div>
             </div>
           </div>
@@ -185,16 +191,49 @@
   </div>
 </section>
 
+<script>
+  /* Keep the Subscribe & save / One-time choice when the customer switches grind.
+     The subscriptions app renders one set of options per variant, and the new variant's set starts on one-time. */
+  (function () {
+    var app = document.querySelector('.pdp-app-block');
+    if (!app) return;
+    var lastType = null, lastPlan = null;
+    function visibleFieldset() {
+      var sets = app.querySelectorAll('.shopify_subscriptions_fieldset');
+      for (var i = 0; i < sets.length; i++) { if (sets[i].offsetParent !== null) return sets[i]; }
+      return null;
+    }
+    function remember() {
+      var fs = visibleFieldset(); if (!fs) return;
+      var r = fs.querySelector('input[type=radio]:checked'); if (!r) return;
+      lastType = r.getAttribute('data-radio-type');
+      lastPlan = r.getAttribute('data-selling-plan-id');
+    }
+    function restore() {
+      if (!lastType) return;
+      var fs = visibleFieldset(); if (!fs) return;
+      var target = null;
+      if (lastType === 'selling_plan') {
+        target = (lastPlan && fs.querySelector('input[type=radio][data-selling-plan-id="' + lastPlan + '"]')) || fs.querySelector('input[type=radio][data-radio-type=selling_plan]');
+      } else {
+        target = fs.querySelector('input[type=radio][data-radio-type=one_time_purchase]');
+      }
+      if (target && !target.checked) { target.click(); }
+    }
+    app.addEventListener('change', function (e) { if (e.target && e.target.type === 'radio') remember(); });
+    remember();
+    document.querySelectorAll('[data-pdp-option]').forEach(function (opt) {
+      opt.addEventListener('change', function () {
+        [60, 250, 600].forEach(function (ms) { setTimeout(restore, ms); });
+      });
+    });
+  })();
+</script>
+
 {% schema %}
 {
   "name": "Product",
   "settings": [
-    {
-      "type": "text",
-      "id": "badge_text",
-      "label": "Rotating badge text",
-      "default": "New devotion · Roasted fresh"
-    },
     {
       "type": "checkbox",
       "id": "show_tabs",
@@ -215,6 +254,11 @@
       "type": "textarea",
       "id": "shipping_text",
       "label": "Shipping tab"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text (not shown)"
     },
     {
       "type": "header",
@@ -266,15 +310,3 @@
   ]
 }
 {% endschema %}
-{% comment %}
-
-This file has been rewritten to preserve the original behavior.
-
----
-Changes:
-- from: "{% render 'circle-text', text: section.settings.badge_text | default: 'New
-    devotion · Roasted fresh', size: 130 %}"
-  to: "{% render 'circle-text', text: section.settings.badge_text, default: 'New devotion
-    · Roasted fresh', size: 130 %}"
-  position: 555..668
-{% endcomment %}

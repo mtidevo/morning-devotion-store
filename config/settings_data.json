@@ -9,16 +9,16 @@
  */
 {
   "current": {
-    "color_paper": "#ffffff",
-    "color_ink": "#2a251a",
-    "color_mute": "#6b6353",
+    "color_paper": "#f8f6f0",
+    "color_ink": "#252923",
+    "color_mute": "#514e46",
     "color_espresso": "#1a160e",
     "color_gold": "#a08957",
     "color_gold_dark": "#8f7845",
     "color_gold_light": "#c3a468",
-    "color_champagne": "#f1eada",
-    "color_sage": "#6e7862",
-    "color_sage_dark": "#4f5646",
+    "color_champagne": "#eef1ea",
+    "color_sage": "#65715d",
+    "color_sage_dark": "#334538",
     "font_display": "bodoni_moda_n4",
     "font_body": "jost_n4",
     "brand_name": "For Every Morning",
@@ -28,11 +28,35 @@
     "roastery_location": "Roasted in Bend, Oregon",
     "content_for_index": [],
     "blocks": {
+      "1768834845299682660": {
+        "type": "shopify://apps/subscriptions/blocks/app-embed-block/a3bfe9ec-96f8-4508-a003-df608a36d2ad",
+        "disabled": true,
+        "settings": {
+          "color_text_title": "#6D7175",
+          "color_text_body": "#6D7175",
+          "dividers_color": "#8F8D8D",
+          "bacgkround_color": "#FFFFFF",
+          "border_thickness": 1,
+          "border_radius": 0,
+          "subscription_policy_url": "/policies/subscription-policy"
+        }
+      },
+      "14060646107696862457": {
+        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      },
       "13768625480086291342": {
         "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",
         "disabled": false,
         "settings": {}
       }
-    }
+    },
+    "gb_two_blend_product": "christmas-morning-gift-basket-two-blends",
+    "gb_blend_collection": "coffee",
+    "gb_holiday_collection": "seasonal",
+    "gb_default_first": "emmanuel",
+    "gb_default_second": "joy-to-the-world",
+    "gb_addon_product": "christmas-morning-gift-basket-single-bag"
   }
 }

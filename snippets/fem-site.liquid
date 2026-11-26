@@ -1,0 +1,121 @@
+{% comment %} Site-wide polish: tighter desktop section spacing, "shop this coffee" photo tags, full-row product grids. Rendered in the head of every page. {% endcomment %}
+<style>
+  /* Tighter vertical rhythm on desktop. Mobile spacing is unchanged. */
+  @media (min-width: 861px) {
+    html body .v2-shop, html body .v2-dev, html body .v2-rit, html body .v2gear, html body .v2g,
+    html body .v2f, html body .v2q, html body .v2e, html body .frp, html body .v2l { padding-top:clamp(48px,5vw,76px); padding-bottom:clamp(48px,5vw,76px); }
+    html body .v2gc { padding-bottom:clamp(40px,4vw,60px); }
+    html body .v2 .v2-shop__head { margin-bottom:28px; }
+    html body .v2 .v2-rit h2 { margin:12px 0 36px; }
+    html body .v2 .v2-dev h2 { margin:12px 0 20px; }
+    html body .v2-club__body { margin:clamp(20px,3vw,36px); }
+    html body .pdp { padding-top:44px; padding-bottom:44px; }
+  }
+
+  /* Shop-this-coffee tags on lifestyle photos */
+  .scene-cover { position:absolute; inset:0; z-index:3; }
+  .scene-tags { position:absolute; left:16px; bottom:16px; z-index:4; display:flex; flex-wrap:wrap; gap:8px; max-width:calc(100% - 32px); }
+  .scene-tags--right { left:auto; right:16px; justify-content:flex-end; }
+  .scene-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.94); color:#231d15 !important; border-radius:999px; padding:9px 14px; font-family:var(--sans, 'Jost', sans-serif); font-size:11px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; text-decoration:none !important; box-shadow:0 10px 24px -14px rgba(20,14,8,.6); transition:background .25s, color .25s, transform .25s; }
+  .scene-tag:hover { background:#a8843f; color:#fff !important; transform:translateY(-1px); }
+  .scene-tag span { font-size:13px; line-height:1; }
+  html body .v2-club__img, html body .v2-dev__img, html body .v2-rit__img { position:relative; }
+
+  /* Collection grids: full rows only, the rest behind a Show more button */
+  .grid-more { display:flex; justify-content:center; margin-top:32px; }
+  .grid-more[hidden] { display:none; }
+  [data-full-rows] > .is-row-hidden { display:none !important; }
+  /* Product grids: no grey band above the first row (the badge gets its own room instead) */
+  html body .pricing-grid { padding-top:0; margin-top:18px; }
+  html body .popular-badge { z-index:5; }
+
+  /* Coffee cartons fill the photo window instead of floating small in the middle */
+  html body .product-card--carton .product-card-image { position:relative; display:block; overflow:hidden; }
+  html body .product-card--carton .product-card-image img { width:100%; aspect-ratio:4 / 5; object-fit:cover; padding:0; transform:scale(1.06); transform-origin:50% 30%; transition:transform .6s cubic-bezier(.2,.8,.2,1); }
+  html body .product-card--carton:hover .product-card-image img { transform:scale(1.1); }
+  /* Pods boxes are wide: show the whole box, just without the old padding */
+  html body .product-card--pods .product-card-image img { object-fit:contain; padding:16% 4% 4%; transform:none; }
+  html body .product-card--pods:hover .product-card-image img { transform:scale(1.03); }
+
+  /* Roast chip on the photo: five beans light to dark, plus the roast name */
+  .roast-chip { position:absolute; left:12px; top:12px; z-index:2; display:inline-flex; align-items:center; gap:8px; white-space:nowrap; background:rgba(255,255,255,.95); border-radius:999px; padding:7px 12px 7px 10px; font-family:var(--sans, 'Jost', sans-serif); font-size:10.5px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:#231d15; box-shadow:0 8px 20px -12px rgba(20,14,8,.55); pointer-events:none; }
+  .roast-chip__beans { display:inline-flex; gap:3px; }
+  .roast-chip__beans i { width:7px; height:9px; border-radius:50%; background:rgba(35,29,21,.14); }
+  .roast-chip__beans i.on:nth-child(1) { background:#d2ad73; }
+  .roast-chip__beans i.on:nth-child(2) { background:#b4844c; }
+  .roast-chip__beans i.on:nth-child(3) { background:#8b5c32; }
+  .roast-chip__beans i.on:nth-child(4) { background:#653f22; }
+  .roast-chip__beans i.on:nth-child(5) { background:#3a2414; }
+  @media (prefers-reduced-motion: reduce) { html body .product-card--carton .product-card-image img { transition:none; } }
+  /* ============================================================
+     Color refresh: brighter, clearer, easier to read.
+     Base tokens come from theme settings (settings_data.json).
+     This layer adds the new palette tokens and remaps the local
+     color tokens that individual sections define for themselves.
+     Gold stays for small decorative accents only (rules, icons,
+     bean dots, seals, outlines); text and controls use green/ink.
+     ============================================================ */
+  :root {
+    --fem-bg:#F8F6F0;          /* main background */
+    --fem-surface:#EEF1EA;     /* soft secondary surface */
+    --fem-text:#252923;        /* headings and main text */
+    --fem-body:#514E46;        /* body text */
+    --fem-primary:#334538;     /* primary buttons */
+    --fem-primary-h:#28372C;   /* primary hover (darker step of the same green) */
+    --fem-accent:#65715D;      /* secondary accent: small labels, notes */
+    --fem-line:rgba(37,41,35,.14);
+    --fem-field:rgba(37,41,35,.28);
+  }
+  /* Section-level tokens (homepage, gear, guarantee, gift card, FAQ, email, fundraisers, box builder, roast profile, lifestyle, cart drawer) */
+  html body :is(.v2, .v2gear, .v2g, .v2gc, .v2q, .v2e, .v2f, .v2l, .bx, .cd) { --cream:var(--fem-bg); --cream2:var(--fem-surface); --ink:var(--fem-text); --mute:var(--fem-body); --sage:var(--fem-accent); }
+  html body :is(.v2, .v2f, .bx) { --esp:var(--fem-primary); }
+  html body .frp { --cream:var(--fem-bg); --cream2:var(--fem-surface); --paper:var(--fem-surface); --ink:var(--fem-text); --mute:var(--fem-body); }
+  html body .cd { --hair:var(--fem-line); }
+
+  /* Page surfaces that were hard-coded cream or white */
+  html body { background:var(--fem-bg); }
+  html body .pdp, html body .apps-section { background:var(--fem-bg); }
+  html body .site-header { background:rgba(248,246,240,.94); }
+  html body .announcement-bar { background:var(--fem-surface); color:var(--fem-text); }
+  html body .search-overlay-inner { background:var(--fem-bg); }
+
+  /* Primary actions: dark green */
+  html body .btn-gold, html body .v2-btn--gold, html body .v2gc__btn, html body .v2f__btn, html body .bx__cta, html body .contact-form button[type="submit"] { background:var(--fem-primary); color:var(--fem-bg); border-color:var(--fem-primary); }
+  html body .btn-gold:hover, html body .v2-btn--gold:hover, html body .v2gc__btn:hover, html body .v2f__btn:hover, html body .bx__cta:hover, html body .contact-form button[type="submit"]:hover { background:var(--fem-primary-h); color:var(--fem-bg); }
+  html body .shopify-payment-button__button--unbranded { background:transparent; color:var(--fem-primary); border:1px solid var(--fem-primary); }
+  html body .shopify-payment-button__button--unbranded:hover:not([disabled]) { background:var(--fem-surface); color:var(--fem-primary); }
+  html body .popular-badge { background:var(--fem-primary); color:var(--fem-bg); }
+  html body #judgeme_product_reviews .jdgm-write-rev-link, html body #judgeme_product_reviews button, html body .jm-button--primary { background:var(--fem-primary) !important; border-color:var(--fem-primary) !important; color:var(--fem-bg) !important; }
+  html body #judgeme_product_reviews { --jdgm-primary-color:var(--fem-primary); --jdgm-paginate-color:var(--fem-primary); --jdgm-btn-bg:var(--fem-primary); }
+
+  /* Small labels and notes that were gold text: secondary accent green (readable at 11-12px) */
+  html body :is(.v2-eyebrow, .v2gear__eyebrow, .v2gear__type, .v2-card__notes, .v2g__eyebrow, .v2gc__eyebrow, .v2q__eyebrow, .v2e__eyebrow, .v2f__eyebrow, .frp__eyebrow, .v2l__eyebrow, .bx__eyebrow, .bx__notes, .coll-start__title, .cart-suggest__notes, .v2-marquee__track span) { color:var(--fem-accent) !important; }
+  html body .product-card-notes { color:var(--fem-accent) !important; }
+  /* Eyebrows sitting on photos (pale gold before): light text instead */
+  html body :is(.v2-band, .v2-season) .v2-eyebrow { color:var(--fem-surface) !important; }
+
+  /* Links, rules and form controls */
+  html body .rte a, html body .page-content a, html body .v2q a { color:var(--fem-primary); text-decoration-color:rgba(51,69,56,.4); }
+  html body :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea) { background-color:var(--fem-bg); border-color:var(--fem-field); color:var(--fem-text); }
+  html body .v2f :is(input, select, textarea) { background-color:var(--fem-bg); }
+  html body :is(input, select, textarea):focus-visible { outline:2px solid var(--fem-primary); outline-offset:1px; border-color:var(--fem-primary); }
+  html body .pdp-swatch.is-active { background:var(--fem-primary); border-color:var(--fem-primary); color:var(--fem-bg); }
+  html body .coll-filter button.f[aria-pressed="true"] { background:var(--fem-primary); border-color:var(--fem-primary); }
+  html body .ship-bar-fill { background:var(--fem-primary); }
+  html body .scene-tag:hover { background:var(--fem-primary); }
+
+  /* Second pass: white cards to palette surfaces, gold controls to green, leftover off-palette text */ html body :is(.coll-start__card, .coll-filter, .coll-filter .f, .coll-jump a, .cart-suggest__card, .cd__close, .cd__img, .cd__qty, .cd__foot, .bx__card, .bx__sum, .bx__bar, .v2f__formwrap, .v2-club__body, .v2-card, .v2gear__card, .pdp-swatch:not(.is-active), .pdp-qty, .plan_card, .frp__card, .sticky-atc) { background-color:var(--fem-bg); } html body :is(.coll-filter, .v2e__wrap) { background-color:var(--fem-surface); } html body .coll-jump a:is(:hover, :focus-visible) { background:var(--fem-primary); border-color:var(--fem-primary); color:var(--fem-bg); } html body .cart-count { background:var(--fem-primary); color:var(--fem-bg); } html body .bx .bx__bar button { background:var(--fem-primary); color:var(--fem-bg); border-color:var(--fem-primary); } html body .bx .bx__bar button:hover { background:var(--fem-primary-h); } html body .v2 .v2-club .v2-eyebrow, html body .v2f .v2f__formwrap .v2f__eyebrow, html body .v2 .v2-rit__num, html body .v2f .v2f__step span { color:var(--fem-accent) !important; } html body .v2 .v2-rail__nav button { color:var(--fem-text); } html body :is(.scene-tag, .roast-chip) { background:rgba(248,246,240,.95); color:var(--fem-text) !important; } html body :is(.plan_card, .subscription_group) :is(.in_widget_price, .group_name, .title_and_price_wrapper span) { color:var(--fem-body); } /* Third pass: contact page, menus, banners and remaining gold controls */ html body .fc { --cream:var(--fem-bg); --cream2:var(--fem-surface); --ink:var(--fem-text); --mute:var(--fem-body); } html body .fc__card { background:var(--fem-surface); } html body .fc :is(input, textarea) { background:var(--fem-bg); } html body .fc :is(input, textarea):focus, html body .search-form input:focus { border-color:var(--fem-primary); } html body .fc .fc__eyebrow { color:var(--fem-accent) !important; } html body .fc .fc__rte a, html body .cd__view, html body .pdp-tabs-nav button[aria-selected="true"], html body .header-nav .nav-link:is(:hover, .is-active) { color:var(--fem-primary); } html body .fc .fc__btn, html body .floating-rail-pill:hover, html body .upgrade-check:checked + .upgrade-check-box { background:var(--fem-primary); border-color:var(--fem-primary); color:var(--fem-bg); } html body .fc .fc__btn:hover { background:var(--fem-primary-h); } html body .floating-rail-icons a:hover { color:var(--fem-primary); } html body .btn-edge:hover, html body .pdp-thumb.is-active { border-color:var(--fem-primary); } html body .pdp-stock-note { color:var(--fem-text); } html body :is(.mobile-menu, .cookie-banner, .mega-menu, .header-locale summary, .header-locale-panel, .popup-newsletter-panel, .pdp-upgrades, .cart-notes, .upgrade-check-box) { background-color:var(--fem-bg); } /* Homepage hero: keep the headline on its solid column so every word stays readable on wide screens */
+  html body .v2 .v2-hero__body { position:relative; z-index:2; background:var(--fem-bg); }
+  html body .v2 .v2-hero h1 { font-size:clamp(40px, 4.4vw, 76px); color:var(--fem-text); } @media (min-width:1600px) { html body .v2 .v2-hero h1 { font-size:min(76px, calc((42vw - max(20px, 50vw - 620px) - 64px) / 5.3)); } }
+  html body .v2 .v2-hero__sub, html body .v2 .v2-hero__trust { color:var(--fem-body); }
+</style>
+{%- if template.name == 'product' and product -%}
+  {%- if product.tags contains 'accessories' or product.type == 'Brewing Gear' -%}
+  <style>
+    /* Gear photos are square with built-in text and measurements: show the whole image, never crop it */
+    .pdp-main-image { aspect-ratio:1 / 1 !important; background:#fff; }
+    .pdp-main-image img { object-fit:contain !important; width:100% !important; height:100% !important; padding:12px; box-sizing:border-box; }
+    .pdp-thumb img { object-fit:contain !important; background:#fff; }
+  </style>
+  {%- endif -%}
+{%- endif -%}

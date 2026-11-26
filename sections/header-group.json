@@ -17,7 +17,7 @@
         "message_ypEFnq": {
           "type": "message",
           "settings": {
-            "text": "Free US shipping over $40",
+            "text": "Free US shipping on 2+ bags",
             "link": ""
           }
         },
@@ -42,7 +42,7 @@
         "message_aWCUUp"
       ],
       "settings": {
-        "fallback": "Free US shipping over $40.",
+        "fallback": "Free US shipping on 2+ bags.",
         "instagram_url": "https://www.instagram.com/foreverymorning",
         "facebook_url": "https://www.facebook.com/Foreverymorning",
         "x_url": "",
@@ -53,9 +53,26 @@
     "header": {
       "type": "header",
       "settings": {}
+    },
+    "gift-basket-banner": {
+      "type": "gift-basket-banner",
+      "settings": {
+        "enabled": true,
+        "text": "🎄 Christmas Morning Gift Baskets are here. Save $14, order by Dec 7 for Christmas delivery.",
+        "link_label": "Shop baskets →",
+        "bg_color": "#334538",
+        "text_color": "#F8F6F0",
+        "start_at": "2026-11-14T00:00:00-05:00",
+        "end_at": "2026-12-07T23:59:59-05:00",
+        "dismissible": true,
+        "dismiss_version": "xmas-2026",
+        "close_label": "Close announcement",
+        "region_label": "Christmas gift basket announcement"
+      }
     }
   },
   "order": [
+    "gift-basket-banner",
     "announcement-bar",
     "header"
   ]

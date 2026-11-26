@@ -1,7 +1,35 @@
 {% comment %} Product card snippet for pricing grid {% endcomment %}
-<article class="product-card{% if popular %} popular{% endif %}">
+{%- liquid
+  assign is_carton = false
+  if product.type == 'Coffee'
+    assign is_carton = true
+  endif
+  assign rp = product.metafields.fem.roast_profile.value
+  if rp == blank or rp.lv == blank
+    assign rp = product.metafields.fem.roast_level.value
+  endif
+  assign roast_label = ''
+  if is_carton and rp.lv
+    assign lvl_parts = rp.level | split: '-'
+    assign lvl = ''
+    for part in lvl_parts
+      assign cap = part | capitalize
+      if forloop.first
+        assign lvl = cap
+      else
+        assign lvl = lvl | append: '-' | append: cap
+      endif
+    endfor
+    if product.description contains '<strong>Decaf'
+      assign roast_label = 'Decaf · ' | append: lvl
+    else
+      assign roast_label = lvl | append: ' Roast'
+    endif
+  endif
+-%}
+<article {% render 'card-filter-attrs', product: product %} class="product-card{% if popular %} popular{% endif %}{% if is_carton %} product-card--carton{% endif %}{% if is_carton and product.handle contains '-pods' %} product-card--pods{% endif %}">
   {% if popular %}
-    <div class="popular-badge">Most chosen</div>
+    <div class="popular-badge">Start here</div>
   {% endif %}
 
   <a href="{{ product.url }}" class="product-card-image" aria-label="{{ product.title | escape }}">
@@ -14,6 +42,9 @@
         {% render 'icon-shopping-bag' %}
       </div>
     {% endif %}
+    {%- if roast_label != '' -%}
+      <span class="roast-chip"><span class="roast-chip__beans" aria-hidden="true">{%- for i in (1..5) -%}<i{% if i <= rp.lv %} class="on"{% endif %}></i>{%- endfor -%}</span>{{ roast_label }}</span>
+    {%- endif -%}
   </a>
 
   <div class="product-card-content">
@@ -27,14 +58,23 @@
         {% render 'icon-star' %} <span>{{ card_rating }}</span>{% if card_count > 0 %} <span class="product-card-rating-count">({{ card_count }})</span>{% endif %}
       </div>
     {%- endif -%}
-    <p class="product-card-desc">{{ product.description | strip_html | truncatewords: 25 }}</p>
+    {%- comment -%} The first paragraph of each description is the roast and tasting-notes line. Show it on its own line so it never runs into the description. {%- endcomment -%}
+    {%- assign desc_parts = product.description | split: '</p>' -%}
+    {%- if desc_parts.size > 1 -%}
+      {%- assign card_notes = desc_parts[0] | strip_html | strip -%}
+      {%- assign card_body = desc_parts[1] | strip_html | strip -%}
+      <p class="product-card-notes" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-d); margin: 0 0 6px;">{{ card_notes }}</p>
+      <p class="product-card-desc">{{ card_body | truncatewords: 22 }}</p>
+    {%- else -%}
+      <p class="product-card-desc">{{ product.description | strip_html | truncatewords: 25 }}</p>
+    {%- endif -%}
 
     <div class="product-card-price">
       <div class="product-card-price-amount" data-product-card-price>{{ product.price | money }}</div>
       {%- if product.type == 'Coffee' -%}{%- unless product.variants.first.title contains '2 x' -%}<div class="product-card-price-label">per bag</div>{%- endunless -%}{%- endif -%}
     </div>
 
-    {% form 'product', product, class: 'product-card-form' %}
+    {%- if product.type == 'Coffee' -%}<p class="product-card-ship" style="margin:-4px 0 12px;font-size:12.5px;color:var(--mute);">$4.50 shipping on 1 bag &middot; free on 2+</p>{%- endif -%}{%- assign gb_tag = settings.gb_picker_tag | default: 'gift-basket' -%}{%- if product.tags contains gb_tag -%}{% render 'gift-basket-discount', product: product %}<a class="btn btn-gold product-card-submit" href="{{ product.url }}" style="margin-top:12px">Choose your blends</a>{%- else -%}{% form 'product', product, class: 'product-card-form' %}
       {% render 'variant-json', product: product %}
       {% if product.variants.size > 1 %}
         <div class="product-card-options">
@@ -70,6 +110,6 @@
           Sold out
         {% endif %}
       </button>
-    {% endform %}
+    {% endform %}{%- endif -%}
   </div>
 </article>

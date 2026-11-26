@@ -1,0 +1,26 @@
+{%- comment -%} Roast chip for a product photo: five beans light to dark plus the roast name. Styles live in snippets/fem-site.liquid (.roast-chip). Usage: {% render 'roast-chip', product: p %} {%- endcomment -%}
+{%- liquid
+  assign rp = product.metafields.fem.roast_profile.value
+  if rp == blank or rp.lv == blank
+    assign rp = product.metafields.fem.roast_level.value
+  endif
+  assign roast_label = ''
+  if product.type == 'Coffee' and rp.lv
+    assign lvl_parts = rp.level | split: '-'
+    assign lvl = ''
+    for part in lvl_parts
+      assign cap = part | capitalize
+      if forloop.first
+        assign lvl = cap
+      else
+        assign lvl = lvl | append: '-' | append: cap
+      endif
+    endfor
+    if product.description contains '<strong>Decaf'
+      assign roast_label = 'Decaf · ' | append: lvl
+    else
+      assign roast_label = lvl | append: ' Roast'
+    endif
+  endif
+-%}
+{%- if roast_label != '' -%}<span class="roast-chip"><span class="roast-chip__beans" aria-hidden="true">{%- for i in (1..5) -%}<i{% if i <= rp.lv %} class="on"{% endif %}></i>{%- endfor -%}</span>{{ roast_label }}</span>{%- endif -%}

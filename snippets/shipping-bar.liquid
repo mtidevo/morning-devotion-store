@@ -1,22 +1,43 @@
 {% comment %}
-  Free-shipping progress bar.
-  Usage: {% render 'shipping-bar', threshold_cents: 4000 %}
+  Free-shipping progress bar. Coffee ships free on 2+ bags (pods count), so the bar counts Coffee-type items only. A single bag ships for $4.50. Brewing gear ships separately and does not count.
+  Usage: {% render 'shipping-bar' %}
 {% endcomment %}
-{%- assign threshold = threshold_cents | default: 4000 -%}
-{%- assign remaining = threshold | minus: cart.total_price -%}
-{%- if remaining < 0 -%}{%- assign remaining = 0 -%}{%- endif -%}
-{%- assign pct = cart.total_price | times: 100 | divided_by: threshold -%}
+{%- assign item_count = 0 -%}
+{%- assign has_gear = false -%}
+{%- for item in cart.items -%}
+  {%- if item.product.type == 'Coffee' -%}
+    {%- assign item_count = item_count | plus: item.quantity -%}
+  {%- elsif item.requires_shipping -%}
+    {%- assign has_gear = true -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign pct = item_count | times: 50 -%}
 {%- if pct > 100 -%}{%- assign pct = 100 -%}{%- endif -%}
+{%- assign sub_count = 0 -%}
+{%- for item in cart.items -%}{%- if item.selling_plan_allocation -%}{%- assign sub_count = sub_count | plus: item.quantity -%}{%- endif -%}{%- endfor -%}
 
-<div class="ship-bar" data-ship-bar data-ship-threshold="{{ threshold }}">
+<div class="ship-bar" data-ship-bar>
   <p class="ship-bar-msg" data-ship-msg>
-    {% if remaining > 0 %}
-      Spend <strong>{{ remaining | money }}</strong> more to reach <strong>free shipping</strong>.
+    {% if item_count == 0 %}
+      Coffee ships <strong>free</strong> on 2 or more bags ($4.50 for one).
+    {% elsif item_count == 1 %}
+      One bag ships for <strong>$4.50</strong>. Add <strong>one more bag</strong> and your coffee ships <strong>free</strong>.
+    {% elsif sub_count == 2 %}
+      You've unlocked <strong>free coffee shipping</strong>. Add <strong>one more subscription bag</strong> for an extra 5% off.
+    {% elsif sub_count >= 3 %}
+      You've unlocked <strong>free coffee shipping</strong> and an <strong>extra 5% off</strong> your subscription.
     {% else %}
-      You've unlocked <strong>free shipping</strong>.
+      You've unlocked <strong>free coffee shipping</strong>.
     {% endif %}
   </p>
-  <div class="ship-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}">
+  <div class="ship-bar-track" role="progressbar" aria-label="Progress to free coffee shipping" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}">
     <div class="ship-bar-fill" data-ship-fill style="width: {{ pct }}%;"></div>
   </div>
+  {%- if item_count > 0 or has_gear -%}
+    <p class="ship-bar-est" style="margin:8px 0 0;font-size:13px;color:var(--mute, #6f6455);">
+      {%- if item_count > 0 -%}Estimated coffee shipping: <strong style="color:var(--ink, #231d15);">{% if item_count >= 2 %}Free{% else %}$4.50{% endif %}</strong>{%- endif -%}
+      {%- if item_count > 0 and has_gear %} &middot; {% endif -%}
+      {%- if has_gear -%}Gear ships separately, shown at checkout{%- endif -%}
+    </p>
+  {%- endif -%}
 </div>

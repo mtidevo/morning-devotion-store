@@ -1,4 +1,40 @@
-{% comment %} Main collection template section {% endcomment %}
+{% comment %} Main collection template section. Uses the shared product-card snippet so cards match the homepage and include grind choice and quick add. The Coffee collection is split into groups (bags, seasonal, pods, gift cards) so shoppers can find the right format fast. {% endcomment %}
+<style>
+  .coll-jump { display:flex; flex-wrap:wrap; gap:10px; margin:20px 0 8px; }
+  .coll-jump a { display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border:1px solid var(--hair, rgba(35,29,21,.14)); border-radius:999px; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); text-decoration:none; background:#fff; transition:background .25s, color .25s, border-color .25s; }
+  .coll-jump a:hover, .coll-jump a:focus-visible { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .coll-jump a span { color:var(--mute); font-size:11px; letter-spacing:.06em; }
+  .coll-jump a:hover span { color:rgba(255,255,255,.75); }
+  .coll-group { margin-top:56px; scroll-margin-top:110px; }
+  .coll-group:first-of-type { margin-top:36px; }
+  .coll-group__head { display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--hair, rgba(35,29,21,.14)); padding-bottom:12px; }
+  .coll-group__head h2 { font-family:var(--disp); font-weight:400; font-size:clamp(28px,3vw,40px); margin:0; }
+  .coll-group__head p { margin:0; color:var(--mute); font-size:14px; }
+  .coll-start { margin:28px 0 8px; }
+  .coll-start__title { font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-d, #8f6f31); margin:0 0 12px; }
+  .coll-start__grid { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; }
+  .coll-start__card { display:flex; align-items:center; gap:14px; padding:12px 14px; background:#fff; border:1px solid var(--hair, rgba(35,29,21,.14)); border-radius:16px; text-decoration:none; color:var(--ink); transition:border-color .25s, transform .25s, box-shadow .25s; }
+  .coll-start__card:hover, .coll-start__card:focus-visible { border-color:var(--gold-d, #8f6f31); transform:translateY(-2px); box-shadow:0 14px 30px -20px rgba(35,29,21,.5); }
+  .coll-start__card img { width:52px; height:64px; object-fit:cover; border-radius:10px; background:#f3ede1; flex:none; }
+  .coll-start__card small { display:block; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); }
+  .coll-start__card b { display:block; font-family:var(--disp); font-weight:400; font-size:20px; line-height:1.15; margin-top:2px; }
+  .coll-filter { margin:22px 0 0; padding:18px 20px; background:#fff; border:1px solid var(--hair, rgba(35,29,21,.14)); border-radius:18px; display:grid; gap:12px; }
+  .coll-filter__row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .coll-filter__label { width:64px; flex:none; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--mute); }
+  .coll-filter button.f { font:inherit; font-size:13px; padding:8px 14px; border-radius:999px; border:1px solid var(--hair, rgba(35,29,21,.18)); background:#fff; color:var(--ink); cursor:pointer; transition:background .2s, color .2s, border-color .2s; }
+  .coll-filter button.f:hover { border-color:var(--ink); }
+  .coll-filter button.f[aria-pressed="true"] { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .coll-filter button.f i { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:7px; vertical-align:1px; }
+  .coll-filter__foot { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; border-top:1px solid var(--hair, rgba(35,29,21,.1)); padding-top:12px; }
+  .coll-filter__status { margin:0; font-size:13px; color:var(--mute); }
+  .coll-filter__clear { font:inherit; font-size:13px; background:none; border:0; padding:0; color:var(--ink); text-decoration:underline; text-underline-offset:4px; cursor:pointer; }
+  .coll-filter__clear[hidden] { display:none; }
+  .coll-empty { margin:40px 0 0; padding:40px 20px; text-align:center; color:var(--mute); border:1px dashed var(--hair, rgba(35,29,21,.2)); border-radius:18px; }
+  .coll-empty[hidden], .coll-group[hidden] { display:none; }
+  [data-full-rows] > .is-filtered-out { display:none !important; }
+  @media (max-width: 900px) { .coll-start__grid { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 520px) { .coll-start__grid { grid-template-columns:1fr; } .coll-filter__label { width:100%; } }
+</style>
 <section class="page-section">
   <div class="wrap">
     <span class="rule">{{ collection.title }}</span>
@@ -8,32 +44,220 @@
     {% endif %}
 
     {% if collection.products.size > 0 %}
-      <div class="pricing-grid">
-        {% for product in collection.products %}
-          <article class="product-card">
-            <a href="{{ product.url }}" class="product-card-image">
-              {% if product.featured_image != blank %}
-                <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" loading="lazy" width="600" height="450">
-              {% else %}
-                <div class="product-card-placeholder">
-                  {% render 'icon-shopping-bag' %}
-                </div>
-              {% endif %}
-            </a>
+      {%- if collection.handle == 'coffee' -%}
+        {%- assign seasonal_handles = collections['seasonal'].products | map: 'handle' | join: ',' | prepend: ',' | append: ',' -%}
+        {%- assign n_bags = 0 -%}{%- assign n_season = 0 -%}{%- assign n_pods = 0 -%}{%- assign n_gifts = 0 -%}
+        {%- capture g_bags -%}
+          {%- for product in collection.products -%}
+            {%- assign hk = product.handle | prepend: ',' | append: ',' -%}
+            {%- if product.gift_card? or product.handle contains '-pods' or seasonal_handles contains hk -%}{%- continue -%}{%- endif -%}
+            {%- assign n_bags = n_bags | plus: 1 -%}
+            {%- assign is_popular = false -%}{%- if product.handle == 'new-mercies' -%}{%- assign is_popular = true -%}{%- endif -%}
+            {% render 'product-card', product: product, popular: is_popular, section: section %}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- capture g_season -%}
+          {%- for product in collections['seasonal'].products -%}
+            {%- assign hk = product.handle | prepend: ',' | append: ',' -%}
+            {%- if product.gift_card? or product.handle contains '-pods' -%}{%- continue -%}{%- endif -%}
+            {%- if seasonal_handles contains hk -%}
+              {%- assign n_season = n_season | plus: 1 -%}
+              {% render 'product-card', product: product, popular: false, section: section %}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- capture g_pods -%}
+          {%- for product in collection.products -%}
+            {%- if product.handle contains '-pods' -%}
+              {%- assign n_pods = n_pods | plus: 1 -%}
+              {% render 'product-card', product: product, popular: false, section: section %}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- capture g_gifts -%}
+          {%- for product in collection.products -%}
+            {%- if product.gift_card? -%}
+              {%- assign n_gifts = n_gifts | plus: 1 -%}
+              {% render 'product-card', product: product, popular: false, section: section %}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
 
-            <div class="product-card-content">
-              <a href="{{ product.url }}" class="product-card-title no-underline">
-                <h3>{{ product.title }}</h3>
-              </a>
-              <p class="product-card-desc">{{ product.description | strip_html | truncatewords: 25 }}</p>
-              <div class="product-card-price">
-                <div class="product-card-price-amount">{{ product.price | money }}</div>
-                <div class="product-card-price-label">per bag</div>
-              </div>
-            </div>
-          </article>
-        {% endfor %}
-      </div>
+        {%- comment -%} Not sure? Four starting points, matching the FAQ advice. {%- endcomment -%}
+        <div class="coll-start" aria-labelledby="coll-start-title">
+          <p class="coll-start__title" id="coll-start-title">Not sure? Start here</p>
+          <div class="coll-start__grid">
+            {%- assign picks = 'new-mercies|Our flagship,rise-shine|Like it bright,steadfast|Like it bold,abide|No caffeine' | split: ',' -%}
+            {%- for pk in picks -%}
+              {%- assign pk_parts = pk | split: '|' -%}
+              {%- assign sp = all_products[pk_parts[0]] -%}
+              {%- if sp.id -%}
+                <a class="coll-start__card" href="{{ sp.url }}">
+                  {%- if sp.featured_image -%}<img src="{{ sp.featured_image | image_url: width: 160 }}" alt="" width="52" height="64" loading="lazy">{%- endif -%}
+                  <span><small>{{ pk_parts[1] }}</small><b>{{ sp.title }}</b></span>
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="coll-filter" data-coll-filter role="group" aria-label="Filter coffees">
+          <div class="coll-filter__row" data-f="lv"><span class="coll-filter__label">Roast</span>
+            <button type="button" class="f" data-v="1" aria-pressed="false"><i style="background:#d2ad73"></i>Light</button>
+            <button type="button" class="f" data-v="2" aria-pressed="false"><i style="background:#b4844c"></i>Light-Medium</button>
+            <button type="button" class="f" data-v="3" aria-pressed="false"><i style="background:#8b5c32"></i>Medium</button>
+            <button type="button" class="f" data-v="4" aria-pressed="false"><i style="background:#653f22"></i>Medium-Dark</button>
+            <button type="button" class="f" data-v="5" aria-pressed="false"><i style="background:#3a2414"></i>Dark</button>
+          </div>
+          <div class="coll-filter__row" data-f="taste"><span class="coll-filter__label">Taste</span>
+            <button type="button" class="f" data-v="bright" aria-pressed="false">Bright &amp; fruity</button>
+            <button type="button" class="f" data-v="balanced" aria-pressed="false">Sweet &amp; balanced</button>
+            <button type="button" class="f" data-v="chocolatey" aria-pressed="false">Rich &amp; chocolatey</button>
+            <button type="button" class="f" data-v="bold" aria-pressed="false">Bold &amp; dark</button>
+          </div>
+          <div class="coll-filter__row" data-f="type"><span class="coll-filter__label">Type</span>
+            <button type="button" class="f" data-v="single" aria-pressed="false">Single origin</button>
+            <button type="button" class="f" data-v="blend" aria-pressed="false">Blend</button>
+            <button type="button" class="f" data-v="decaf" aria-pressed="false">Decaf</button>
+          </div>
+          <div class="coll-filter__foot">
+            <p class="coll-filter__status" data-coll-status aria-live="polite">Pick a roast, taste or type to narrow it down.</p>
+            <button type="button" class="coll-filter__clear" data-coll-clear hidden>Clear filters</button>
+          </div>
+        </div>
+
+        <nav class="coll-jump" aria-label="Jump to a group">
+          {%- if n_bags > 0 -%}<a href="#coll-bags">Coffee bags <span>{{ n_bags }}</span></a>{%- endif -%}
+          {%- if n_season > 0 -%}<a href="#coll-seasonal">Christmas only <span>{{ n_season }}</span></a>{%- endif -%}
+          {%- if n_pods > 0 -%}<a href="#coll-pods">K-Cup&reg; pods <span>{{ n_pods }}</span></a>{%- endif -%}
+          {%- if n_gifts > 0 -%}<a href="#coll-gifts">Gift cards <span>{{ n_gifts }}</span></a>{%- endif -%}
+        </nav>
+
+        {%- if n_bags > 0 -%}
+          <div class="coll-group" id="coll-bags">
+            <div class="coll-group__head"><h2>Coffee bags</h2><p>12 oz &middot; whole bean or ground &middot; roasted to order</p></div>
+            <div class="pricing-grid" data-full-rows>{{ g_bags }}</div>
+            <div class="grid-more" data-grid-more hidden><button type="button" class="btn btn-edge">Show more</button></div>
+          </div>
+        {%- endif -%}
+        {%- if n_season > 0 -%}
+          <div class="coll-group" id="coll-seasonal">
+            <div class="coll-group__head"><h2>Christmas only</h2><p>Here for the season, gone after Christmas</p></div>
+            <div class="pricing-grid" data-full-rows>{{ g_season }}</div>
+            <div class="grid-more" data-grid-more hidden><button type="button" class="btn btn-edge">Show more</button></div>
+          </div>
+        {%- endif -%}
+        {%- if n_pods > 0 -%}
+          <div class="coll-group" id="coll-pods">
+            <div class="coll-group__head"><h2>K-Cup&reg; pods</h2><p>12 single-serve pods per box &middot; counts toward free shipping</p></div>
+            <div class="pricing-grid" data-full-rows>{{ g_pods }}</div>
+            <div class="grid-more" data-grid-more hidden><button type="button" class="btn btn-edge">Show more</button></div>
+          </div>
+        {%- endif -%}
+        {%- if n_gifts > 0 -%}
+          <div class="coll-group" id="coll-gifts">
+            <div class="coll-group__head"><h2>Gift cards</h2><p>Delivered by email, never expires</p></div>
+            <div class="pricing-grid" data-full-rows>{{ g_gifts }}</div>
+            <div class="grid-more" data-grid-more hidden><button type="button" class="btn btn-edge">Show more</button></div>
+          </div>
+        {%- endif -%}
+        <div class="coll-empty" data-coll-empty hidden>
+          <p>No coffees match all of those. Try fewer filters.</p>
+          <button type="button" class="coll-filter__clear" data-coll-clear>Clear filters</button>
+        </div>
+      {%- else -%}
+        <div class="pricing-grid" data-full-rows>
+          {% for product in collection.products %}
+            {%- assign is_popular = false -%}
+            {%- if product.handle == 'new-mercies' -%}{%- assign is_popular = true -%}{%- endif -%}
+            {% render 'product-card', product: product, popular: is_popular, section: section %}
+          {% endfor %}
+        </div>
+        <div class="grid-more" data-grid-more hidden><button type="button" class="btn btn-edge">Show more</button></div>
+      {%- endif -%}
+      <script>
+        (function () {
+          var grids = document.querySelectorAll('[data-full-rows]');
+          var layouts = [];
+          window.FEMFilterActive = false;
+          grids.forEach(function (grid) {
+            var wrap = grid.nextElementSibling;
+            if (!wrap || !wrap.hasAttribute('data-grid-more')) return;
+            var btn = wrap.querySelector('button'), expanded = false;
+            function layout() {
+              var items = [].slice.call(grid.children);
+              items.forEach(function (el) { el.classList.remove('is-row-hidden'); });
+              if (expanded || window.FEMFilterActive) { wrap.hidden = true; return; }
+              var cols = getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean).length || 1;
+              var full = Math.floor(items.length / cols) * cols;
+              if (cols < 2 || full === items.length || full === 0) { wrap.hidden = true; return; }
+              items.slice(full).forEach(function (el) { el.classList.add('is-row-hidden'); });
+              var n = items.length - full;
+              btn.textContent = 'Show ' + n + ' more';
+              btn.setAttribute('aria-label', 'Show ' + n + ' more ' + (n === 1 ? 'product' : 'products'));
+              wrap.hidden = false;
+            }
+            btn.addEventListener('click', function () { expanded = true; layout(); });
+            var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(layout, 150); });
+            layouts.push(layout);
+            layout();
+          });
+
+          /* Coffee filters: OR within a row, AND across rows. */
+          var bar = document.querySelector('[data-coll-filter]');
+          if (!bar) return;
+          var status = bar.querySelector('[data-coll-status]');
+          var clears = document.querySelectorAll('[data-coll-clear]');
+          var empty = document.querySelector('[data-coll-empty]');
+          var defaultMsg = status.textContent;
+          function selected(key) {
+            return [].map.call(bar.querySelectorAll('[data-f="' + key + '"] button[aria-pressed="true"]'), function (b) { return b.getAttribute('data-v'); });
+          }
+          function apply() {
+            var lv = selected('lv'), taste = selected('taste'), type = selected('type');
+            var active = lv.length + taste.length + type.length > 0;
+            window.FEMFilterActive = active;
+            var shown = 0;
+            document.querySelectorAll('.coll-group').forEach(function (g) {
+              var visible = 0;
+              g.querySelectorAll('[data-full-rows] > .product-card').forEach(function (card) {
+                var ok = true;
+                if (active) {
+                  var d = card.dataset;
+                  if (!d.taste && !d.lv) ok = false;
+                  if (ok && lv.length && lv.indexOf(d.lv) === -1) ok = false;
+                  if (ok && taste.length && taste.indexOf(d.taste) === -1) ok = false;
+                  if (ok && type.length) {
+                    var typeOk = type.indexOf(d.origin) !== -1 || (type.indexOf('decaf') !== -1 && d.decaf === '1');
+                    if (!typeOk) ok = false;
+                  }
+                }
+                card.classList.toggle('is-filtered-out', !ok);
+                if (active) card.classList.remove('is-row-hidden');
+                if (ok) visible++;
+              });
+              g.hidden = active && visible === 0;
+              shown += visible;
+            });
+            layouts.forEach(function (fn) { fn(); });
+            clears.forEach(function (c) { c.hidden = !active; });
+            if (empty) empty.hidden = !(active && shown === 0);
+            status.textContent = active ? (shown === 1 ? '1 coffee matches.' : shown + ' coffees match.') : defaultMsg;
+          }
+          bar.addEventListener('click', function (e) {
+            var b = e.target.closest('button.f');
+            if (!b) return;
+            b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+            apply();
+          });
+          clears.forEach(function (c) {
+            c.addEventListener('click', function () {
+              bar.querySelectorAll('button.f').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+              apply();
+            });
+          });
+        })();
+      </script>
     {% else %}
       <p class="text-mute">No products found in this collection.</p>
     {% endif %}

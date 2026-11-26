@@ -15,6 +15,13 @@
   <meta property="og:image:secure_url" content="https:{{ share_image | image_url: width: 1200 }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:alt" content="{{ share_image.alt | default: shop.name | escape }}">
+{%- else -%}
+  {%- assign fallback_share = 'fem-scene-kitchen-table.jpg' | file_img_url: '1200x' -%}
+  <meta property="og:image" content="https:{{ fallback_share }}">
+  <meta property="og:image:secure_url" content="https:{{ fallback_share }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="800">
+  <meta property="og:image:alt" content="New Mercies coffee on a farmhouse kitchen table beside a mug and an open Bible">
 {%- endif -%}
 {%- if template.name == 'product' -%}
   <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">

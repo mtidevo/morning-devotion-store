@@ -70,17 +70,19 @@
     };
   </script>
 
+  {%- assign org_description = shop.description | default: settings.share_description | default: 'Specialty coffee with a new devotion and prayer on the back of every bag.' -%}
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": {{ shop.name | json }},
-      "description": {{ shop.description | json }},
+      "description": {{ org_description | json }},
       "url": {{ shop.url | json }},
       {%- if settings.logo != blank -%}
       "logo": {{ settings.logo | image_url: width: 500 | prepend: 'https:' | json }},
       {%- endif -%}
       "email": {{ settings.contact_email | json }},
+      "sameAs": ["https://www.instagram.com/foreverymorning", "https://www.facebook.com/Foreverymorning"],
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Wooster",
@@ -89,6 +91,44 @@
       }
     }
   </script>
+
+  {%- if template.name == 'product' and product -%}
+    {%- assign ld_variant = product.selected_or_first_available_variant -%}
+    {%- assign ld_rating = product.metafields.reviews.rating.value.rating -%}
+    {%- assign ld_count = product.metafields.reviews.rating_count.value -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": {{ product.title | json }},
+        "description": {{ product.description | strip_html | strip | json }},
+        "url": {{ shop.url | append: product.url | json }},
+        {%- if product.featured_image != blank -%}
+        "image": [{% for img in product.images limit: 4 %}{{ img | image_url: width: 1200 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}{% endfor %}],
+        {%- endif -%}
+        "brand": { "@type": "Brand", "name": {{ shop.name | json }} },
+        {%- if ld_variant.sku != blank -%}"sku": {{ ld_variant.sku | json }},{%- endif -%}
+        {%- if ld_rating and ld_count and ld_count > 0 -%}
+        "aggregateRating": { "@type": "AggregateRating", "ratingValue": {{ ld_rating | json }}, "reviewCount": {{ ld_count | json }} },
+        {%- endif -%}
+        "offers": [
+          {%- for v in product.variants -%}
+          {
+            "@type": "Offer",
+            "name": {{ v.title | json }},
+            {%- if v.sku != blank -%}"sku": {{ v.sku | json }},{%- endif -%}
+            "price": {{ v.price | divided_by: 100.0 | json }},
+            "priceCurrency": {{ cart.currency.iso_code | json }},
+            "availability": "https://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}",
+            "url": {{ shop.url | append: v.url | json }}
+          }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+      }
+    </script>
+  {%- endif -%}
+  {%- if template.name == 'index' -%}{% render 'fem-v2-fixes' %}{%- endif -%}
+  {% render 'fem-site' %}
 </head>
 
 <body class="template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}">
@@ -103,6 +143,9 @@
   </main>
 
   {% sections 'footer-group' %}
+
+  {% section 'cart-drawer' %}
+  {% render 'cart-drawer-script' %}
 
   <script src="{{ 'site.js' | asset_url }}" defer></script>
 </body>

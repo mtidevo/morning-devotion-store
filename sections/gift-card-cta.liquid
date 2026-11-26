@@ -1,0 +1,36 @@
+{% comment %} Small gift card CTA band {% endcomment %}
+<section class="v2gc">
+  <style>
+    .v2gc { --cream:#f6efe2; --cream2:#efe5d2; --ink:#231d15; --mute:#6f6455; --gold:#a8843f; background:var(--cream); color:var(--ink); padding:0 0 clamp(50px,7vw,90px); }
+    .v2gc * { box-sizing:border-box; }
+    .v2gc__card { width:min(1100px, 100% - 40px); margin:0 auto; background:var(--cream2); border-radius:22px; padding:clamp(26px,3.5vw,40px) clamp(24px,4vw,52px); display:flex; align-items:center; justify-content:space-between; gap:20px 40px; flex-wrap:wrap; }
+    .v2gc__eyebrow { font-family:var(--sans, 'Jost', sans-serif); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin:0 0 8px; }
+    .v2gc h2 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:400; font-size:clamp(24px,2.6vw,34px); line-height:1.15; margin:0 0 6px; }
+    .v2gc__body { font-family:var(--sans, 'Jost', sans-serif); color:var(--mute); font-size:16px; line-height:1.6; margin:0; max-width:52ch; }
+    .v2gc__btn { display:inline-flex; align-items:center; gap:10px; padding:15px 28px; border-radius:999px; font-family:var(--sans, 'Jost', sans-serif); font-size:13px; letter-spacing:.14em; text-transform:uppercase; text-decoration:none; background:var(--gold); color:#fff; white-space:nowrap; transition:transform .4s cubic-bezier(.2,.8,.2,1), background .3s; }
+    .v2gc__btn:hover { transform:translateY(-2px); background:#8f6f31; color:#fff; }
+    @media (prefers-reduced-motion: reduce) { .v2gc__btn { transition:none; } }
+  </style>
+  <div class="v2gc__card">
+    <div>
+      <p class="v2gc__eyebrow">{{ section.settings.label }}</p>
+      <h2>{{ section.settings.heading }}</h2>
+      <p class="v2gc__body">{{ section.settings.body }}</p>
+    </div>
+    <a class="v2gc__btn" href="{{ section.settings.url | default: '/products/for-every-morning-gift-card' }}">{{ section.settings.button_text }}</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Gift card CTA",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Gift cards" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Give the gift of a better morning." },
+    { "type": "textarea", "id": "body", "label": "Text", "default": "Let them pick their coffee. Delivered instantly by email, never expires." },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Shop gift cards" },
+    { "type": "url", "id": "url", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Gift card CTA" }]
+}
+{% endschema %}

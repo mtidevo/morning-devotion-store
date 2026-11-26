@@ -1,0 +1,65 @@
+{% comment %} Lifestyle photo mosaic for product pages. Product-specific scenes first, the hands-and-Bible scene as a general fallback. {% endcomment %}
+{%- case product.handle -%}
+  {%- when 'new-mercies' -%}{%- assign scenes = 'fem-scene-kitchen-table.jpg|fem-scene-windowsill-trio.jpg|fem-scene-hero-v3.jpg' -%}{%- assign alts = 'New Mercies on a farmhouse kitchen table at sunrise beside a mug and an open Bible|Rise & Shine, New Mercies and Steadfast on a sunlit windowsill|Hands holding a mug of coffee over an open Bible' -%}
+  {%- when 'steadfast' -%}{%- assign scenes = 'fem-scene-porch-dawn.jpg|fem-scene-windowsill-trio.jpg|fem-scene-hero-v3.jpg' -%}{%- assign alts = 'Steadfast dark roast on a porch railing at dawn|Rise & Shine, New Mercies and Steadfast on a sunlit windowsill|Hands holding a mug of coffee over an open Bible' -%}
+  {%- when 'rise-shine' -%}{%- assign scenes = 'fem-scene-windowsill-trio.jpg|fem-scene-hero-v3.jpg' -%}{%- assign alts = 'Rise & Shine, New Mercies and Steadfast on a sunlit windowsill|Hands holding a mug of coffee over an open Bible' -%}
+  {%- when 'abide' -%}{%- assign scenes = 'fem-scene-evening-reading.jpg|fem-scene-hero-v3.jpg' -%}{%- assign alts = 'Abide decaf in a lamp-lit reading corner with a Bible and journal|Hands holding a mug of coffee over an open Bible' -%}
+  {%- when 'grateful-heart' or 'anchored' -%}{%- assign scenes = 'fem-scene-roastery.jpg|fem-scene-hero-v3.jpg' -%}{%- assign alts = 'Grateful Heart and Anchored single origins on a roastery workbench|Hands holding a mug of coffee over an open Bible' -%}
+  {%- when 'emmanuel' or 'joy-to-the-world' -%}{%- assign scenes = 'fem-scene-christmas.jpg|fem-scene-hero-v3.jpg' -%}{%- assign alts = 'Emmanuel and Joy to the World on a candlelit Christmas table|Hands holding a mug of coffee over an open Bible' -%}
+  {%- else -%}{%- assign scenes = '' -%}
+{%- endcase -%}
+{%- if product.type == 'Coffee' or scenes != '' -%}
+{%- if scenes == '' -%}{%- assign scenes = 'fem-scene-hero-v3.jpg|fem-scene-kitchen-table.jpg' -%}{%- assign alts = 'Hands holding a mug of coffee over an open Bible|Coffee and an open Bible on a farmhouse kitchen table' -%}{%- endif -%}
+{%- assign scene_list = scenes | split: '|' -%}
+{%- assign alt_list = alts | split: '|' -%}
+<section class="v2l">
+  <style>
+    .v2l { --cream:#f6efe2; --ink:#231d15; --mute:#6f6455; --gold:#a8843f; background:var(--cream); color:var(--ink); padding:clamp(60px,9vw,120px) 0; }
+    .v2l * { box-sizing:border-box; }
+    .v2l__wrap { width:min(1240px, 100% - 40px); margin:0 auto; }
+    .v2l__head { display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:34px; flex-wrap:wrap; }
+    .v2l__eyebrow { font-family:var(--sans, 'Jost', sans-serif); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin:0 0 12px; }
+    .v2l h2 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:400; font-size:clamp(32px,4vw,54px); line-height:1.05; margin:0; }
+    .v2l__sub { color:var(--mute); max-width:42ch; line-height:1.7; margin:0; }
+    .v2l__grid { display:grid; gap:18px; grid-template-columns:1.6fr 1fr; grid-auto-rows:clamp(200px,24vw,330px); }
+    .v2l__grid--2 { grid-template-columns:1.6fr 1fr; }
+    .v2l__grid--3 .v2l__tile:first-child { grid-row:span 2; }
+    .v2l__grid--2 .v2l__tile { grid-row:span 2; }
+    .v2l__tile { border-radius:20px; overflow:hidden; margin:0; position:relative; }
+    .v2l__tile img { width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.06); transition:transform 1.6s cubic-bezier(.2,.8,.2,1), opacity 1s; opacity:0; }
+    .v2l__tile.in img { transform:scale(1); opacity:1; }
+    .v2l__tile:hover img { transform:scale(1.03); }
+    @media (max-width: 760px) {
+      .v2l__grid, .v2l__grid--2 { grid-template-columns:1fr; grid-auto-rows:auto; }
+      .v2l__grid .v2l__tile { grid-row:auto !important; aspect-ratio:4/3; }
+    }
+    @media (prefers-reduced-motion: reduce) { .v2l__tile img { transform:none; opacity:1; transition:none; } }
+  </style>
+  <div class="v2l__wrap">
+    <div class="v2l__head">
+      <div>
+        <p class="v2l__eyebrow">In the morning</p>
+        <h2>{% if product.type == 'Coffee' %}{{ product.title }}, at home.{% else %}Made for slow mornings.{% endif %}</h2>
+      </div>
+      <p class="v2l__sub">Brew it slowly, turn the bag over and read the devotion while the coffee blooms.</p>
+    </div>
+    <div class="v2l__grid v2l__grid--{{ scene_list.size }}">
+      {%- for s in scene_list -%}
+        <figure class="v2l__tile" data-v2l>
+          <img src="{{ s | file_img_url: '1200x' }}" srcset="{{ s | file_img_url: '700x' }} 700w, {{ s | file_img_url: '1200x' }} 1200w, {{ s | file_img_url: '1536x' }} 1536w" sizes="(max-width: 760px) 100vw, 60vw" alt="{{ alt_list[forloop.index0] | escape }}" loading="lazy">
+          {% render 'scene-shop', scene: s, exclude: product.handle %}
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+  <script>
+    (function(){ var t = document.querySelectorAll('[data-v2l]'); if (!('IntersectionObserver' in window)) { t.forEach(function(e){ e.classList.add('in'); }); return; }
+      var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .1 });
+      t.forEach(function(e){ io.observe(e); }); })();
+  </script>
+</section>
+{%- endif -%}
+
+{% schema %}
+{ "name": "Lifestyle photos", "settings": [], "presets": [{ "name": "Lifestyle photos" }] }
+{% endschema %}

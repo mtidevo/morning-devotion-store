@@ -1,0 +1,292 @@
+{% comment %} FEM homepage v2 concept: warm editorial with motion. Images are Shopify Files. {% endcomment %}
+{%- assign img_hero = 'fem-scene-hero-v3.jpg' | file_img_url: '1600x' -%}
+{%- assign img_kitchen = 'fem-scene-kitchen-table.jpg' | file_img_url: '1000x' -%}
+{%- assign img_sill = 'fem-scene-windowsill-trio.jpg' | file_img_url: '1600x' -%}
+{%- assign img_read = 'fem-scene-evening-reading.jpg' | file_img_url: '1200x' -%}
+{%- assign img_porch = 'fem-scene-porch-dawn.jpg' | file_img_url: '2000x' -%}
+{%- assign img_xmas = 'fem-scene-christmas.jpg' | file_img_url: '1800x' -%}
+{%- assign img_roast = 'fem-scene-roastery.jpg' | file_img_url: '1600x' -%}
+
+<style>
+  .v2 { --cream:#f6efe2; --cream2:#efe5d2; --ink:#231d15; --mute:#6f6455; --gold:#a8843f; --gold-l:#d8b878; --sage:#55634f; --esp:#1d1812; overflow-x:clip; background:var(--cream); color:var(--ink); }
+  .v2 * { box-sizing:border-box; }
+  .v2 h1,.v2 h2,.v2 h3 { font-family:var(--disp); font-weight:400; letter-spacing:-0.01em; margin:0; }
+  .v2 p { margin:0; }
+  .v2-eyebrow { font-family:var(--sans); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); }
+  .v2-btn { display:inline-flex; align-items:center; gap:10px; padding:16px 30px; border-radius:999px; font-family:var(--sans); font-size:13px; letter-spacing:.14em; text-transform:uppercase; text-decoration:none; transition:transform .4s cubic-bezier(.2,.8,.2,1), background .3s, color .3s; }
+  .v2-btn:hover { transform:translateY(-2px); }
+  .v2-btn--gold { background:var(--gold); color:#fff; }
+  .v2-btn--gold:hover { background:#8f6f31; }
+  .v2-btn--ghost { border:1px solid rgba(255,255,255,.7); color:#fff; backdrop-filter:blur(6px); background:rgba(255,255,255,.08); }
+  .v2-btn--ink { background:var(--esp); color:var(--cream); }
+  .v2-wrap { width:min(1240px, 100% - 40px); margin-inline:auto; }
+
+  /* reveal */
+  .v2 [data-reveal] { opacity:0; transform:translateY(28px); transition:opacity 1s cubic-bezier(.2,.8,.2,1), transform 1.1s cubic-bezier(.2,.8,.2,1); transition-delay:var(--d,0s); }
+  .v2 [data-reveal].in { opacity:1; transform:none; }
+  .v2 [data-reveal="fade"] { transform:none; }
+  .v2 [data-reveal="scale"] { transform:scale(1.06); }
+  .v2 [data-reveal="scale"].in { transform:scale(1); }
+
+  /* hero: split layout keeps the photo sharp and the headline clear of the product */
+  .v2-hero { display:grid; grid-template-columns:minmax(0,42fr) minmax(0,58fr); min-height:min(86vh, 820px); background:var(--cream); }
+  .v2-hero__body { align-self:center; padding:clamp(40px,6vw,90px) clamp(20px,4vw,64px) clamp(40px,6vw,90px) max(20px, calc((100vw - 1240px)/2)); }
+  .v2-hero h1 { font-size:clamp(44px, 5.6vw, 92px); line-height:1; max-width:10ch; color:var(--ink); }
+  .v2-hero h1 .w { display:inline-block; opacity:0; transform:translateY(.6em); animation:v2up 1.1s cubic-bezier(.2,.8,.2,1) forwards; animation-delay:calc(.2s + var(--i)*.08s); }
+  @keyframes v2up { to { opacity:1; transform:none; } }
+  .v2-hero__sub { font-size:clamp(16px,1.3vw,18px); line-height:1.7; max-width:40ch; margin:26px 0 34px; color:var(--mute); opacity:0; animation:v2up 1s .8s forwards; }
+  .v2-hero__ctas { display:flex; gap:14px; flex-wrap:wrap; opacity:0; animation:v2up 1s 1s forwards; }
+  .v2-hero__trust { margin-top:30px; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--mute); opacity:0; animation:v2up 1s 1.2s forwards; }
+  .v2-hero__media { position:relative; overflow:hidden; border-bottom-left-radius:clamp(60px,9vw,160px); }
+  .v2-hero__img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:46% 60%; animation:v2kb 18s ease-out forwards; transform-origin:50% 65%; }
+  @keyframes v2kb { from { transform:scale(1.05); } to { transform:scale(1); } }
+  .v2-btn--line { border:1px solid rgba(35,29,21,.35); color:var(--ink); }
+  .v2-btn--line:hover { background:var(--esp); color:var(--cream); }
+
+  /* marquee */
+  .v2-marquee { background:var(--esp); color:var(--gold-l); overflow:hidden; padding:18px 0; }
+  .v2-marquee__track { display:flex; gap:48px; width:max-content; animation:v2mq 38s linear infinite; font-family:var(--disp); font-style:italic; font-size:clamp(18px,2vw,24px); white-space:nowrap; }
+  .v2-marquee__track span::after { content:"✦"; font-style:normal; margin-left:48px; font-size:.6em; vertical-align:middle; color:var(--gold); }
+  @keyframes v2mq { to { transform:translateX(-50%); } }
+
+  /* devotion split */
+  .v2-dev { padding:clamp(80px,12vw,160px) 0; }
+  .v2-dev__grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(30px,6vw,90px); align-items:center; }
+  .v2-dev__img { border-radius:200px 200px 18px 18px; overflow:hidden; aspect-ratio:4/5; box-shadow:0 40px 80px -40px rgba(40,25,10,.45); }
+  .v2-dev__img img { width:100%; height:100%; object-fit:cover; transform:scale(1.08); transition:transform 1.6s cubic-bezier(.2,.8,.2,1); }
+  .v2-dev__img.in img { transform:scale(1); }
+  .v2-dev h2 { font-size:clamp(36px,4.6vw,64px); line-height:1.04; margin:16px 0 26px; }
+  .v2-dev blockquote { margin:0 0 22px; padding-left:22px; border-left:2px solid var(--gold); font-family:var(--disp); font-style:italic; font-size:clamp(19px,1.8vw,23px); line-height:1.5; }
+  .v2-dev cite { display:block; font-style:normal; font-family:var(--sans); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--mute); margin-top:10px; }
+  .v2-dev__body { color:var(--mute); font-size:17px; line-height:1.75; margin-bottom:30px; max-width:52ch; }
+
+  /* products carousel */
+  .v2-shop { padding:clamp(70px,10vw,130px) 0; background:var(--cream2); }
+  .v2-shop__head { display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:40px; }
+  .v2-shop__head h2 { font-size:clamp(34px,4.4vw,60px); line-height:1.05; max-width:14ch; }
+  .v2-rail { display:grid; grid-auto-flow:column; grid-auto-columns:clamp(260px, 27vw, 340px); gap:22px; overflow-x:auto; scroll-snap-type:x mandatory; padding:10px max(20px, calc((100vw - 1240px)/2)) 30px; scrollbar-width:none; }
+  .v2-rail::-webkit-scrollbar { display:none; }
+  .v2-card { scroll-snap-align:start; border-radius:22px; overflow:hidden; background:#fff; text-decoration:none; color:inherit; display:flex; flex-direction:column; transition:transform .6s cubic-bezier(.2,.8,.2,1), box-shadow .6s; }
+  .v2-card:hover { transform:translateY(-8px); box-shadow:0 30px 60px -30px rgba(40,25,10,.35); }
+  .v2-card__stage { position:relative; aspect-ratio:4/5; background:#f7f3ea; overflow:hidden; }
+  .v2-card__stage::before { content:""; position:absolute; width:70%; aspect-ratio:1; border-radius:50%; background:radial-gradient(circle, rgba(255,240,210,.55), transparent 65%); top:8%; transition:transform 1s; }
+  .v2-card:hover .v2-card__stage::before { transform:scale(1.25); }
+  .v2-card__stage::before { display:none; } .v2-card__stage img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:scale(1.06); transform-origin:50% 30%; transition:transform .8s cubic-bezier(.2,.8,.2,1); } .v2-card__stage--pods img { object-fit:contain; padding:16% 4% 4%; box-sizing:border-box; transform:none; }
+  .v2-card:hover .v2-card__stage img { transform:scale(1.1); } .v2-card:hover .v2-card__stage--pods img { transform:scale(1.03); }
+  .v2-card__badge { position:absolute; bottom:12px; left:12px; z-index:3; color:var(--ink); background:rgba(255,255,255,.9); border-radius:999px; padding:6px 12px; font-size:11px; letter-spacing:.14em; text-transform:uppercase; }
+  .v2-card__info { padding:22px 22px 24px; display:flex; flex-direction:column; gap:6px; flex:1; }
+  .v2-card__notes { font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); }
+  .v2-card__title { font-family:var(--disp); font-size:28px; }
+  .v2-card__price { margin-top:auto; padding-top:12px; display:flex; justify-content:space-between; align-items:center; font-size:15px; }
+  .v2-card__price small { color:var(--sage); font-size:12px; }
+  .v2-rail__nav { display:flex; gap:10px; }
+  .v2-rail__nav button { width:48px; height:48px; border-radius:50%; border:1px solid rgba(35,29,21,.25); background:transparent; cursor:pointer; font-size:18px; transition:background .3s, color .3s; }
+  .v2-rail__nav button:hover { background:var(--esp); color:var(--cream); }
+
+  /* parallax band */
+  .v2-band { position:relative; height:clamp(420px, 75vh, 760px); overflow:hidden; display:grid; place-items:center; text-align:center; color:#fff; }
+  .v2-band__img { position:absolute; inset:-12% 0; background-size:cover; background-position:center; will-change:transform; }
+  .v2-band::after { content:""; position:absolute; inset:0; background:rgba(20,14,8,.38); }
+  .v2-band__txt { position:relative; z-index:2; padding:0 20px; }
+  .v2-band__txt p:first-child { font-family:var(--disp); font-style:italic; font-size:clamp(34px,5.6vw,80px); line-height:1.08; max-width:16ch; margin:0 auto 18px; }
+
+  /* ritual */
+  .v2-rit { padding:clamp(80px,11vw,150px) 0; }
+  .v2-rit h2 { font-size:clamp(34px,4.4vw,60px); text-align:center; margin:14px 0 56px; }
+  .v2-rit__grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .v2-rit__item:nth-child(2) { margin-top:70px; }
+  .v2-rit__img { border-radius:18px; overflow:hidden; aspect-ratio:4/5; margin-bottom:22px; }
+  .v2-rit__img img { width:100%; height:100%; object-fit:cover; transition:transform 1.4s cubic-bezier(.2,.8,.2,1); }
+  .v2-rit__item:hover .v2-rit__img img { transform:scale(1.05); }
+  .v2-rit__num { font-family:var(--disp); font-size:15px; color:var(--gold); }
+  .v2-rit__item h3 { font-size:34px; margin:4px 0 10px; }
+  .v2-rit__item p { color:var(--mute); line-height:1.7; }
+
+  /* club */
+  .v2-club { background:var(--esp); color:var(--cream); overflow:hidden; }
+  .v2-club__grid { display:grid; grid-template-columns:1.05fr 1fr; align-items:stretch; }
+  .v2-club__img { min-height:520px; background-size:cover; background-position:center; }
+  .v2-club__body { padding:clamp(50px,8vw,110px) clamp(24px,6vw,90px); display:flex; flex-direction:column; justify-content:center; gap:22px; }
+  .v2-club h2 { font-size:clamp(36px,4.4vw,62px); line-height:1.04; }
+  .v2-club ul { list-style:none; padding:0; margin:0 0 10px; display:grid; gap:12px; }
+  .v2-club li { display:flex; gap:12px; color:rgba(246,239,226,.82); }
+  .v2-club li::before { content:"✦"; color:var(--gold-l); }
+
+  /* seasonal */
+  .v2-season { position:relative; overflow:hidden; color:#fff; }
+  .v2-season img { width:100%; height:clamp(460px,70vh,720px); object-fit:cover; display:block; }
+  .v2-season::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(30,10,8,.78), rgba(30,10,8,.15) 65%); }
+  .v2-season__txt { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:center; gap:18px; }
+  .v2-season h2 { font-size:clamp(38px,5vw,72px); line-height:1.02; max-width:12ch; }
+  .v2-season p { max-width:40ch; } .v2-marquee { background:var(--cream2); color:var(--gold); border-top:1px solid rgba(35,29,21,.08); border-bottom:1px solid rgba(35,29,21,.08); } .v2-club { background:var(--cream2); color:var(--ink); } .v2-club__body { background:#fff; border:1px solid rgba(35,29,21,.1); border-radius:24px; margin:clamp(20px,4vw,48px); box-shadow:0 30px 60px -40px rgba(40,25,10,.35); } .v2-club .v2-eyebrow { color:var(--gold) !important; } .v2-club li { color:var(--mute); } .v2-club li::before { color:var(--gold); } .v2-club .v2-btn--ghost { border-color:rgba(35,29,21,.25); color:var(--ink); background:transparent; backdrop-filter:none; } .v2-club .v2-btn--ghost:hover { background:var(--esp); color:var(--cream); } .v2-hero__bag { position:absolute; right:clamp(16px,3vw,40px); bottom:clamp(16px,3vw,40px); z-index:2; display:flex; align-items:center; gap:14px; background:rgba(255,255,255,.95); border:1px solid rgba(35,29,21,.1); border-radius:18px; padding:10px 20px 10px 10px; text-decoration:none; color:var(--ink); box-shadow:0 20px 40px -24px rgba(20,14,8,.6); } .v2-hero__bag img { width:56px; height:72px; object-fit:contain; background:var(--cream); border-radius:12px; padding:4px; } .v2-hero__bag b { display:block; font-family:var(--disp); font-weight:400; font-size:19px; } .v2-hero__bag small { font-size:12px; color:var(--mute); } .v2-season p { max-width:40ch; color:rgba(255,255,255,.85); line-height:1.7; }
+
+  @media (max-width: 860px) {
+    .v2-dev__grid, .v2-club__grid { grid-template-columns:1fr; }
+    .v2-rit__grid { grid-template-columns:1fr; }
+    .v2-rit__item:nth-child(2) { margin-top:0; }
+    .v2-hero { grid-template-columns:1fr; }
+    .v2-hero__media { order:-1; min-height:62vw; border-bottom-left-radius:0; }
+    .v2-hero__body { padding:36px 20px 50px; }
+    .v2-shop__head { flex-direction:column; align-items:flex-start; }
+    .v2-club__img { min-height:340px; }
+    .v2-season::after { background:linear-gradient(0deg, rgba(30,10,8,.85), rgba(30,10,8,.2)); }
+    .v2-season__txt { justify-content:flex-end; padding-bottom:40px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v2 *, .v2 *::before { animation:none !important; transition:none !important; }
+    .v2 [data-reveal], .v2-hero h1 .w, .v2-hero__sub, .v2-hero__ctas, .v2-hero__trust { opacity:1 !important; transform:none !important; }
+  }
+</style>
+
+<div class="v2">
+  {%- comment -%} HERO {%- endcomment -%}
+  <section class="v2-hero">
+    <div class="v2-hero__body">
+      {%- assign words = 'Coffee with something underneath it.' | split: ' ' -%}
+      <h1>{% for w in words %}<span class="w" style="--i:{{ forloop.index0 }}">{{ w }}</span> {% endfor %}</h1>
+      <p class="v2-hero__sub">Specialty coffee with a new devotion and prayer on the back of every bag. Written once. Never reprinted.</p>
+      <div class="v2-hero__ctas">
+        <a class="v2-btn v2-btn--gold" href="/collections/coffee">Shop the coffee</a>
+        <a class="v2-btn v2-btn--line" href="/pages/build-your-box">Build a box &amp; save</a>
+      </div>
+      <p class="v2-hero__trust">Roasted to order &middot; Free US shipping on 2+ bags</p>
+    </div>
+    <div class="v2-hero__media">
+      <img class="v2-hero__img" src="{{ img_hero }}" srcset="{{ 'fem-scene-hero-v3.jpg' | file_img_url: '900x' }} 900w, {{ 'fem-scene-hero-v3.jpg' | file_img_url: '1200x' }} 1200w, {{ img_hero }} 1536w" sizes="(max-width: 860px) 100vw, 58vw" alt="Hands holding a warm mug of coffee over an open Bible in morning light" fetchpriority="high">{%- assign hb = all_products['new-mercies'] -%}{%- if hb.featured_image -%}<a class="v2-hero__bag" href="{{ hb.url }}"><img src="{{ hb.featured_image | image_url: width: 160 }}" alt="" width="56" height="72"><span><b>{{ hb.title }}</b><small>Light-medium roast &middot; 12 oz &middot; {{ hb.price | money }}</small></span></a>{%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} MARQUEE {%- endcomment -%}
+  <div class="v2-marquee" aria-hidden="true">
+    <div class="v2-marquee__track">
+      {%- for i in (1..2) -%}
+        <span>Written once, never reprinted</span><span>Roasted to order in small batches</span><span>A new devotion every month</span><span>Love your first bag or we make it right</span><span>Subscribe &amp; save 10%</span>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- comment -%} DEVOTION CLUB {%- endcomment -%}
+  <section class="v2-club" id="v2-club">
+    <div class="v2-club__grid">
+      <div class="v2-club__img" data-reveal="fade" style="background-image:url('{{ img_sill }}')">{% render 'scene-shop', scene: 'fem-scene-windowsill-trio.jpg' %}</div>
+      <div class="v2-club__body">
+        <p class="v2-eyebrow" style="color:var(--gold-l)" data-reveal>The Devotion Club</p>
+        <h2 data-reveal style="--d:.08s">Never miss a month.</h2>
+        <ul data-reveal style="--d:.16s">
+          <li>Save 10% on every bag, plus an extra 5% on 3 or more</li>
+          <li>Ships on the 1st with the new devotion</li>
+          <li>Skip, swap or cancel anytime</li>
+        </ul>
+        <div data-reveal style="--d:.24s;display:flex;gap:12px;flex-wrap:wrap"><a class="v2-btn v2-btn--gold" href="/pages/build-your-box">Build your box</a> <a class="v2-btn v2-btn--ghost" href="/collections/coffee">Shop single bags</a></div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} SHOP RAIL {%- endcomment -%}
+  <section class="v2-shop">
+    <div class="v2-wrap v2-shop__head">
+      <div>
+        <p class="v2-eyebrow" data-reveal>The coffee</p>
+        <h2 data-reveal style="--d:.08s">Every coffee. One devotion each month.</h2>
+      </div>
+      <div class="v2-rail__nav" data-reveal style="--d:.16s;align-items:center"><a class="v2-btn v2-btn--line" href="/collections/coffee" style="margin-right:6px">Shop all coffee</a><button type="button" aria-label="Previous" data-rail="-1">←</button><button type="button" aria-label="Next" data-rail="1">→</button></div>
+    </div>
+    {%- comment -%} Pulls every product in the Coffee collection, so new coffees appear automatically. Known coffees get a matching tint; new ones rotate through the palette. {%- endcomment -%}
+    {%- assign tint_handles = 'new-mercies,rise-shine,steadfast,abide,grateful-heart,anchored,emmanuel,joy-to-the-world' | split: ',' -%}
+    {%- assign tints = '#6f8a74,#e3c98f,#3b3d44,#d9cfb8,#8a3b3f,#3d5a78,#5a4470,#b5414a' | split: ',' -%}
+    {%- assign rail_products = collections['coffee'].products -%}
+    {%- assign seasonal_handles = collections['seasonal'].products | map: 'handle' | join: ',' | prepend: ',' | append: ',' -%}
+    <div class="v2-rail" data-rail-track>
+      {%- for p in rail_products limit: 24 -%}
+        {%- assign h = p.handle -%}
+        {%- assign ti = forloop.index0 | modulo: 8 -%}{%- assign tint = tints[ti] -%}
+        {%- for th in tint_handles -%}{%- if th == h -%}{%- assign tint = tints[forloop.index0] -%}{%- endif -%}{%- endfor -%}
+        {%- if p.available or p.id -%}
+          {%- assign parts = p.description | split: '</p>' -%}
+          {%- assign hk = h | prepend: ',' | append: ',' -%}
+          <a class="v2-card" href="{{ p.url }}" data-reveal style="--d:{{ forloop.index0 | times: 0.06 }}s;--tint:{{ tint }}">
+            <div class="v2-card__stage{% if h contains '-pods' %} v2-card__stage--pods{% endif %}">{% render 'roast-chip', product: p %}
+              {%- if h == 'new-mercies' -%}<span class="v2-card__badge">Start here</span>{%- elsif seasonal_handles contains hk -%}<span class="v2-card__badge">Christmas only</span>{%- endif -%}
+              <img src="{{ p.featured_image | image_url: width: 700 }}" alt="{{ p.featured_image.alt | escape }}" loading="lazy">
+            </div>
+            <div class="v2-card__info">
+              <span class="v2-card__notes">{{ parts[0] | strip_html | strip }}</span>
+              <span class="v2-card__title">{{ p.title }}</span>
+              <span style="color:var(--mute);font-size:14px;line-height:1.6;">{{ parts[1] | strip_html | strip | truncatewords: 14 }}</span>
+              <span class="v2-card__price">{{ p.price | money }} <small>or 10% off with subscription</small></span>
+            </div>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} PARALLAX BAND {%- endcomment -%}
+  <section class="v2-band">
+    <div class="v2-band__img" data-parallax style="background-image:url('{{ img_porch }}')"></div>
+    <div class="v2-band__txt" data-reveal>
+      <p>His mercies are new every morning.</p>
+      <p class="v2-eyebrow" style="color:var(--gold-l)">So is the coffee</p>
+    </div>
+    {% render 'scene-shop', scene: 'fem-scene-porch-dawn.jpg', align: 'right' %}
+  </section>
+
+  {%- comment -%} DEVOTION TEASER (devotion text lives only on the bag) {%- endcomment -%}
+  <section class="v2-dev" id="v2-devotion">
+    <div class="v2-wrap v2-dev__grid">
+      <div class="v2-dev__img" data-reveal="fade"><img src="{{ img_read }}" alt="Abide decaf in a lamp-lit reading corner with a Bible and journal" loading="lazy">{% render 'scene-shop', scene: 'fem-scene-evening-reading.jpg' %}</div>
+      <div>
+        <p class="v2-eyebrow" data-reveal>On the back of every bag</p>
+        <h2 data-reveal style="--d:.08s">The devotion is only on the bag.</h2>
+        <p class="v2-dev__body" data-reveal style="--d:.16s">Each month we write one devotion and prayer and print it on the back of that month&rsquo;s coffee. We don&rsquo;t post it online. It&rsquo;s waiting for you the morning you open the bag, and it&rsquo;s gone when the month ends.</p>
+        <a class="v2-btn v2-btn--ink" href="/pages/build-your-box" data-reveal style="--d:.24s">Get every month&rsquo;s devotion</a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} RITUAL {%- endcomment -%}
+  <section class="v2-rit">
+    <div class="v2-wrap">
+      <p class="v2-eyebrow" style="text-align:center" data-reveal>How it works</p>
+      <h2 data-reveal style="--d:.08s">A simple morning rhythm.</h2>
+      <div class="v2-rit__grid">
+        <div class="v2-rit__item" data-reveal style="--d:.0s"><div class="v2-rit__img"><img src="{{ img_roast }}" alt="Single origin coffees on a roastery bench" loading="lazy">{% render 'scene-shop', scene: 'fem-scene-roastery.jpg' %}</div><span class="v2-rit__num">01</span><h3>Rise</h3><p>Choose a coffee and grind. We roast it to order and ship within two business days.</p></div>
+        <div class="v2-rit__item" data-reveal style="--d:.12s"><div class="v2-rit__img"><img src="{{ img_kitchen }}" alt="Coffee and an open Bible on a kitchen table" loading="lazy">{% render 'scene-shop', scene: 'fem-scene-kitchen-table.jpg' %}</div><span class="v2-rit__num">02</span><h3>Pour</h3><p>Brew it slowly. The devotion is on the back, short enough to read while the coffee blooms.</p></div>
+        <div class="v2-rit__item" data-reveal style="--d:.24s"><div class="v2-rit__img"><img src="{{ img_sill }}" alt="Three coffees on a sunlit windowsill" loading="lazy">{% render 'scene-shop', scene: 'fem-scene-windowsill-trio.jpg' %}</div><span class="v2-rit__num">03</span><h3>Renew</h3><p>Each month brings a new devotion and prayer, so the morning never repeats.</p></div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} SEASONAL {%- endcomment -%}
+  <section class="v2-season">
+    <div style="position:relative"><img src="{{ img_xmas }}" alt="Emmanuel and Joy to the World on a candlelit Christmas table" loading="lazy" data-reveal="scale">{% render 'scene-shop', scene: 'fem-scene-christmas.jpg', cover: false, align: 'right' %}</div>
+    <div class="v2-season__txt v2-wrap">
+      <p class="v2-eyebrow" style="color:var(--gold-l)" data-reveal>Here for Christmas only</p>
+      <h2 data-reveal style="--d:.08s">Emmanuel &amp; Joy to the World</h2>
+      <p data-reveal style="--d:.16s">A warm spiced holiday blend and a peppermint dark-chocolate roast, each with an Advent devotion on the back. Gone after Christmas.</p>
+      <div data-reveal style="--d:.24s"><a class="v2-btn v2-btn--gold" href="/collections/seasonal">Shop the season</a></div>
+    </div>
+  </section>
+</div>
+
+<script>
+  (function(){
+    var root = document.currentScript.previousElementSibling;
+    var els = root.querySelectorAll('[data-reveal]');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .15, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(function(el){ io.observe(el); });
+    } else { els.forEach(function(el){ el.classList.add('in'); }); }
+    var track = root.querySelector('[data-rail-track]');
+    root.querySelectorAll('[data-rail]').forEach(function(b){ b.addEventListener('click', function(){ track.scrollBy({ left: track.clientWidth * 0.8 * Number(b.dataset.rail), behavior: 'smooth' }); }); });
+    var par = root.querySelectorAll('[data-parallax]');
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var tick = false;
+      window.addEventListener('scroll', function(){ if (tick) return; tick = true; requestAnimationFrame(function(){ par.forEach(function(p){ var r = p.parentElement.getBoundingClientRect(); var pct = (r.top + r.height/2 - innerHeight/2) / innerHeight; p.style.transform = 'translate3d(0,' + (pct * -60) + 'px,0)'; }); tick = false; }); }, { passive: true });
+    }
+  })();
+</script>
+
+{% schema %}
+{ "name": "Homepage v2 (concept)", "settings": [], "presets": [{ "name": "Homepage v2 (concept)" }] }
+{% endschema %}

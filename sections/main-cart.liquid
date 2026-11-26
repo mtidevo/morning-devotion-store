@@ -11,8 +11,9 @@
         <a href="{{ routes.all_products_collection_url }}" class="btn btn-gold mt-4">Continue shopping</a>
       </div>
     {% else %}
-      {%- assign ship_threshold = section.settings.free_shipping_threshold_cents | default: 4000 -%}
+      {%- assign ship_threshold = section.settings.free_shipping_threshold_cents | default: 3400 -%}
       {% render 'shipping-bar', threshold_cents: ship_threshold %}
+      {% render 'gift-basket-cart-addon' %}
 
       <form action="{{ routes.cart_url }}" method="post" class="cart-form">
         <div class="cart-items">
@@ -28,21 +29,25 @@
 
               <div>
                 <div class="cart-item-title">{{ item.product.title }}</div>
-                <div class="cart-item-variant">{{ item.variant.title }}</div>
+                {%- unless item.product.has_only_default_variant -%}<div class="cart-item-variant">{{ item.variant.title }}</div>{%- endunless -%}
+                {%- for p in item.properties -%}{%- assign pk = p.first | slice: 0 -%}{%- if p.last != blank and pk != "_" -%}<div class="cart-item-prop" style="font-size:13px;color:var(--mute);margin-top:2px;">{{ p.first }}: {{ p.last }}</div>{%- endif -%}{%- endfor -%}
+                {%- if item.selling_plan_allocation -%}
+                  <div class="cart-item-plan" style="font-size:13px;color:var(--sage-d);margin-top:4px;">Subscribe &amp; save: {{ item.selling_plan_allocation.selling_plan.name }}</div>
+                {%- else -%}
+                  <div class="cart-item-plan" style="font-size:13px;color:var(--mute);margin-top:4px;">One-time purchase</div>
+                {%- endif -%}
                 <div class="cart-item-qty">
                   <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantity">
                 </div>
               </div>
 
-              <div class="cart-item-price">{{ item.line_price | money }}</div>
+              <div class="cart-item-price">
+                {{ item.final_line_price | money }}
+                {%- if item.original_line_price > item.final_line_price -%}<div style="font-size:13px;color:var(--mute);text-decoration:line-through;">{{ item.original_line_price | money }}</div>{%- endif -%}
+              </div>
             </div>
           {% endfor %}
         </div>
-
-        <details class="cart-notes" {% if cart.note != blank %}open{% endif %}>
-          <summary>Order special instructions</summary>
-          <textarea name="note" rows="3" placeholder="Add a note for our roasters…" aria-label="Order note">{{ cart.note }}</textarea>
-        </details>
 
         <div class="cart-footer">
           <div>
@@ -55,6 +60,71 @@
           </div>
         </div>
       </form>
+
+      {%- comment -%} Add-a-bag suggestions. If the cart has a subscription bag, suggestions add on the same plan so they join that subscription. {%- endcomment -%}
+      {%- assign cart_plan_id = '' -%}
+      {%- assign in_cart = ',' -%}
+      {%- for item in cart.items -%}
+        {%- assign in_cart = in_cart | append: item.product.handle | append: ',' -%}
+        {%- if cart_plan_id == '' and item.selling_plan_allocation -%}{%- assign cart_plan_id = item.selling_plan_allocation.selling_plan.id | append: '' -%}{%- endif -%}
+      {%- endfor -%}
+      <div class="cart-suggest">
+        <style>
+          .cart-suggest { margin-top: 56px; }
+          .cart-suggest__head { display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:18px; }
+          .cart-suggest__head h2 { font-family: var(--disp); font-weight:400; font-size: clamp(26px, 3vw, 36px); margin:0; }
+          .cart-suggest__head p { margin:0; color: var(--mute); font-size:14px; }
+          .cart-suggest__rail { display:grid; grid-auto-flow:column; grid-auto-columns: minmax(220px, 1fr); gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:8px; scrollbar-width:none; }
+          .cart-suggest__rail::-webkit-scrollbar { display:none; }
+          .cart-suggest__card { scroll-snap-align:start; border:1px solid var(--hair); border-radius:18px; padding:16px; display:flex; flex-direction:column; gap:10px; background:#fff; }
+          .cart-suggest__img { background: var(--champagne); border-radius:12px; aspect-ratio: 1 / 1; display:grid; place-items:center; overflow:hidden; }
+          .cart-suggest__img img { width:62%; height:auto; filter: drop-shadow(0 14px 14px rgba(0,0,0,.22)); }
+          .cart-suggest__title { font-family: var(--disp); font-size:22px; color: var(--ink); text-decoration:none; }
+          .cart-suggest__notes { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color: var(--gold-d); }
+          .cart-suggest__price { font-size:15px; color: var(--ink); }
+          .cart-suggest__price small { color: var(--sage-d); font-size:12px; }
+          .cart-suggest select { width:100%; font:inherit; font-size:14px; padding:10px 12px; border:1px solid var(--hair); border-radius:10px; background:#fff; color: var(--ink); }
+          .cart-suggest .btn { width:100%; justify-content:center; }
+        </style>
+        <div class="cart-suggest__head">
+          <h2>Add another item</h2>
+          {%- assign coffee_qty = 0 -%}{%- for item in cart.items -%}{%- if item.product.type == 'Coffee' -%}{%- assign coffee_qty = coffee_qty | plus: item.quantity -%}{%- endif -%}{%- endfor -%}
+          <p>{% if coffee_qty == 1 %}Add one more bag and save the $4.50 shipping.{% else %}Try something new this month.{% endif %}{% if cart_plan_id != '' %} Subscription coffees join your subscription at 10% off.{% endif %}</p>
+        </div>
+        <div class="cart-suggest__rail">
+          {%- assign sug_shown = 0 -%}{%- assign sug_list = 'new-mercies,rise-shine,steadfast,lamplight,still-waters,grateful-heart,anchored,cornerstone,daily-bread,made-whole,good-shepherd,blossom,abide' | split: ',' -%}{%- for sh in sug_list -%}{%- assign p = all_products[sh] -%}{%- if sug_shown >= 3 or p.id == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign hk = p.handle | prepend: ',' | append: ',' -%}
+            {%- unless in_cart contains hk -%}
+              {%- if p.available -%}
+                {%- assign use_plan = '' -%}
+                {%- if cart_plan_id != '' -%}
+                  {%- for g in p.selling_plan_groups -%}{%- for sp in g.selling_plans -%}{%- assign spid = sp.id | append: '' -%}{%- if spid == cart_plan_id -%}{%- assign use_plan = spid -%}{%- endif -%}{%- endfor -%}{%- endfor -%}
+                {%- endif -%}
+                {%- assign parts = p.description | split: '</p>' -%}
+                {%- assign sug_shown = sug_shown | plus: 1 -%}<div class="cart-suggest__card">
+                  <a href="{{ p.url }}" class="cart-suggest__img"><img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.featured_image.alt | escape }}" loading="lazy" width="200" height="200"></a>
+                  <span class="cart-suggest__notes">{{ parts[0] | strip_html | strip | truncate: 48 }}</span>
+                  <a href="{{ p.url }}" class="cart-suggest__title">{{ p.title }}</a>
+                  <span class="cart-suggest__price">{% if use_plan != '' %}{{ p.price | times: 0.9 | round | money }} <small>with your subscription</small>{% else %}{{ p.price | money }}{% endif %}</span>
+                  {% form 'product', p %}
+                    {%- if p.variants.size > 1 -%}
+                      <select name="id" aria-label="Grind for {{ p.title | escape }}">
+                        {%- for v in p.variants -%}<option value="{{ v.id }}" {% unless v.available %}disabled{% endunless %}>{{ v.title }}</option>{%- endfor -%}
+                      </select>
+                    {%- else -%}
+                      <input type="hidden" name="id" value="{{ p.variants.first.id }}">
+                    {%- endif -%}
+                    {%- if use_plan != '' -%}<input type="hidden" name="selling_plan" value="{{ use_plan }}">{%- endif -%}
+                    <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="return_to" value="/cart">
+                    <button type="submit" class="btn btn-gold btn-sm mt-2">Add to cart</button>
+                  {% endform %}
+                </div>
+              {%- endif -%}
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+      </div>
     {% endif %}
   </div>
 </section>
@@ -63,7 +133,7 @@
 {
   "name": "Main cart",
   "settings": [
-    { "type": "number", "id": "free_shipping_threshold_cents", "label": "Free shipping threshold (cents)", "default": 4000 }
+    { "type": "number", "id": "free_shipping_threshold_cents", "label": "Free shipping threshold (cents)", "default": 3400 }
   ]
 }
 {% endschema %}

@@ -171,5 +171,216 @@
         "default": "Roasted in Bend, Oregon"
       }
     ]
+  },
+  {
+    "name": "Christmas gift baskets",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Blend picker (basket product pages)"
+      },
+      {
+        "type": "text",
+        "id": "gb_picker_tag",
+        "label": "Product tag that turns on the blend picker",
+        "default": "gift-basket"
+      },
+      {
+        "type": "product",
+        "id": "gb_two_blend_product",
+        "label": "Two Blends basket",
+        "info": "This product gets two blend dropdowns. Other tagged products get one."
+      },
+      {
+        "type": "collection",
+        "id": "gb_blend_collection",
+        "label": "Blends to choose from",
+        "info": "Defaults to Coffee. Pods, gear and other baskets are left out automatically."
+      },
+      {
+        "type": "collection",
+        "id": "gb_holiday_collection",
+        "label": "Holiday blends collection",
+        "info": "Blends in this collection are labeled Holiday. Defaults to Seasonal."
+      },
+      {
+        "type": "text",
+        "id": "gb_holiday_label",
+        "label": "Holiday label",
+        "default": "Holiday"
+      },
+      {
+        "type": "product",
+        "id": "gb_default_first",
+        "label": "Default first blend",
+        "info": "Preselected. Usually Emmanuel."
+      },
+      {
+        "type": "product",
+        "id": "gb_default_second",
+        "label": "Default second blend",
+        "info": "Preselected. Usually Joy to the World."
+      },
+      {
+        "type": "text",
+        "id": "gb_picker_heading",
+        "label": "Heading",
+        "default": "Choose your blends"
+      },
+      {
+        "type": "text",
+        "id": "gb_picker_help",
+        "label": "Help text",
+        "default": "Pick any of our coffees for the basket. The price stays the same."
+      },
+      {
+        "type": "text",
+        "id": "gb_picker_placeholder",
+        "label": "Dropdown placeholder",
+        "default": "Select a blend"
+      },
+      {
+        "type": "text",
+        "id": "gb_blend_label_first",
+        "label": "First dropdown (also the order field name)",
+        "default": "First blend"
+      },
+      {
+        "type": "text",
+        "id": "gb_blend_label_second",
+        "label": "Second dropdown (also the order field name)",
+        "default": "Second blend"
+      },
+      {
+        "type": "text",
+        "id": "gb_blend_label_one",
+        "label": "One Blend order field name",
+        "default": "Blend"
+      },
+      {
+        "type": "text",
+        "id": "gb_blend_shown_label_one",
+        "label": "One Blend dropdown label",
+        "default": "Your blend"
+      },
+      {
+        "type": "text",
+        "id": "gb_picker_error",
+        "label": "Missing-pick error",
+        "default": "Please choose a blend for each bag before adding the basket to your cart."
+      },
+      {
+        "type": "header",
+        "content": "Cart add-on (drawer and cart page)"
+      },
+      {
+        "type": "checkbox",
+        "id": "gb_addon_enabled",
+        "label": "Show the gift basket add-on",
+        "default": true
+      },
+      {
+        "type": "product",
+        "id": "gb_addon_product",
+        "label": "Basket to offer",
+        "info": "Usually the One Blend basket. It's added with the default first blend."
+      },
+      {
+        "type": "text",
+        "id": "gb_addon_text",
+        "label": "Message",
+        "default": "Make it a gift: add a Christmas Morning Gift Basket."
+      },
+      {
+        "type": "text",
+        "id": "gb_addon_button",
+        "label": "Button",
+        "default": "Add"
+      },
+      {
+        "type": "text",
+        "id": "gb_addon_change_label",
+        "label": "Change blend link",
+        "default": "Change blend"
+      },
+      {
+        "type": "text",
+        "id": "gb_addon_end",
+        "label": "End date and time",
+        "default": "2026-12-07T23:59:59-05:00",
+        "info": "After this, the card only shows while the basket is still in stock."
+      },
+      {
+        "type": "header",
+        "content": "Checkout discount message"
+      },
+      {
+        "type": "number",
+        "id": "gb_discount_two",
+        "label": "Two Bag basket discount ($)",
+        "default": 14,
+        "info": "Match the automatic discount in Shopify. Shown in red on the homepage, shop page, product page and cart add-on."
+      },
+      {
+        "type": "number",
+        "id": "gb_discount_one",
+        "label": "Single Bag basket discount ($)",
+        "default": 9
+      },
+      {
+        "type": "text",
+        "id": "gb_discount_text",
+        "label": "Message",
+        "default": "Save [amount] at checkout, no code needed. You pay [final].",
+        "info": "[amount] and [final] are filled in from the basket price."
+      },
+      {
+        "type": "color",
+        "id": "gb_discount_color",
+        "label": "Message color",
+        "default": "#B3261E"
+      },
+      {
+        "type": "text",
+        "id": "gb_discount_end",
+        "label": "Hide the message after",
+        "default": "2026-12-07T23:59:59-05:00",
+        "info": "Set this to when the automatic discounts end."
+      },
+      {
+        "type": "text",
+        "id": "gb_cart_note",
+        "label": "Cart line note for baskets",
+        "default": "Christmas pre-order · ships by Dec 10"
+      },
+      {
+        "type": "header",
+        "content": "Basket product page text"
+      },
+      {
+        "type": "textarea",
+        "id": "gb_shipping_text",
+        "label": "Shipping tab",
+        "default": "Christmas pre-order. Baskets are assembled in Wooster, Ohio, and ship in batches by Dec 10. Order by Monday, Dec 7 for Christmas delivery. Shipping is a flat $14.95. Baskets ship separately from any other coffee in your order."
+      },
+      {
+        "type": "textarea",
+        "id": "gb_details_text",
+        "label": "Details tab",
+        "default": "A ready-to-give Christmas basket: our holiday coffee in 12 oz bags, a Bible-verse ceramic mug, a linen gratitude journal, a leather Bible-verse bookmark, chocolate-covered espresso beans and a devotion card, nestled in a woven rope basket."
+      },
+      {
+        "type": "text",
+        "id": "gb_perk_shipping",
+        "label": "Shipping perk line",
+        "default": "Flat $14.95 shipping · ships by Dec 10"
+      },
+      {
+        "type": "text",
+        "id": "gb_perk_devotion",
+        "label": "Devotion perk line",
+        "default": "Sent with a devotion card"
+      }
+    ]
   }
 ]

@@ -1,20 +1,43 @@
-{% comment %} Email capture section {% endcomment %}
-<section id="signup" class="band email-capture">
-  <div class="wrap narrow text-center">
-    <span class="rule">Stay in the morning</span>
-    <h2 class="mb-4">{{ section.settings.heading | default: 'Be first for the next roast.' }}</h2>
-    <p class="lede mb-6">
-      {{ section.settings.description | default: 'One email when No. 01 opens. No daily noise, no sales spam — just a heads up when the next devotion and roast are ready.' }}
-    </p>
-
-    {% form 'customer', class: 'email-form' %}
-      {% if form.posted_successfully? %}
-        <p style="color: var(--sage-d); font-size: 14px;">Thanks — you are on the list.</p>
-      {% else %}
-        <input type="email" name="contact[email]" class="email-field" placeholder="{{ section.settings.placeholder | default: 'Your email address' }}" required aria-label="Email address">
-        <button type="submit" class="btn btn-gold">{{ section.settings.button_text | default: 'Join the list' }}</button>
-      {% endif %}
-    {% endform %}
+{% comment %} Email capture: photo band with a light card, styled to match the box builder {% endcomment %}
+{%- assign ec_img = 'fem-scene-porch-dawn.jpg' | file_img_url: '1800x' -%}
+<section id="signup" class="v2e">
+  <style>
+    .v2e { --cream:#f6efe2; --ink:#231d15; --mute:#6f6455; --gold:#a8843f; --gold-l:#d8b878; position:relative; overflow:hidden; color:var(--ink); padding:clamp(80px,11vw,150px) 0; text-align:center; background:var(--cream); }
+    .v2e * { box-sizing:border-box; }
+    .v2e__bg { position:absolute; inset:0; background-size:cover; background-position:center 60%; transform:scale(1.04); }
+    .v2e::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(246,239,226,.15), rgba(246,239,226,.35)); }
+    .v2e__wrap { position:relative; z-index:2; width:min(640px, 100% - 40px); margin:0 auto; background:#fff; border:1px solid rgba(35,29,21,.1); border-radius:24px; padding:clamp(28px,5vw,48px); box-shadow:0 40px 80px -40px rgba(20,14,8,.55); }
+    .v2e__eyebrow { font-family:var(--sans, 'Jost', sans-serif); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin:0 0 12px; }
+    .v2e h2 { font-family:var(--disp, 'Bodoni Moda', serif); font-weight:400; font-size:clamp(32px,4.2vw,52px); line-height:1.05; margin:0 0 14px; }
+    .v2e__lede { color:var(--mute); font-size:16px; line-height:1.7; margin:0 auto 26px; max-width:44ch; }
+    .v2e form { position:relative; display:flex; gap:10px; max-width:500px; margin:0 auto; }
+    .v2e input[type=email] { flex:1; min-width:0; background:#fff; border:1px solid rgba(35,29,21,.18); border-radius:999px; outline:none; color:var(--ink); font:inherit; font-size:16px; padding:15px 20px; transition:border-color .2s, box-shadow .2s; }
+    .v2e input[type=email]:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(168,132,63,.15); }
+    .v2e input::placeholder { color:rgba(111,100,85,.7); }
+    .v2e button { flex:none; border:0; cursor:pointer; border-radius:999px; background:var(--gold); color:#fff; font-family:var(--sans, 'Jost', sans-serif); font-size:13px; letter-spacing:.14em; text-transform:uppercase; padding:16px 26px; transition:background .3s; }
+    .v2e button:hover { background:#8f6f31; }
+    .v2e__ok { font-size:16px; color:var(--ink); margin:0 auto; padding:14px 16px; border-radius:12px; background:rgba(168,132,63,.12); border:1px solid var(--gold-l); }
+    .v2e__err { color:#7a2b2b; margin:12px 0 0; font-size:14px; }
+    .v2e__fine { margin:14px 0 0; font-size:12px; color:var(--mute); }
+    @media (max-width: 520px) { .v2e form { flex-direction:column; } .v2e button { width:100%; } }
+  </style>
+  <div class="v2e__bg" style="background-image:url('{{ ec_img }}')" aria-hidden="true"></div>
+  {% render 'scene-shop', scene: 'fem-scene-porch-dawn.jpg', cover: false, align: 'right' %}
+  <div class="v2e__wrap">
+    <p class="v2e__eyebrow">Stay in the morning</p>
+    <h2>{{ section.settings.heading | default: 'Be first for the next roast.' }}</h2>
+    <p class="v2e__lede">{{ section.settings.description }}</p>
+    {%- form 'customer', id: 'fem-signup-form' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="v2e__ok" role="status">Thank you. You are on the list.</p>
+      {%- else -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="email" name="contact[email]" placeholder="{{ section.settings.placeholder | default: 'Your email address' }}" required aria-label="Email address" autocomplete="email">
+        <button type="submit">{{ section.settings.button_text | default: 'Join the list' }}</button>
+      {%- endif -%}
+      {%- if form.errors -%}<p class="v2e__err" style="position:absolute;left:0;right:0;top:100%">Please check your email address and try again.</p>{%- endif -%}
+    {%- endform -%}
+    <p class="v2e__fine">No spam. Unsubscribe anytime.</p>
   </div>
 </section>
 
@@ -22,30 +45,10 @@
 {
   "name": "Email capture",
   "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Be first for the next roast."
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "label": "Description",
-      "default": "One email when No. 01 opens. No daily noise, no sales spam — just a heads up when the next devotion and roast are ready."
-    },
-    {
-      "type": "text",
-      "id": "placeholder",
-      "label": "Placeholder",
-      "default": "Your email address"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button text",
-      "default": "Join the list"
-    }
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Be first for the next roast." },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "One email when each new devotion and roast is ready. No daily noise, no sales spam." },
+    { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Your email address" },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Join the list" }
   ]
 }
 {% endschema %}
